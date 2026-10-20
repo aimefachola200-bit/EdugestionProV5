@@ -1,4 +1,4 @@
-/* ÉduGestion Pro — comptes d'accès : écoles, enseignants, parents et élèves.
+/* ÉduGestion Pro Master — comptes d'accès : écoles, enseignants, parents et élèves.
 
    Un seul écran, quatre onglets. Pour chaque personne ou école : créer le
    compte, remettre un mot de passe provisoire (jamais conservé en clair),

@@ -1,4 +1,4 @@
-/* ÉduGestion Pro — effectifs et personnel par école (statistiques de la circonscription).
+/* ÉduGestion Pro Master — effectifs et personnel par école (statistiques de la circonscription).
 
    Reproduit le tableau que chaque circonscription remet à sa direction départementale :
    pour chaque école, ses classes autorisées, son personnel (FE, ACDPE, ACDPCTD) et ses élèves par cours

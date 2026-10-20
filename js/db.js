@@ -1,9 +1,11 @@
-/* ÉduGestion Pro — couche de données locale (IndexedDB), hors-ligne d'abord. */
+/* ÉduGestion Pro Master — couche de données locale (IndexedDB), hors-ligne d'abord. */
 (function (global) {
   'use strict';
 
   const EG = global.EG;
-  const DB_NAME = 'edugestion_pro';
+  /* Variante Master : sur github.io, où ÉduGestion Pro est servie à la même adresse, une base à elle ; ailleurs la base
+     d'origine (les données déjà saisies sur l'adresse de la Master restent en place). */
+  const DB_NAME = (global.location && /github\.io$/.test(location.hostname)) ? 'edugestion_pro_master' : 'edugestion_pro';
   const DB_VERSION = 12;
   const SYSTEM_STORES = ['outbox', 'meta'];
   const ALL_STORES = EG.STORES.concat(SYSTEM_STORES);
@@ -40,6 +42,8 @@
       };
       req.onsuccess = e => {
         _db = e.target.result;
+        /* L'espace CP intégré (memp-cp/) lit la base de cette application-ci, pas celle d'une autre servie à la même adresse. */
+        try { sessionStorage.setItem('eg-db', DB_NAME); } catch (x) { /* stockage de session indisponible */ }
         /* Ne jamais bloquer une future mise à jour faite depuis une autre fenêtre. */
         _db.onversionchange = () => {
           try { _db.close(); } catch (x) { /* déjà fermée */ }
@@ -70,6 +74,7 @@
   }
 
   const DB = {
+    NOM: DB_NAME,
     uuid,
     open,
 
@@ -232,7 +237,7 @@
     exportAll() {
       return Promise.all(ALL_STORES.map(s => DB.all(s).then(rows => [s, rows])))
         .then(pairs => {
-          const out = { application: 'ÉduGestion Pro', version: '5.2', exporte_le: new Date().toISOString(), donnees: {} };
+          const out = { application: 'ÉduGestion Pro Master', version: '5.2', exporte_le: new Date().toISOString(), donnees: {} };
           pairs.forEach(([s, rows]) => { if (rows.length) out.donnees[s] = rows; });
           return out;
         });

@@ -1,4 +1,4 @@
-/* ÉduGestion Pro — calendrier scolaire d'une circonscription.
+/* ÉduGestion Pro Master — calendrier scolaire d'une circonscription.
 
    Rentrée, vacances, jours fériés, examens, réunions, animations pédagogiques,
    visites, formations, cérémonies : chaque circonscription tient son propre

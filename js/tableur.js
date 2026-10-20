@@ -1,4 +1,4 @@
-/* ÉduGestion Pro — classeurs Excel (.xlsx), lus et écrits sur l'appareil.
+/* ÉduGestion Pro Master — classeurs Excel (.xlsx), lus et écrits sur l'appareil.
    Aucune bibliothèque : un fichier .xlsx est une archive ZIP contenant du XML.
    L'écriture se fait sans compression, la lecture accepte les deux méthodes. */
 (function (global) {

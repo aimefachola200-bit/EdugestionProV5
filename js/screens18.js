@@ -1,4 +1,4 @@
-/* ÉduGestion Pro — deux modules détachés, accessibles directement depuis chaque école :
+/* ÉduGestion Pro Master — deux modules détachés, accessibles directement depuis chaque école :
 
    1. la carte d'identité de l'école (identification, localisation, direction,
       effectifs), à consulter, imprimer, exporter ;

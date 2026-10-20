@@ -1,4 +1,4 @@
-/* ÉduGestion Pro — socle des pièces officielles.
+/* ÉduGestion Pro Master — socle des pièces officielles.
    Cachet, codes QR, signatures et en-têtes : les briques communes à
    toutes les pièces éditées. Ce fichier ne connaît aucun modèle particulier. */
 (function (global) {
@@ -35,49 +35,136 @@
    * et choisit l'encre, bleue ou rouge.
    */
   function cachet(ecole, options) {
+    /* Même dessin que SCOLARIS, GESCOL et MEMP-CP : trois cercles, texte de l'arc supérieur et de l'arc
+       inférieur posé lettre par lettre (largeur réelle de chaque lettre), une étoile de chaque côté, et le texte
+       central centré dans le cercle intérieur — sur une à trois lignes (« | » force un retour à la ligne). */
     options = options || {};
     ecole = ecole || {};
     const encre = COULEURS_CACHET[options.couleur || ecole.cachet_couleur || 'BLEU'] || COULEURS_CACHET.BLEU;
-    const haut = (options.haut || ecole.cachet_haut || 'RÉPUBLIQUE DU BÉNIN').toUpperCase();
-    const centre = options.centre || ecole.cachet_centre || 'LE DIRECTEUR';
-    const brut = options.bas || ecole.cachet_bas || ecole.nom || 'ÉCOLE';
-    const bas = brut.length > 34 ? brut.slice(0, 33) + '…' : brut;
+    const haut = String(options.haut || ecole.cachet_haut || 'RÉPUBLIQUE DU BÉNIN').toUpperCase().trim();
+    const centre = String(options.centre || ecole.cachet_centre || 'LE DIRECTEUR').toUpperCase().trim();
+    const bas = String(options.bas || ecole.cachet_bas || ecole.nom || 'ÉCOLE').toUpperCase().trim();
     const taille = options.taille || 118;
-    const id = 'c' + Math.random().toString(36).slice(2, 8);
+    const T = 200, r = T / 2, rt = r * 0.74, fs = r * 0.17;
+    const parts = ['<svg class="cachet" width="' + taille + '" height="' + taille + '" viewBox="0 0 ' + T + ' ' + T + '"'
+      + ' xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Cachet — ' + echapper(centre.replace(/\|/g, ' ')) + '">',
+      '<g fill="none" stroke="' + encre + '" opacity="0.92">'
+      + '<circle cx="' + r + '" cy="' + r + '" r="' + (r - 3) + '" stroke-width="3.2"/>'
+      + '<circle cx="' + r + '" cy="' + r + '" r="' + (r - 8) + '" stroke-width="1"/>'
+      + '<circle cx="' + r + '" cy="' + r + '" r="' + (r * 0.56) + '" stroke-width="1.4"/></g>',
+      '<g fill="' + encre + '" font-family="Arial, Helvetica, sans-serif" font-weight="700" opacity="0.92">'];
+    const rad = d => d * Math.PI / 180, deg = x => x * 180 / Math.PI;
+    function arc(texte, enHaut) {
+      if (!texte) return;
+      let t = fs;
+      let larg = Array.from(texte).map(ch => largeurTexte(ch, t, true) + t * 0.08);
+      let total = deg(larg.reduce((a, b) => a + b, 0) / rt);
+      if (total > 150) { const f = 150 / total; t *= f; larg = larg.map(w => w * f); total = 150; }
+      let cumul = 0;
+      Array.from(texte).forEach((ch, k) => {
+        const pas = deg(larg[k] / rt), milieu = cumul + pas / 2; cumul += pas;
+        const a = enHaut ? 90 + total / 2 - milieu : 270 - total / 2 + milieu, rot = enHaut ? 90 - a : 270 - a;
+        const x = r + rt * Math.cos(rad(a)), y = r - rt * Math.sin(rad(a));
+        parts.push('<text x="' + x.toFixed(2) + '" y="' + y.toFixed(2) + '" font-size="' + t.toFixed(2) + '" text-anchor="middle" dominant-baseline="central"'
+          + ' transform="rotate(' + rot.toFixed(2) + ' ' + x.toFixed(2) + ' ' + y.toFixed(2) + ')">' + echapper(ch) + '</text>');
+      });
+    }
+    arc(haut, true); arc(bas, false);
+    [0, 180].forEach(a => parts.push('<text x="' + (r + rt * Math.cos(rad(a))).toFixed(2) + '" y="' + r + '" font-size="' + (fs * 1.1).toFixed(2)
+      + '" text-anchor="middle" dominant-baseline="central">★</text>'));
+    /* Texte central : coupé en lignes équilibrées s'il est long, puis taille ajustée pour tenir dans le cercle intérieur. */
+    let lignes = centre.split('|').map(x => x.trim()).filter(Boolean);
+    if (lignes.length === 1 && lignes[0].length > 14) {
+      const mots = lignes[0].split(/\s+/), n = lignes[0].length > 28 ? 3 : 2, cible = lignes[0].length / n;
+      lignes = []; let cur = '';
+      mots.forEach(m => { if (cur && (cur + ' ' + m).length > cible + 3 && lignes.length < n - 1) { lignes.push(cur); cur = m; } else cur = cur ? cur + ' ' + m : m; });
+      if (cur) lignes.push(cur);
+    }
+    if (!lignes.length) lignes = [''];
+    let fc = r * 0.2;
+    const maxW = r * 0.98, w = Math.max.apply(null, lignes.map(l => largeurTexte(l, fc, true)));
+    if (w > maxW) fc *= maxW / w;
+    fc = Math.min(fc, (r * 0.98) / (lignes.length * 1.2));
+    const y0 = r - (lignes.length - 1) * fc * 0.6;
+    lignes.forEach((l, k) => parts.push('<text x="' + r + '" y="' + (y0 + k * fc * 1.2).toFixed(2) + '" font-size="' + fc.toFixed(2)
+      + '" text-anchor="middle" dominant-baseline="central">' + echapper(l) + '</text>'));
+    parts.push('</g></svg>');
+    return parts.join('');
+  }
 
-    /* Les deux étoiles marquent la césure entre l'arc du haut et celui du bas. */
-    const etoile = (x, y, r) => '<path transform="translate(' + x + ' ' + y + ') scale(' + (r / 10) + ')"'
-      + ' d="M0 -10 L2.9 -3.1 10.4 -3.1 4.3 1.5 6.7 8.8 0 4.4 -6.7 8.8 -4.3 1.5 -10.4 -3.1 -2.9 -3.1 Z"'
-      + ' fill="' + encre + '"/>';
+  /* =======================================================================
+     Cachet rectangulaire du nom (« griffe ») — même dessin que SCOLARIS,
+     GESCOL et MEMP-CP : bord double (trait épais + trait fin), coins droits,
+     2 à 3 lignes centrées en majuscules — titre ou fonction, NOM Prénoms,
+     ligne facultative (grade, qualité). La taille s'ajuste à la largeur.
+     ======================================================================= */
 
-    /* Les deux arcs de texte courent tous les deux sur le même anneau, entre
-       le cercle extérieur (r 94) et le cercle intérieur (r 80) — exactement
-       comme sur les cachets de l'application de gestion des CS — avec une
-       courte coupure de part et d'autre de chaque étoile pour que le texte
-       ne les chevauche pas. */
-    return '<svg class="cachet" width="' + taille + '" height="' + taille + '" viewBox="0 0 200 200"'
-      + ' xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Cachet — ' + echapper(centre) + '">'
-      + '<defs>'
-      + '<path id="h' + id + '" d="M 16.9,77.7 A 86,86 0 0 1 183.1,77.7"/>'
-      + '<path id="b' + id + '" d="M 16.9,122.3 A 86,86 0 0 0 183.1,122.3"/>'
-      + '</defs>'
-      + '<circle cx="100" cy="100" r="94" fill="none" stroke="' + encre + '" stroke-width="4"/>'
-      + '<circle cx="100" cy="100" r="80" fill="none" stroke="' + encre + '" stroke-width="1.5"/>'
-      + '<text font-size="' + (haut.length > 26 ? 8.5 : 10) + '" font-weight="700" fill="' + encre + '"'
-      + ' text-anchor="middle" font-family="Helvetica, Arial, sans-serif" letter-spacing="0.3">'
-      + '<textPath href="#h' + id + '" startOffset="50%">' + echapper(haut) + '</textPath></text>'
-      + '<text font-size="' + (bas.length > 26 ? 7.5 : 9) + '" font-weight="600" fill="' + encre + '"'
-      + ' text-anchor="middle" font-family="Helvetica, Arial, sans-serif" letter-spacing="0.3">'
-      + '<textPath href="#b' + id + '" startOffset="50%">' + echapper(bas) + '</textPath></text>'
-      + etoile(14, 100, 7) + etoile(186, 100, 7)
-      + '<text x="100" y="' + (centre.length > 18 ? 96 : 100) + '" font-size="'
-      + (centre.length > 24 ? 11 : (centre.length > 14 ? 13.5 : 17)) + '" font-weight="700" fill="' + encre + '"'
-      + ' text-anchor="middle" font-family="Helvetica, Arial, sans-serif" letter-spacing="0.5">'
-      + echapper(centre.length > 30 ? centre.slice(0, 29) + '…' : centre) + '</text>'
-      + (ecole.code_ecole ? '<text x="100" y="' + (centre.length > 18 ? 118 : 120) + '" font-size="10"'
-        + ' font-weight="600" fill="' + encre + '" text-anchor="middle"'
-        + ' font-family="Helvetica, Arial, sans-serif">' + echapper(ecole.code_ecole) + '</text>' : '')
-      + '</svg>';
+  let _mesure = null;
+  function largeurTexte(t, taille, gras) {
+    try {
+      _mesure = _mesure || document.createElement('canvas').getContext('2d');
+      _mesure.font = (gras ? 'bold ' : '') + taille + 'px Arial, Helvetica, sans-serif';
+      return _mesure.measureText(t).width;
+    } catch (e) { return t.length * taille * (gras ? 0.66 : 0.58); }
+  }
+  function lignesGriffe(lignes) {
+    return (lignes || []).map(l => String(l || '').replace(/\s+/g, ' ').trim().toUpperCase()).filter(Boolean).slice(0, 3);
+  }
+
+  /** Griffe en SVG (largeur en pixels, hauteur calculée). Rend '' sans aucune ligne. */
+  function griffe(lignes, couleur, largeur) {
+    lignes = lignesGriffe(lignes);
+    if (!lignes.length) return '';
+    const L = largeur || 230, col = COULEURS_CACHET[couleur] || couleur || COULEURS_CACHET.BLEU;
+    const base = L / 19, pad = L * 0.06, dispo = L - 2 * pad;
+    const spec = lignes.map((t, i) => {
+      const gras = i === 1 || i === 0 || lignes.length === 1;
+      let taille = (i === 1 || (i === 0 && lignes.length === 1)) ? base * 1.3 : (i === 0 ? base : base * 0.92);
+      const w = largeurTexte(t, taille, gras);
+      if (w > dispo && w) taille = Math.max(taille * dispo / w, 3);
+      return { t, gras, taille };
+    });
+    const hTexte = spec.reduce((a, x) => a + x.taille * 1.3, 0), H = hTexte + 2 * pad;
+    let y = (H - hTexte) / 2;
+    const textes = spec.map(x => { y += x.taille * 1.3; return '<text x="' + (L / 2).toFixed(1) + '" y="' + (y - x.taille * 0.3).toFixed(2) + '" font-size="' + x.taille.toFixed(2) + '" font-weight="' + (x.gras ? 700 : 400) + '">' + echapper(x.t) + '</text>'; }).join('');
+    return '<svg class="griffe" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ' + L.toFixed(1) + ' ' + H.toFixed(1) + '" width="' + L.toFixed(0) + '" height="' + H.toFixed(0) + '"'
+      + ' role="img" aria-label="Cachet rectangulaire : ' + echapper(lignes.join(' / ')) + '">'
+      + '<g fill="none" stroke="' + col + '" opacity="0.92"><rect x="1.6" y="1.6" width="' + (L - 3.2).toFixed(1) + '" height="' + (H - 3.2).toFixed(1) + '" stroke-width="2.4"/>'
+      + '<rect x="' + (1.6 + pad * 0.55).toFixed(1) + '" y="' + (1.6 + pad * 0.55).toFixed(1) + '" width="' + (L - 3.2 - pad * 1.1).toFixed(1) + '" height="' + (H - 3.2 - pad * 1.1).toFixed(1) + '" stroke-width="0.8"/></g>'
+      + '<g fill="' + col + '" font-family="Arial, Helvetica, sans-serif" opacity="0.92" text-anchor="middle">' + textes + '</g></svg>';
+  }
+
+  /** Griffe d'une école : « LE DIRECTEUR » (ou le titre choisi), le nom du directeur, une 3e ligne facultative. */
+  function griffeEcole(ecole, largeur) {
+    ecole = ecole || {};
+    const nom = ecole.griffe_nom || ecole.directeur_nom || '';
+    if (!nom) return '';
+    return griffe([ecole.griffe_titre || (ecole.cachet_centre && !/^LE DIRECTEUR$/i.test(ecole.cachet_centre) ? ecole.cachet_centre : 'LE DIRECTEUR'), nom, ecole.griffe_ligne3],
+      ecole.griffe_couleur || ecole.cachet_couleur || 'BLEU', largeur);
+  }
+
+  /** Griffe d'une circonscription (chef de CS) ou d'une direction départementale (DDEMP). */
+  function griffeTerritoire(t, largeur) {
+    t = t || {};
+    const nom = t.griffe_nom || t.responsable || '';
+    if (!nom) return '';
+    const titre = t.griffe_titre || (t.type === 'DEPARTEMENT' ? 'LE DIRECTEUR DÉPARTEMENTAL' : 'LE CHEF DE LA CIRCONSCRIPTION SCOLAIRE');
+    return griffe([titre, nom, t.griffe_ligne3], t.griffe_couleur || t.cachet_couleur || 'BLEU', largeur);
+  }
+
+  /** Cachet rond et/ou rectangulaire selon la forme choisie : ROND_ET_GRIFFE (par défaut), ROND, RECTANGULAIRE. */
+  function assembler(rond, rect, forme) {
+    if (!rect || forme === 'ROND') return rond;
+    if (forme === 'RECTANGULAIRE') return '<span class="cachets-duo">' + rect + '</span>';
+    return '<span class="cachets-duo">' + rond + rect + '</span>';
+  }
+  function cachetComplet(ecole, options) {
+    ecole = ecole || {};
+    return assembler(cachet(ecole, options), griffeEcole(ecole, options && options.largeurGriffe), ecole.cachet_type || 'ROND_ET_GRIFFE');
+  }
+  function cachetTerritoireComplet(t, options) {
+    t = t || {};
+    return assembler(cachetTerritoire(t, options), griffeTerritoire(t, options && options.largeurGriffe), t.cachet_type || 'ROND_ET_GRIFFE');
   }
 
   /* =======================================================================
@@ -146,7 +233,7 @@
     return '<div class="bloc-signature">'
       + (titulaire ? caseSignature(titulaire, 'Le titulaire de la classe') : '')
       + caseSignature(user, mention === '' ? '' : (mention || 'Le directeur'))
-      + '<div class="cachet-case">' + cachet(ecole) + '</div>'
+      + '<div class="cachet-case">' + cachetComplet(ecole) + '</div>'
       + '</div>';
   }
 
@@ -192,7 +279,7 @@
     return '<p class="fait-a">Fait à ' + echapper(t.ville || '……………………') + ', le ' + '……………………' + '</p>'
       + '<div class="bloc-signature">'
       + caseSignature({ nom: t.responsable || '' }, mention || (t.type === 'DEPARTEMENT' ? 'Le Directeur départemental' : 'Le Chef de la circonscription scolaire'))
-      + '<div class="cachet-case">' + cachetTerritoire(t) + '</div></div>';
+      + '<div class="cachet-case">' + cachetTerritoireComplet(t) + '</div></div>';
   }
 
   /**
@@ -263,13 +350,9 @@
 
   /** Bandeau du ministère, repris du modèle transmis par la DDEMP. */
   function enteteMEMP(departement, service) {
-    const logo = (global.location && location.href)
-      ? new URL('assets/entete-memp.jpg', location.href).href : 'assets/entete-memp.jpg';
+    /* Même en-tête que l'application MEMP-CP : bandeau officiel (armoiries, ministère, coordonnées). */
     return '<div class="entete-memp">'
-      + '<img src="' + logo + '" alt="Ministère des Enseignements Maternel et Primaire — République du Bénin">'
-      + '<div class="entete-coordonnees">'
-      + '01 BP 10 Porto-Novo<br>Tél. : +229 20 21 52 22 • Fax : +229 20 21 52 22<br>'
-      + 'E-mail : mempmatprim@gmail.com</div>'
+      + '<img class="entete-bandeau" src="' + ressource('embleme-memp.png') + '" alt="République du Bénin — Ministère des Enseignements Maternel et Primaire — 01 BP 10 Porto-Novo">'
       + '</div>'
       + '<div class="entete-direction">Direction Départementale des Enseignements Maternel et Primaire : '
       + '<strong>' + echapper(departement || '—') + '</strong><br>'
@@ -277,29 +360,27 @@
   }
 
   /**
-   * En-tête administratif court, apposé sur toutes les pièces éditées qui n'ont
-   * pas déjà leur propre en-tête officiel.
+   * En-tête administratif, apposé sur toutes les pièces éditées qui n'ont pas
+   * déjà leur propre en-tête officiel : le bandeau du MEMP (comme MEMP-CP,
+   * SCOLARIS et GESCOL), puis direction départementale, circonscription, école.
    */
   function enteteAdministratif(ecole, contexte) {
     contexte = contexte || {};
+    const lignes = [
+      contexte.departement ? 'Direction Départementale des Enseignements Maternel et Primaire — ' + echapper(contexte.departement) : '',
+      contexte.circonscription ? 'Circonscription scolaire de ' + echapper(String(contexte.circonscription).replace(/^CS\s+/i, '')) : ''
+    ].filter(Boolean);
     return '<div class="entete-admin">'
-      + '<img class="entete-armoiries" src="' + ressource('armoiries-benin.png')
-      + '" alt="Armoiries de la République du Bénin">'
+      + '<img class="entete-bandeau" src="' + ressource('embleme-memp.png') + '" alt="République du Bénin — Ministère des Enseignements Maternel et Primaire">'
       + '<div class="entete-admin-centre">'
-      + '<strong>RÉPUBLIQUE DU BÉNIN</strong>'
-      + '<span>Ministère des Enseignements Maternel et Primaire</span>'
-      + (contexte.departement ? '<span>Direction Départementale de ' + echapper(contexte.departement) + '</span>' : '')
-      + (contexte.circonscription ? '<span>Circonscription scolaire de '
-        + echapper(String(contexte.circonscription).replace(/^CS\s+/i, '')) + '</span>' : '')
-      + '<span class="entete-ecole">' + echapper(ecole ? ecole.nom : '') + '</span>'
-      + '</div>'
-      + '<img class="entete-logo" src="' + ressource('entete-memp.jpg')
-      + '" alt="Ministère des Enseignements Maternel et Primaire">'
-      + '</div>';
+      + lignes.map(l => '<span>' + l + '</span>').join('')
+      + (ecole && ecole.nom ? '<span class="entete-ecole">' + echapper(ecole.nom) + '</span>' : '')
+      + '</div></div>';
   }
 
   Object.assign(EG.Docs, {
     echapper, ressource, cachet, COULEURS_CACHET, cachetTerritoire, mentionsTerritoire, visaEcole, visaTerritoire,
+    griffe, griffeEcole, griffeTerritoire, cachetComplet, cachetTerritoireComplet,
     adresseVerification, qrDocument, qrEleve,
     caseSignature, blocSignature, capturerSignature,
     enteteMEMP, enteteAdministratif

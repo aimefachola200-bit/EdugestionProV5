@@ -1,4 +1,4 @@
-/* ÉduGestion Pro — classes et rôles de gestion collégiale ; téléchargements.
+/* ÉduGestion Pro Master — classes et rôles de gestion collégiale ; téléchargements.
 
    « Classes & rôles » : les six cours du primaire (CI, CP, CE1, CE2, CM1, CM2),
    leurs titulaires, puis les instances de gestion collégiale de l'école (comité

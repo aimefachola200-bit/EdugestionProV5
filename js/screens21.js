@@ -1,4 +1,4 @@
-/* ÉduGestion Pro — jeux de données des circonscriptions.
+/* ÉduGestion Pro Master — jeux de données des circonscriptions.
 
    Un « jeu de données » est un fichier livré avec l'application (dossier donnees/) qui décrit
    les écoles d'UNE circonscription, avec leurs statistiques : classes autorisées, personnel

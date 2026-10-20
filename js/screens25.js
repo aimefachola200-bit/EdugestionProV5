@@ -1,4 +1,4 @@
-/* ÉduGestion Pro — les rubriques de la circonscription et de la direction départementale.
+/* ÉduGestion Pro Master — les rubriques de la circonscription et de la direction départementale.
 
    Ce fichier porte les écrans du menu des comptes de circonscription (CS) et de direction
    départementale (DDEMP) qui n'existaient pas encore :

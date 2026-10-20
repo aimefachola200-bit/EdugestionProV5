@@ -1,4 +1,4 @@
-/* ÉduGestion Pro — synthèse officielle de l'évaluation.
+/* ÉduGestion Pro Master — synthèse officielle de l'évaluation.
    Le document qui remonte à la DDEMP : en-tête d'identification complet, tableau
    par matière, participation et réussite au seuil, puis les quatre sections
    d'analyse. Il se calcule à la classe, à l'école ou à l'unité pédagogique. */

@@ -1,4 +1,4 @@
-/* ÉduGestion Pro — l'import et l'export reliés à chaque rubrique.
+/* ÉduGestion Pro Master — l'import et l'export reliés à chaque rubrique.
 
    Sous l'en-tête de chaque rubrique (personnel, élèves, écoles, calendrier, courriers…), une barre
    propose « Exporter » et « Importer » : elle ouvre le module Import et export déjà réglé sur les

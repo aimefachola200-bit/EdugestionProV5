@@ -1,4 +1,4 @@
-/* ÉduGestion Pro — les présences en demi-journées.
+/* ÉduGestion Pro Master — les présences en demi-journées.
 
    Une journée de classe compte deux demi-journées : l'appel se fait le matin et l'après-midi.
    Ce fichier porte :

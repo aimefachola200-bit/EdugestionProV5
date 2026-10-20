@@ -1,4 +1,4 @@
-# Mettre ÉduGestion Pro en ligne
+# Mettre ÉduGestion Pro Master en ligne
 
 L'application est un site statique : pas de serveur applicatif, pas de base à
 installer, aucune dépendance à télécharger. Il suffit de publier le dossier tel
@@ -42,7 +42,7 @@ npx wrangler pages deploy . --project-name edugestion-pro
 
 ```bash
 cd edugestion-pro
-git init && git add -A && git commit -m "ÉduGestion Pro"
+git init && git add -A && git commit -m "ÉduGestion Pro Master"
 git branch -M main
 git remote add origin git@github.com:VOTRE-COMPTE/edugestion-pro.git
 git push -u origin main
@@ -81,7 +81,7 @@ n'ont plus besoin du réseau au quotidien.
 ## Après la mise en ligne — à faire avant d'ouvrir aux écoles
 
 1. Ouvrir l'adresse sur un téléphone, vérifier que le bandeau **« Installer
-   ÉduGestion Pro »** apparaît, et installer l'application.
+   ÉduGestion Pro Master »** apparaît, et installer l'application.
 2. Activer le mode avion et relancer : l'application doit démarrer normalement.
 3. Se connecter en `admin` / `admin123`, créer les comptes réels dans
    *Plus → Utilisateurs & sécurité*, puis **désactiver les six comptes de

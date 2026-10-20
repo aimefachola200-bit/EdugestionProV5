@@ -1,4 +1,4 @@
-/* ÉduGestion Pro — sorties de documents : impression (PDF), Word, Excel.
+/* ÉduGestion Pro Master — sorties de documents : impression (PDF), Word, Excel.
 
    Les écrans d'édition passent ici pour livrer un document sans le consigner
    dans le registre des documents scellés : fiches vierges, fiches d'accès,

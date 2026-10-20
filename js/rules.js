@@ -1,4 +1,4 @@
-/* ÉduGestion Pro — règles métier officielles (MEMP).
+/* ÉduGestion Pro Master — règles métier officielles (MEMP).
    Toutes les décisions passent par ce module : une seule source de vérité. */
 (function (global) {
   'use strict';

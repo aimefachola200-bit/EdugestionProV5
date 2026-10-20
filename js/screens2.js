@@ -1,4 +1,4 @@
-/* ÉduGestion Pro — espaces de travail métier (2e série).
+/* ÉduGestion Pro Master — espaces de travail métier (2e série).
    Dossier élève, dossier agent, patrimoine, visites, gouvernance. */
 (function (global) {
   'use strict';
@@ -178,6 +178,32 @@
           mk('lieu_naissance', 'Lieu de naissance', txt('lieu_naissance')),
           mk('classe_id', 'Classe *', el('select', { id: 'i_classe_id' }, [el('option', { value: '', text: '— Choisir —' })]
             .concat(dispo.map(c => el('option', { value: c.id, text: (c.libelle || c.code) + ' — ' + c.niveau }))))),
+          mk('nom_pere', 'Nom et prénoms du père', txt('nom_pere')),
+          mk('nom_mere', 'Nom et prénoms de la mère', txt('nom_mere')),
+          mk('tuteur_telephone', 'Téléphone des parents ou du tuteur', txt('tuteur_telephone', '01 …')),
+          mk('photo', 'Photo de l’élève (appareil photo ou fichier)', (() => {
+            const c = el('input', { type: 'file', id: 'i_photo', accept: 'image/*', 'aria-label': 'Photo de l’élève' });
+            const apercu = el('img', { class: 'apercu-image', alt: '', style: 'display:none;max-width:120px;margin-top:4px;border-radius:6px' });
+            c.dataURL = '';
+            c.addEventListener('change', () => {
+              const fichier = c.files && c.files[0];
+              if (!fichier) return;
+              const lecteur = new FileReader();
+              lecteur.onload = () => {
+                const img = new Image();
+                img.onload = () => {
+                  const k = Math.min(1, 900 / Math.max(img.width, img.height)), t = document.createElement('canvas');
+                  t.width = Math.round(img.width * k); t.height = Math.round(img.height * k);
+                  t.getContext('2d').drawImage(img, 0, 0, t.width, t.height);
+                  c.dataURL = t.toDataURL('image/jpeg', 0.82); apercu.src = c.dataURL; apercu.style.display = '';
+                };
+                img.src = lecteur.result;
+              };
+              lecteur.readAsDataURL(fichier);
+            });
+            c.apercu = apercu;
+            return el('div', {}, [c, apercu]);
+          })()),
           el('div', { class: 'champ champ-bool' }, [
             (ch.acte_naissance = el('input', { type: 'checkbox', id: 'i_acte' })),
             el('label', { for: 'i_acte', text: 'Acte de naissance fourni' })
@@ -203,7 +229,10 @@
             nom: ch.nom.value.trim(), prenoms: ch.prenoms.value.trim(), sexe: ch.sexe.value,
             date_naissance: ch.date_naissance.value || null, lieu_naissance: ch.lieu_naissance.value.trim() || null,
             acte_naissance: ch.acte_naissance.checked, classe_id: ch.classe_id.value,
-            redoublant: ch.redoublant.checked, a_suivi_maternelle: ch.a_suivi_maternelle.checked
+            redoublant: ch.redoublant.checked, a_suivi_maternelle: ch.a_suivi_maternelle.checked,
+            nom_pere: ch.nom_pere.value.trim() || null, nom_mere: ch.nom_mere.value.trim() || null,
+            tuteur_telephone: ch.tuteur_telephone.value.trim() || null,
+            photo: (form.querySelector('#i_photo') || {}).dataURL || null
           };
         }
 
@@ -246,9 +275,16 @@
             nom: v.nom, prenoms: v.prenoms, sexe: v.sexe, date_naissance: v.date_naissance,
             date_naissance_precision: v.date_naissance ? 'EXACTE' : 'INCONNUE',
             lieu_naissance: v.lieu_naissance, acte_naissance: v.acte_naissance,
-            nationalite: 'Béninoise', educmaster_statut: 'NON_SYNCHRONISE', statut_identite: 'ACTIF'
-          }).then(eleve => inscrire(eleve, v, 'NOUVELLE'))
-            .then(() => { f(); U.toast(v.nom + ' ' + v.prenoms + ' est inscrit(e)'); dessiner(); EG.majSynchro(); });
+            nationalite: 'Béninoise', educmaster_statut: 'NON_SYNCHRONISE', statut_identite: 'ACTIF',
+            nom_pere: v.nom_pere, nom_mere: v.nom_mere, tuteur_telephone: v.tuteur_telephone, photo: v.photo
+          }).then(eleve => inscrire(eleve, v, 'NOUVELLE').then(ins => ({ eleve, ins })))
+            .then(({ eleve, ins }) => {
+              f(); U.toast(v.nom + ' ' + v.prenoms + ' est inscrit(e)'); dessiner(); EG.majSynchro();
+              U.modal('Inscription enregistrée', el('p', { text: 'Imprimer maintenant la fiche d’inscription de ' + v.nom + ' ' + v.prenoms + ', avec sa carte d’identité scolaire ?' }), f3 => [
+                el('button', { class: 'btn btn-fantome', text: 'Plus tard', onclick: f3 }),
+                el('button', { class: 'btn btn-primaire', text: '🖨 Fiche d’inscription + carte', onclick: () => { f3(); EG.imprimerFicheInscription(eleve, ins); } })
+              ]);
+            });
         }
 
         function reinscrire(eleve, v) {
@@ -265,11 +301,26 @@
             redoublant: v.redoublant, a_suivi_maternelle: v.a_suivi_maternelle,
             date_inscription: new Date().toISOString().slice(0, 10),
             statut: 'ACTIF', principale: true
-          }).then(ins => DB.audit('INSCRIPTION', 'inscriptions_eleves', ins.id, { type: type, niveau: cl.niveau }));
+          }).then(ins => DB.audit('INSCRIPTION', 'inscriptions_eleves', ins.id, { type: type, niveau: cl.niveau }).then(() => ins));
         }
       });
     }
   });
+
+  /** Fiche d'inscription de l'élève avec sa carte d'identité scolaire (numérotée, scellée, QR, cachets). */
+  EG.imprimerFicheInscription = function (eleve, ins) {
+    const numeroCarte = 'CS-' + ins.niveau + '-' + ins.id.slice(0, 6).toUpperCase();
+    return Promise.all([DB.get('ecoles', ins.ecole_id), DB.all('territoires')]).then(([ecole, territoires]) => {
+      const it = {}; territoires.forEach(t => { it[t.id] = t; });
+      const circo = ecole ? it[ecole.territoire_id] : null;
+      let dep = circo ? it[circo.parent_id] : null;
+      while (dep && dep.type !== 'DEPARTEMENT' && dep.parent_id) dep = it[dep.parent_id];
+      const contexte = { circonscription: circo ? String(circo.nom).replace(/^CS\s+/i, '') : '', departement: dep ? dep.nom : '' };
+      return EG.genererDocument('FICHE_INSCRIPTION', 'Fiche d’inscription — ' + nomEleve(eleve),
+        EG.Docs.ficheInscription(eleve, ins, ecole, session().annee_code, numeroCarte, contexte, session().user),
+        { classe_id: ins.classe_id, ecole_id: ins.ecole_id });
+    });
+  };
 
   /** Rapprochement simple sur le nom, les prénoms et la date de naissance. */
   function doublonsPossibles(tous, v) {
@@ -460,6 +511,10 @@
                 + '</div>', { classe_id: ins.classe_id });
             });
           }
+        }));
+        actions.push(el('button', {
+          class: 'btn btn-fantome', text: '🪪 Fiche d’inscription + carte d’identité',
+          onclick: () => EG.imprimerFicheInscription(eleve || {}, ins)
         }));
         if (ins.niveau === 'CM2') {
           actions.push(el('button', {

@@ -1,4 +1,4 @@
-/* ÉduGestion Pro — fin de cycle annuel et répertoire national.
+/* ÉduGestion Pro Master — fin de cycle annuel et répertoire national.
    Rapprochement EDUCMaster, clôture d'année, calendrier scolaire. */
 (function (global) {
   'use strict';

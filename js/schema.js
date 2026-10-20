@@ -1,4 +1,4 @@
-/* ÉduGestion Pro V5.2 — Schéma de données
+/* ÉduGestion Pro Master V5.2 — Schéma de données
    Chaque entité = un magasin IndexedDB + un écran CRUD généré.
    t: text|textarea|number|money|date|datetime|bool|select|ref|json
 */
@@ -165,6 +165,11 @@
         f('cachet_centre', 'Cachet — texte central', 'text'),
         f('cachet_bas', 'Cachet — texte de l’arc inférieur', 'text'),
         f('cachet_couleur', 'Cachet — couleur', 'select', { o: ['BLEU', 'ROUGE'], def: 'BLEU' }),
+        /* Cachet rectangulaire du nom (griffe), comme SCOLARIS, GESCOL et MEMP-CP. */
+        f('cachet_type', 'Cachet — forme apposée', 'select', { o: ['ROND_ET_GRIFFE', 'ROND', 'RECTANGULAIRE'], def: 'ROND_ET_GRIFFE' }),
+        f('griffe_titre', 'Cachet rectangulaire — 1re ligne (titre)', 'text'),
+        f('griffe_nom', 'Cachet rectangulaire — nom (vide : celui du responsable)', 'text'),
+        f('griffe_ligne3', 'Cachet rectangulaire — 3e ligne (grade, qualité)', 'text'),
         /* Le sélecteur ne montre que les territoires dont le type peut être
            parent du type choisi ci-dessus : impossible de rattacher, par
            exemple, un arrondissement directement au pays. */
@@ -215,6 +220,11 @@
         f('cachet_centre', 'Cachet — texte central', 'text', { def: 'LE DIRECTEUR' }),
         f('cachet_bas', 'Cachet — texte de l’arc inférieur', 'text'),
         f('cachet_couleur', 'Cachet — couleur', 'select', { o: ['BLEU', 'ROUGE'], def: 'BLEU' }),
+        /* Cachet rectangulaire du nom (griffe), comme SCOLARIS, GESCOL et MEMP-CP. */
+        f('cachet_type', 'Cachet — forme apposée', 'select', { o: ['ROND_ET_GRIFFE', 'ROND', 'RECTANGULAIRE'], def: 'ROND_ET_GRIFFE' }),
+        f('griffe_titre', 'Cachet rectangulaire — 1re ligne (titre)', 'text'),
+        f('griffe_nom', 'Cachet rectangulaire — nom (vide : celui du responsable)', 'text'),
+        f('griffe_ligne3', 'Cachet rectangulaire — 3e ligne (grade, qualité)', 'text'),
         f('directeur_telephone', 'Téléphone du directeur', 'text'),
         f('statut', 'Statut', 'select', { o: ['PUBLIQUE', 'PRIVEE', 'COMMUNAUTAIRE'] }),
         f('adresse', 'Adresse', 'text'),
@@ -443,6 +453,10 @@
         f('matricule_ecole', 'Numéro matricule de l’école', 'text', { list: 1 }),
         f('nom_pere', 'Nom et prénoms du père', 'text'),
         f('nom_mere', 'Nom et prénoms de la mère', 'text'),
+        f('tuteur_nom', 'Tuteur (si différent des parents)', 'text'),
+        f('tuteur_telephone', 'Téléphone des parents ou du tuteur', 'text'),
+        f('adresse_parents', 'Adresse des parents', 'text'),
+        f('photo', 'Photo de l’élève (appareil photo ou fichier)', 'image'),
         f('commune_naissance', 'Commune de naissance', 'text'),
         f('educmaster_matricule', 'Matricule EDUCMaster', 'text', { list: 1 }),
         f('educmaster_statut', 'Statut EDUCMaster', 'select', { o: ['NON_SYNCHRONISE', 'EN_ATTENTE', 'SYNCHRONISE', 'CONFLIT', 'REJETE'], def: 'NON_SYNCHRONISE' }),
@@ -711,6 +725,7 @@
         f('lieu_naissance', 'Lieu de naissance', 'text'),
         f('telephone', 'Téléphone', 'text', { list: 1 }),
         f('email', 'E-mail', 'text'),
+        f('photo', 'Photo de l’agent (appareil photo ou fichier)', 'image'),
         f('ecole_id', 'École d\'affectation', 'ref', { ref: 'ecoles', scope: 1 }),
         f('fonction', 'Fonction', 'select', { list: 1, o: ['DIRECTEUR', 'ENSEIGNANT', 'CONSEILLER_PEDAGOGIQUE', 'CS', 'ADMINISTRATIF', 'SOUTIEN', 'AUTRE'] }),
         f('categorie', 'Catégorie', 'select', { list: 1, o: ['A1', 'A2', 'A3', 'B1', 'C1'] }),

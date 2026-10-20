@@ -1,4 +1,4 @@
-/* ÉduGestion Pro — annuaire des écoles.
+/* ÉduGestion Pro Master — annuaire des écoles.
    L'outil de collecte du chef de circonscription : suivi du remplissage école
    par école, import en masse depuis un classeur, export du répertoire complet
    et fiche de collecte à distribuer aux directeurs. */

@@ -1,4 +1,4 @@
-/* ÉduGestion Pro — modèles de pièces officielles.
+/* ÉduGestion Pro Master — modèles de pièces officielles.
    Carte scolaire, certificat de scolarité, fiche d'inscription au CEP et
    fiche d'évaluation de l'agent. Chaque modèle s'appuie sur le socle. */
 (function (global) {
@@ -98,7 +98,8 @@
       + '<div class="carte-titre">CARTE D’IDENTITÉ SCOLAIRE · ' + echapper(annee) + '</div>'
 
       + '<div class="carte-corps">'
-      + '<div class="carte-photo"><span>' + echapper(initiales) + '</span><small>Photo</small></div>'
+      + (eleve.photo ? '<div class="carte-photo carte-photo-image"><img src="' + eleve.photo + '" alt="Photo de l’élève"></div>'
+        : '<div class="carte-photo"><span>' + echapper(initiales) + '</span><small>Photo</small></div>')
       + '<table class="carte-champs"><tbody>'
       + '<tr><td>Nom</td><th>' + echapper((eleve.nom || '').toUpperCase()) + '</th></tr>'
       + '<tr><td>Prénoms</td><th>' + echapper(eleve.prenoms) + '</th></tr>'
@@ -179,7 +180,7 @@
       + '</div>'
       + '<div class="bloc-signature cert-signature">'
       + caseSignature(signataire, 'Le Directeur')
-      + '<div class="cachet-case">' + cachet(ecole) + '</div>'
+      + '<div class="cachet-case">' + D.cachetComplet(ecole) + '</div>'
       + '</div>'
       + '</div>';
   }
@@ -276,7 +277,7 @@
       + echapper(U.dateCourte(new Date().toISOString())) + '</p>'
       + '<div class="bloc-signature fiche-signature">'
       + caseSignature(agent, 'L’agent')
-      + '<div class="cachet-case">' + cachet(ecole) + '</div>'
+      + '<div class="cachet-case">' + D.cachetComplet(ecole) + '</div>'
       + '</div>'
 
       + '<div class="saut-page"></div>'
@@ -413,15 +414,65 @@
       + echapper(U.dateCourte(new Date().toISOString())) + '</p>'
       + '<div class="bloc-signature fiche-signature">'
       + caseSignature(signataire, 'Le Directeur')
-      + '<div class="cachet-case">' + cachet(ecole) + '</div>'
+      + '<div class="cachet-case">' + D.cachetComplet(ecole) + '</div>'
       + '</div>'
       + '</div>';
   }
 
   /* Feuille de style embarquée dans la fenêtre d'impression. */
 
+  /* =======================================================================
+     Fiche d'inscription de l'élève, avec sa carte d'identité scolaire
+     (même principe que SCOLARIS et GESCOL : photo prise à l'appareil,
+     identité, scolarité, parents, puis la carte recto-verso à découper).
+     L'en-tête du MEMP, la signature, le cachet rond et le cachet
+     rectangulaire du directeur et le QR de vérification sont ajoutés à
+     l'impression comme pour toute pièce administrative.
+     ======================================================================= */
+  function ficheInscription(eleve, ins, ecole, annee, numeroCarte, contexte, signataire) {
+    eleve = eleve || {}; ins = ins || {}; ecole = ecole || {};
+    const v = x => (x === null || x === undefined || x === '') ? '<span class="vide-ligne">……………………………</span>' : echapper(x);
+    const oui = b => b ? 'Oui' : 'Non';
+    const ligne = (k, val) => '<tr><td>' + echapper(k) + '</td><th>' + val + '</th></tr>';
+    const photo = eleve.photo
+      ? '<img class="fi-photo" src="' + eleve.photo + '" alt="Photo de l’élève">'
+      : '<div class="fi-photo fi-photo-vide">Photo<br>d’identité</div>';
+    const TYPES = { NOUVELLE: 'Nouvelle inscription', REINSCRIPTION: 'Réinscription', TRANSFERT: 'Transfert' };
+    return '<div class="fiche-inscription">'
+      + '<h2 class="fi-titre">FICHE D’INSCRIPTION — ANNÉE SCOLAIRE ' + echapper(annee) + '</h2>'
+      + '<div class="fi-haut">' + photo + '<table class="fi-table"><tbody>'
+      + ligne('Nom', '<strong>' + v((eleve.nom || '').toUpperCase()) + '</strong>')
+      + ligne('Prénoms', v(eleve.prenoms))
+      + ligne('Sexe', eleve.sexe === 'F' ? 'Féminin' : eleve.sexe === 'M' ? 'Masculin' : v(''))
+      + ligne('Date et lieu de naissance', (eleve.date_naissance ? echapper(U.dateCourte(eleve.date_naissance)) : v('')) + ' à ' + v(eleve.lieu_naissance || eleve.commune_naissance))
+      + ligne('Nationalité', v(eleve.nationalite))
+      + ligne('NPI / matricule EDUCMaster', v(eleve.npi || eleve.educmaster_matricule))
+      + ligne('Acte de naissance fourni', oui(eleve.acte_naissance))
+      + '</tbody></table></div>'
+      + '<h3 class="fi-rubrique">Scolarité</h3><table class="fi-table"><tbody>'
+      + ligne('École', '<strong>' + v(ecole.nom) + '</strong>' + (ecole.code_ecole ? ' (' + echapper(ecole.code_ecole) + ')' : ''))
+      + ligne('Circonscription / département', v([contexte && contexte.circonscription, contexte && contexte.departement].filter(Boolean).join(' — ')))
+      + ligne('Cours / classe', v(ins.niveau))
+      + ligne('Type d’inscription', v(TYPES[ins.type_inscription] || ins.type_inscription))
+      + ligne('Date d’inscription', ins.date_inscription ? echapper(U.dateCourte(ins.date_inscription)) : v(''))
+      + ligne('Redoublant(e) · A suivi la maternelle', oui(ins.redoublant) + ' · ' + oui(ins.a_suivi_maternelle))
+      + '</tbody></table>'
+      + '<h3 class="fi-rubrique">Parents ou tuteur</h3><table class="fi-table"><tbody>'
+      + ligne('Père', v(eleve.nom_pere))
+      + ligne('Mère', v(eleve.nom_mere))
+      + ligne('Tuteur (si différent)', v(eleve.tuteur_nom))
+      + ligne('Téléphone des parents / du tuteur', v(eleve.tuteur_telephone))
+      + ligne('Adresse', v(eleve.adresse_parents))
+      + '</tbody></table>'
+      + '<div class="fi-signature-parent"><span>Signature du parent ou du tuteur</span><span class="fi-cadre"></span></div>'
+      + '<h3 class="fi-rubrique">Carte d’identité scolaire (à découper)</h3>'
+      + '<div class="planche-cartes fi-cartes">' + carteScolaire(eleve, ins, ecole, annee, numeroCarte, signataire)
+      + carteScolaireVerso(eleve, ins, ecole, annee, numeroCarte, contexte) + '</div>'
+      + '</div>';
+  }
+
   Object.assign(EG.Docs, {
-    carteScolaire, carteScolaireVerso, certificatScolarite, ficheCEP, ficheEvaluationAgent,
+    carteScolaire, carteScolaireVerso, ficheInscription, certificatScolarite, ficheCEP, ficheEvaluationAgent,
     CRITERES_EVALUATION, classePerformance
   });
 })(window);

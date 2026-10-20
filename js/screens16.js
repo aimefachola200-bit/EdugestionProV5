@@ -1,4 +1,4 @@
-/* ÉduGestion Pro — répertoire et contacts d'une circonscription, commune par commune.
+/* ÉduGestion Pro Master — répertoire et contacts d'une circonscription, commune par commune.
 
    On y trouve, pour chaque commune de la circonscription : les directeurs des
    écoles (repris de la fiche de chaque école, sans double saisie) et les

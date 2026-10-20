@@ -1,4 +1,4 @@
-/* ÉduGestion Pro — génération de QR codes (ISO/IEC 18004), mode octet.
+/* ÉduGestion Pro Master — génération de QR codes (ISO/IEC 18004), mode octet.
    Versions 1 à 10, correction d'erreurs L ou M. Aucune bibliothèque :
    l'application doit pouvoir imprimer un document sans réseau. */
 (function (global) {

@@ -1,4 +1,4 @@
-/* ÉduGestion Pro — pilotage des évaluations et vie du personnel.
+/* ÉduGestion Pro Master — pilotage des évaluations et vie du personnel.
    Synthèse de la classe au national, examen blanc en centre, présence des agents. */
 (function (global) {
   'use strict';

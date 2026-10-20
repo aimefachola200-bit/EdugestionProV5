@@ -1,4 +1,4 @@
-/* ÉduGestion Pro — import des fichiers du personnel (FE, ACDPE, ACDPCTD).
+/* ÉduGestion Pro Master — import des fichiers du personnel (FE, ACDPE, ACDPCTD).
 
    Lit tels quels les fichiers que le ministère remet aux circonscriptions :
    - « FE / ACDPE » : N° matricule, nom, prénoms, poste, grade, indice, corps, fonction, statut…

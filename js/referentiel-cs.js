@@ -1,4 +1,4 @@
-/* ÉduGestion Pro — plan national : circonscriptions scolaires et zones pédagogiques.
+/* ÉduGestion Pro Master — plan national : circonscriptions scolaires et zones pédagogiques.
 
    Source : « Liste des 118 circonscriptions scolaires du Bénin — découpage des
    circonscriptions scolaires en zones pédagogiques » (document du MEMP).

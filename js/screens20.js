@@ -1,4 +1,4 @@
-/* ÉduGestion Pro — import et export des données.
+/* ÉduGestion Pro Master — import et export des données.
 
    Trois onglets :
    - Exporter : choisir les jeux de données (écoles, personnel, contacts, calendrier…) et
@@ -486,7 +486,7 @@
   /** Copie des données du compte : tout ce qu'il a le droit de voir, hors comptes d'accès (sauf administration). */
   function creerSauvegarde() {
     return Promise.all([DB.exportAll(), E.contexteCS()]).then(([dump, ctx]) => {
-      const sortie = { application: 'ÉduGestion Pro', format: 'sauvegarde-perimetre', version: dump.version, exporte_le: dump.exporte_le,
+      const sortie = { application: 'ÉduGestion Pro Master', format: 'sauvegarde-perimetre', version: dump.version, exporte_le: dump.exporte_le,
         perimetre: estAdmin() ? 'national' : ctx.csList.map(c => c.nom).join(', '), donnees: {} };
       const stores = Object.keys(dump.donnees).filter(s => ['outbox', 'meta'].indexOf(s) < 0 && (estAdmin() || ['users', 'audit_events'].indexOf(s) < 0));
       return stores.reduce((p, s) => p.then(() => EG.filtrerPerimetre(s, dump.donnees[s]).then(rows => { if (rows.length) sortie.donnees[s] = rows; })), Promise.resolve())

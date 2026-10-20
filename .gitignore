@@ -216,3 +216,6 @@ __marimo__/
 
 # Streamlit
 .streamlit/secrets.toml
+
+# Application web : bibliothèques embarquées de l’espace CP (MEMP-CP)
+!memp-cp/lib/

@@ -1,4 +1,4 @@
-/* ÉduGestion Pro — feuille de style des pièces imprimées.
+/* ÉduGestion Pro Master — feuille de style des pièces imprimées.
    Elle est injectée dans la fenêtre d'impression. Toute retouche de mise en
    page se fait ici, sans toucher au contenu des documents. */
 (function (global) {
@@ -23,6 +23,25 @@
     .signature-vide { height: 62px; border-bottom: 1px solid #647067; }
     .signature-nom { font-size: 10.5px; margin-top: 2px; font-weight: 700; }
     .cachet-case { flex: none; }
+    .carte-photo-image { padding: 0; overflow: hidden; }
+    .carte-photo-image img { width: 100%; height: 100%; object-fit: cover; }
+    .fiche-inscription { font-size: 10.5px; max-width: 190mm; margin: 0 auto; }
+    .fi-titre { text-align: center; font-size: 13px; margin: 6px 0 8px; letter-spacing: .02em; }
+    .fi-haut { display: flex; gap: 10px; align-items: flex-start; }
+    .fi-photo { width: 32mm; height: 40mm; object-fit: cover; border: .4mm solid #008751; border-radius: 1mm; flex: none; }
+    .fi-photo-vide { display: flex; align-items: center; justify-content: center; text-align: center; color: #647067; font-size: 9px; }
+    .fi-table { width: 100%; border-collapse: collapse; margin-bottom: 4px; }
+    .fi-table td, .fi-table th { border: .2mm solid #C9D3CC; padding: 3px 5px; text-align: left; vertical-align: top; }
+    .fi-table td { width: 38%; color: #3B453E; background: #F4F8F5; font-weight: 400; }
+    .fi-rubrique { font-size: 11px; margin: 8px 0 3px; color: #006B3F; border-bottom: .3mm solid #008751; }
+    .vide-ligne { color: #9AA59E; }
+    .fi-signature-parent { display: flex; justify-content: flex-end; gap: 8px; align-items: flex-end; margin: 6px 0; font-size: 9.5px; }
+    .fi-cadre { display: inline-block; width: 55mm; height: 14mm; border-bottom: .3mm dotted #647067; }
+    .fi-cartes { margin-top: 4px; }
+    .cachets-duo { display: inline-flex; align-items: center; gap: 8px; }
+    .griffe { transform: rotate(-3deg); opacity: .95; max-width: 46vw; height: auto; }
+    .fiche-signature .griffe, .cert-signature .griffe { width: 150px; }
+    .bloc-signature .griffe { width: 185px; }
     .fait-a { margin: 18px 0 0; font-size: 12px; }
     .cachet { transform: rotate(-8deg); opacity: .92; }
     .fiche-signature .cachet, .cert-signature .cachet { width: 72px; height: 72px; }
@@ -92,17 +111,12 @@
     .carte-pied { display: flex; justify-content: space-between; font-size: 5.8px;
       color: #647067; margin-top: 1.2mm; border-top: .2mm solid #D8E0DB; padding-top: .8mm;
       position: relative; }
-    .entete-admin { display: flex; align-items: center; gap: 12px;
-      border-bottom: 2px solid #008751; padding-bottom: 8px; margin-bottom: 12px; }
-    .entete-armoiries { height: 46px; flex: none; }
-    .entete-logo { height: 40px; flex: none; }
-    .entete-admin-centre { flex: 1; text-align: center; line-height: 1.35; }
-    .entete-admin-centre strong { display: block; font-size: 11px; letter-spacing: .05em; color: #006B3F; }
+    .entete-admin { border-bottom: 2px solid #008751; padding-bottom: 6px; margin-bottom: 12px; }
+    .entete-bandeau { display: block; width: 100%; height: auto; max-height: 64px; object-fit: contain; object-position: left center; }
+    .entete-admin-centre { text-align: center; line-height: 1.35; margin-top: 4px; }
     .entete-admin-centre span { display: block; font-size: 9.5px; color: #3B453E; }
-    .entete-admin-centre .entete-ecole { font-weight: 700; color: #17201B; margin-top: 2px; }
-    .entete-memp { display: flex; justify-content: space-between; align-items: flex-start; gap: 16px; }
-    .entete-memp img { height: 46px; }
-    .entete-coordonnees { font-size: 8.5px; text-align: right; color: #3B453E; line-height: 1.4; }
+    .entete-admin-centre .entete-ecole { font-weight: 700; font-size: 10.5px; color: #17201B; margin-top: 2px; }
+    .entete-memp { display: block; }
     .entete-direction { font-size: 10px; margin-top: 4px; padding-bottom: 4px;
       border-bottom: 2px solid #008751; }
     .fiche-cep { font-size: 9.3px; line-height: 1.3; max-width: 190mm; margin: 0 auto; }

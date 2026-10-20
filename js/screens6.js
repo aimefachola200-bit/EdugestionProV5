@@ -1,4 +1,4 @@
-/* ÉduGestion Pro — certificats administratifs du personnel et cachet de l'école. */
+/* ÉduGestion Pro Master — certificats administratifs du personnel et cachet de l'école. */
 (function (global) {
   'use strict';
   const EG = global.EG, DB = EG.DB, U = EG.UI;
@@ -229,7 +229,7 @@
       + ech(U.dateCourte(new Date().toISOString())) + '</p>'
       + '<div class="bloc-signature fiche-signature">'
       + EG.Docs.caseSignature(ctx.signataire, mention)
-      + '<div class="cachet-case">' + EG.Docs.cachet(ctx.ecole) + '</div>'
+      + '<div class="cachet-case">' + EG.Docs.cachetComplet(ctx.ecole) + '</div>'
       + '</div>'
       + visas
       + '</div>';

@@ -1,4 +1,4 @@
-/* ÉduGestion Pro — unités pédagogiques par circonscription, espace de la
+/* ÉduGestion Pro Master — unités pédagogiques par circonscription, espace de la
    circonscription, et cloisonnement des données par circonscription.
 
    Chaque circonscription scolaire (CS) a ses propres unités pédagogiques (UP),

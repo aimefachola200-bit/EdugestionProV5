@@ -1,4 +1,4 @@
-/* ÉduGestion Pro — carte d'identité de l'élève, module à part.
+/* ÉduGestion Pro Master — carte d'identité de l'élève, module à part.
 
    La carte d'identité scolaire (recto : armoiries, drapeau, photo, identité, classe, code QR, cachet
    de l'école et signatures ; verso : photo et localisation de l'école, consigne en cas de perte)

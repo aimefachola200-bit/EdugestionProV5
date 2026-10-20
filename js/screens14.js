@@ -1,4 +1,4 @@
-/* ÉduGestion Pro — import des écoles d'une circonscription.
+/* ÉduGestion Pro Master — import des écoles d'une circonscription.
 
    On choisit la circonscription, puis on apporte la liste de ses écoles : un
    classeur Excel (le modèle se télécharge ici même), un fichier CSV, ou une

@@ -1,4 +1,4 @@
-/* ÉduGestion Pro — composants d'interface, routeur, formulaires. */
+/* ÉduGestion Pro Master — composants d'interface, routeur, formulaires. */
 (function (global) {
   'use strict';
   const EG = global.EG;
@@ -55,6 +55,7 @@
   /* Les codes techniques sont stockés en majuscules sans accent ; ce lexique
      rend l'affichage lisible et correctement orthographié pour l'utilisateur. */
   const LEXIQUE = {
+    ROND_ET_GRIFFE: 'Rond et rectangulaire (griffe)', ROND: 'Rond seul', RECTANGULAIRE: 'Rectangulaire seul',
     PREPARATION: 'Préparation', OUVERTE: 'Ouverte', CLOTURE_EN_COURS: 'Clôture en cours',
     CLOTUREE: 'Clôturée', CLOTURE: 'Clôturé', ARCHIVEE: 'Archivée', ARCHIVE: 'Archivé',
     VALIDEE: 'Validée', VALIDE: 'Validé', VERROUILLEE: 'Verrouillée', VERROUILLE: 'Verrouillé',

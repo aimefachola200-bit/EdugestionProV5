@@ -1,4 +1,4 @@
-/* ÉduGestion Pro — la gestion de carrière des agents publics.
+/* ÉduGestion Pro Master — la gestion de carrière des agents publics.
 
    carrieres          le suivi de tous les agents publics du périmètre : statut, grade, ancienneté, dernier et
                       prochain avancement d'échelon, départ à la retraite, complétude du dossier ;

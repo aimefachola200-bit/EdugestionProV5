@@ -1,4 +1,4 @@
-/* ÉduGestion Pro — le personnel des circonscriptions par statut.
+/* ÉduGestion Pro Master — le personnel des circonscriptions par statut.
 
    statuts-cs/<catégorie> : pour la circonscription choisie, les directeurs et les adjoints
    - FE     : fonctionnaires de l'État ;
@@ -101,7 +101,7 @@
           return '<p class="fait-a">Fait à ' + ech(o.cs.ville || '……………………') + ', le ' + ech(U.dateFR(new Date().toISOString())) + '</p>'
             + '<div class="bloc-signature">'
             + D.caseSignature({ prenoms: '', nom: sig.signataire_nom || o.cs.responsable || '', signature_image: sig.signature_image }, sig.signataire_qualite || 'Le Chef de la circonscription scolaire')
-            + '<div class="cachet-case">' + D.cachetTerritoire(o.cs) + '</div>'
+            + '<div class="cachet-case">' + D.cachetTerritoireComplet(o.cs) + '</div>'
             + D.qrDocument(numero, hash, 92) + '</div>'
             + '<div class="pied pied-qr"><div>Signature numérique de la catégorie « ' + ech(LIB_CAT[o.cat]) + ' » — document n° ' + ech(numero) + ' — empreinte ' + ech(hash)
             + '<br>Scannez le code ci-contre pour vérifier l’authenticité de cet état.</div></div>';

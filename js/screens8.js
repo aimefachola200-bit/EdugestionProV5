@@ -1,4 +1,4 @@
-/* ÉduGestion Pro — registre d'appel.
+/* ÉduGestion Pro Master — registre d'appel.
    Le calendrier des jours de classe croisé avec la liste alphabétique de la
    classe : un élève non marqué est présent, une croix le déclare absent. Les
    jours chômés sont signalés en rouge et sortent du calcul. */

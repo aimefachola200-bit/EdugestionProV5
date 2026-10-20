@@ -1,4 +1,4 @@
-/* ÉduGestion Pro — fiches CEP renseignables, cantine payante,
+/* ÉduGestion Pro Master — fiches CEP renseignables, cantine payante,
    bilans de présence et tableau d'affichage de classe. */
 (function (global) {
   'use strict';

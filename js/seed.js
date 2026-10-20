@@ -1,4 +1,4 @@
-/* ÉduGestion Pro — données de démarrage.
+/* ÉduGestion Pro Master — données de démarrage.
    Référentiels nationaux (départements, communes, 118 circonscriptions et leurs zones),
    matières, règles, modèles. Aucune école, aucun élève : tout se saisit dans l'application.
    Tout est modifiable dans l'application : rien n'est figé dans le code. */

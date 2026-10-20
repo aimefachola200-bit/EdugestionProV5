@@ -1,4 +1,4 @@
-/* ÉduGestion Pro — relevé mensuel de fréquentation.
+/* ÉduGestion Pro Master — relevé mensuel de fréquentation.
    Les dix rubriques du registre officiel, de septembre à juin, avec les lignes
    Total et Moyenne calculées. Tout se déduit des appels déjà saisis. */
 (function (global) {

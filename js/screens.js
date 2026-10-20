@@ -1,4 +1,4 @@
-/* ÉduGestion Pro — écrans. */
+/* ÉduGestion Pro Master — écrans. */
 (function (global) {
   'use strict';
   const EG = global.EG, DB = EG.DB, R = EG.Rules, U = EG.UI;

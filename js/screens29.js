@@ -1,4 +1,4 @@
-/* ÉduGestion Pro — la gestion financière des écoles privées.
+/* ÉduGestion Pro Master — la gestion financière des écoles privées.
 
    Trois modules, sept onglets, tous propres à l'école privée choisie :
 

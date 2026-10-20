@@ -1,4 +1,4 @@
-/* ÉduGestion Pro — écoles par circonscription scolaire et zone pédagogique.
+/* ÉduGestion Pro Master — écoles par circonscription scolaire et zone pédagogique.
 
    L'onglet « Écoles » : on part du département, on choisit une circonscription,
    on voit ses zones pédagogiques et, dans chaque zone, ses écoles. On peut y
