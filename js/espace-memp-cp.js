@@ -20,6 +20,7 @@
     ['espace', '🧑‍🏫', 'Espace CP de zone'],
     ['synocp', '📋', 'Tableau synoptique du CP'],
     ['fiches', '📝', 'Fiches de recensement, rentrée, fin d’année'],
+    ['saisie', '✍️', 'Saisie manuelle (sans Excel) : fiches, personnel, directeurs'],
     ['personnel', '👩‍🏫', 'Personnel enseignant'],
     ['carriere', '📈', 'Gestion de carrière (anciennetés, retraite)'],
     ['effectifs', '👧', 'Effectifs : âges, sexe, cours, maternelles'],
