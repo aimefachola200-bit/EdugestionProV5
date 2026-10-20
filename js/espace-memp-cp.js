@@ -19,6 +19,7 @@
     ['accueil', '🏠', 'Tableau de bord MEMP-CP'],
     ['espace', '🧑‍🏫', 'Espace CP de zone'],
     ['synocp', '📋', 'Tableau synoptique du CP'],
+    ['recensement', '🗂️', 'Fiches de recensement annuel (EP, EM) — modèle GESCOL'],
     ['fiches', '📝', 'Fiches de recensement, rentrée, fin d’année'],
     ['saisie', '✍️', 'Saisie manuelle (sans Excel) : fiches, personnel, directeurs'],
     ['personnel', '👩‍🏫', 'Personnel enseignant'],
