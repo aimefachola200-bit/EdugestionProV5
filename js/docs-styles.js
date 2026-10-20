@@ -38,6 +38,7 @@
     .fi-signature-parent { display: flex; justify-content: flex-end; gap: 8px; align-items: flex-end; margin: 6px 0; font-size: 9.5px; }
     .fi-cadre { display: inline-block; width: 55mm; height: 14mm; border-bottom: .3mm dotted #647067; }
     .fi-cartes { margin-top: 4px; }
+    .fiche-cep-officielle, .fiche-cep-officielle * { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
     .cachets-duo { display: inline-flex; align-items: center; gap: 8px; }
     .griffe { transform: rotate(-3deg); opacity: .95; max-width: 46vw; height: auto; }
     .fiche-signature .griffe, .cert-signature .griffe { width: 150px; }

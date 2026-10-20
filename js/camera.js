@@ -86,6 +86,14 @@
             : e && e.name === 'NotFoundError' ? 'Aucune caméra détectée sur cet appareil.' : 'Caméra inaccessible : ' + ((e && e.message) || e);
         }
       }
+      async function choisirFace(f) {
+        if (f === face && flux) return;
+        const cams = await camerasVideo(), re = f === 'user' ? /front|avant|user|selfie/i : /back|arri[eè]re|rear|environment/i;
+        const parNom = cams.filter(c => re.test(c.label || ''));
+        face = f;
+        appareil = parNom.length ? parNom[0].deviceId : (choisirCamera(cams, face, appareil) || '');
+        demarrer();
+      }
       async function basculer() {
         face = face === 'user' ? 'environment' : 'user';
         appareil = choisirCamera(await camerasVideo(), face, appareil) || '';
@@ -113,7 +121,9 @@
           el('button', { class: 'icone-btn', type: 'button', 'aria-label': 'Fermer', text: '✕', onclick: () => terminer(null) })]),
         el('div', { class: 'modal-corps' }, [video, info]),
         el('div', { class: 'modal-pied', style: 'display:flex;flex-wrap:wrap;gap:8px' }, [
-          el('button', { class: 'btn btn-fantome', type: 'button', text: '🔄 Avant ⇄ Arrière', title: 'Basculer caméra avant / arrière', onclick: basculer }),
+          el('button', { class: 'btn btn-fantome', type: 'button', text: '🤳 Caméra avant', title: 'Caméra de face (selfie)', onclick: () => choisirFace('user') }),
+          el('button', { class: 'btn btn-fantome', type: 'button', text: '📷 Caméra arrière', title: 'Caméra du dos du téléphone', onclick: () => choisirFace('environment') }),
+          el('button', { class: 'btn btn-fantome', type: 'button', text: '🔄 Basculer', title: 'Basculer caméra avant / arrière', onclick: basculer }),
           el('button', { class: 'btn btn-primaire', type: 'button', text: '📸 Prendre la photo', onclick: declencher }),
           el('button', { class: 'btn btn-fantome', type: 'button', text: 'Annuler', onclick: () => terminer(null) })
         ])

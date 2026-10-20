@@ -312,111 +312,123 @@
     + echapper(valeur || '') + '</span>';
 
   /**
-   * Reprend la mise en page de la fiche transmise par la Direction
-   * Départementale : mêmes rubriques, mêmes mentions, même ordre.
+   * Fiche d'inscription au CEP : même mise en page que SCOLARIS et GESCOL (modèle Word de la DDEMP reproduit
+   * au point près) — en-tête du MEMP, direction départementale à gauche, titre en cartouche vert à droite,
+   * session et centre, « ÉCOLE DE PROVENANCE », « CANDIDAT (E) » avec photo, « TRÈS IMPORTANT », « AGENT DE
+   * LA DDEMP », signature et cachet du directeur. Les positions sont celles du modèle, en points depuis le haut.
    */
   function ficheCEP(eleve, ins, ecole, annee, fiche, cep, contexte, signataire) {
-    contexte = contexte || {};
-    fiche = fiche || {};
-    const session = fiche.session || ('JUIN ' + (new Date().getFullYear() + 1));
-    const publique = !ecole || ecole.statut !== 'PRIVEE';
+    contexte = contexte || {}; fiche = fiche || {}; eleve = eleve || {}; ecole = ecole || {};
+    const VERT = '#194730', OR = '#A3780D', OR_CL = '#C9962B', BORD = '#BAC4BA', TXT = '#1C1A14', GRIS = '#6B6553';
+    const KY = 0.955, X = x => (x - 24).toFixed(1) + 'pt', Y = y => ((y - 3) * KY).toFixed(1) + 'pt';
+    const out = [];
+    const txt = (x, y, t, o) => {
+      o = o || {};
+      const taille = o.taille || 7.6;
+      out.push('<div style="position:absolute;left:' + (o.centre ? X(o.centre - 200) : X(x)) + ';top:' + (((y - 3) * KY) - taille * 0.85).toFixed(1) + 'pt;'
+        + (o.centre ? 'width:400pt;text-align:center;' : '') + 'white-space:nowrap;font:' + (o.italique ? 'italic ' : '') + (o.gras === false ? '400 ' : '700 ')
+        + taille + 'pt \'Times New Roman\',Times,serif;color:' + (o.coul || VERT) + '">' + echapper(t) + '</div>');
+    };
+    const lab = (x, y, t, taille, coul, gras, ital) => { txt(x, y, t, { taille, coul: coul || VERT, gras, italique: ital }); return x + largeurTimes(t, taille || 7.6, gras !== false); };
+    const champ = (x1, x2, y, v, taille, gras) => {
+      out.push('<div style="position:absolute;left:' + X(x1) + ';top:' + Y(y - 9) + ';width:' + (x2 - x1).toFixed(1) + 'pt;height:' + (10.5 * KY).toFixed(1)
+        + 'pt;border-bottom:.6pt dotted ' + BORD + ';overflow:hidden;white-space:nowrap;text-overflow:ellipsis;padding-left:2pt;box-sizing:border-box;'
+        + 'font:' + (gras ? '700 ' : '400 ') + (taille || 9) + 'pt \'Times New Roman\',Times,serif;line-height:' + (10.5 * KY).toFixed(1) + 'pt;color:' + TXT + '">' + echapper(v || '') + '</div>');
+    };
+    const caseC = (x, y, coche, l) => {
+      out.push('<div style="position:absolute;left:' + X(x) + ';top:' + Y(y - 6) + ';width:7pt;height:7pt;border:.6pt solid ' + TXT + ';font:700 7pt Arial;line-height:7pt;text-align:center;color:' + TXT + '">' + (coche ? 'X' : '') + '</div>');
+      txt(x + 10, y, l, { taille: 8.5, coul: TXT, gras: !!coche });
+    };
+    const section = (y1, y2, titre) => {
+      out.push('<div style="position:absolute;left:' + X(28) + ';top:' + Y(y1) + ';width:523pt;height:' + ((y2 - y1) * KY).toFixed(1) + 'pt;border:.7pt solid ' + BORD + ';box-sizing:border-box"></div>');
+      out.push('<div style="position:absolute;left:' + X(28) + ';top:' + Y(y1) + ';width:523pt;height:' + (15 * KY).toFixed(1) + 'pt;background:' + VERT
+        + ';border-radius:2.5pt;color:#fff;font:700 8.3pt \'Times New Roman\',Times,serif;line-height:' + (15 * KY).toFixed(1) + 'pt;padding-left:11pt;box-sizing:border-box">' + echapper(titre) + '</div>');
+    };
+    const publique = ecole.statut !== 'PRIVEE';
+    const auj = U.dateCourte(new Date().toISOString());
+    const naiss = ((eleve.date_naissance ? U.dateCourte(eleve.date_naissance) : '') + (eleve.lieu_naissance ? ' à ' + eleve.lieu_naissance : '')).trim();
+    const contactParent = ((fiche.parent_contact || '') + (fiche.degre_parente ? ' (' + fiche.degre_parente + ')' : '')).trim();
+    const session = fiche.session || ('JUIN ' + (new Date().getFullYear() + (new Date().getMonth() >= 8 ? 1 : 0)));
 
-    return '<div class="fiche-cep">'
-      + enteteMEMP(contexte.departement)
-      + '<h2>FICHE D’INSCRIPTION À L’EXAMEN DU<br>CERTIFICAT D’ÉTUDES PRIMAIRES (CEP)</h2>'
-      + '<p class="option">OPTION : CEP + entrée en 6ᵉ '
-      + case_(fiche.option_6e !== false) + ' &nbsp;&nbsp; CEP seul ' + case_(fiche.option_6e === false)
-      + ' <em>(rayer la mention inutile)</em></p>'
-      + '<table class="bandeau-session"><tr>'
-      + '<td>SESSION DE : <strong>' + echapper(session) + '</strong></td>'
-      + '<td>CENTRE DE : <strong>' + echapper(fiche.centre || '—') + '</strong></td>'
-      + '</tr></table>'
-
-      + '<h3 class="rubrique">ÉCOLE DE PROVENANCE</h3>'
-      + '<table class="fiche-champs">'
-      + '<tr><td>COMMUNE DE</td><th>' + ligne_(contexte.commune) + '</th></tr>'
-      + '<tr><td>CIRCONSCRIPTION SCOLAIRE DE</td><th>' + ligne_(contexte.circonscription) + '</th></tr>'
-      + '<tr><td>NOM DE L’ÉCOLE</td><th>' + ligne_(ecole ? ecole.nom : '') + '</th></tr>'
-      + '<tr><td>STATUT DE L’ÉCOLE</td><th>'
-      + case_(publique) + ' Publique &nbsp;&nbsp;&nbsp;' + case_(!publique) + ' Privée</th></tr>'
-      + '<tr><td>NOM ET PRÉNOM DU DIRECTEUR OU DE LA DIRECTRICE</td><th>'
-      + ligne_(contexte.directeur) + '</th></tr>'
-      + '<tr><td>CONTACT TÉLÉPHONIQUE DU DIRECTEUR OU DE LA DIRECTRICE</td><th>'
-      + ligne_(contexte.directeurContact) + '</th></tr>'
-      + '</table>'
-
-      + '<h3 class="rubrique">CANDIDAT (E)</h3>'
-      + '<div class="candidat">'
-      + '<table class="fiche-champs">'
-      + '<tr><td>NOM <em>(à écrire en lettres capitales)</em></td><th>'
-      + ligne_((eleve.nom || '').toUpperCase()) + '</th></tr>'
-      + '<tr><td>PRÉNOMS <em>(tous les prénoms sans abréviation, suivant l’ordre et l’orthographe '
-      + 'de la pièce d’état civil)</em></td><th>' + ligne_(eleve.prenoms) + '</th></tr>'
-      + '<tr><td>SEXE</td><th>' + ligne_(eleve.sexe === 'F' ? 'Féminin' : (eleve.sexe === 'M' ? 'Masculin' : '')) + '</th></tr>'
-      + '<tr><td>DATE ET LIEU DE NAISSANCE</td><th>'
-      + ligne_((eleve.date_naissance ? U.dateCourte(eleve.date_naissance) : '') + ' à ' + (eleve.lieu_naissance || '')) + '</th></tr>'
-      + '<tr><td>NUMÉRO EDUCMASTER</td><th>' + ligne_(eleve.educmaster_matricule) + '</th></tr>'
-      + '</table>'
-      + '<div class="candidat-visuels">'
-      + '<div class="photo-candidat"><small>Photo du candidat</small></div>'
-      + qrEleve(eleve, ins, ecole, annee, 78)
-      + '</div>'
-      + '</div>'
-
-      + '<table class="fiche-champs">'
-      + '<tr><td>ÉTABLISSEMENTS CHOISIS <em>(trois établissements par ordre de préférence, '
-      + 'sans abréviation)</em></td><th>'
-      + '1 - ' + ligne_(fiche.etablissement_1) + '<br>'
-      + '2 - ' + ligne_(fiche.etablissement_2) + '<br>'
-      + '3 - ' + ligne_(fiche.etablissement_3) + '</th></tr>'
-      + '<tr><td>RÉSIDENCE DES PARENTS</td><th>' + ligne_(fiche.residence_parents) + '</th></tr>'
-      + '<tr><td>DISPENSE D’ÂGE</td><th>'
-      + case_(fiche.dispense_age) + ' Oui &nbsp;&nbsp;&nbsp;' + case_(!fiche.dispense_age) + ' Non</th></tr>'
-      + '<tr><td>DISPENSE DE SPORT</td><th>'
-      + case_(fiche.dispense_sport) + ' Oui &nbsp;&nbsp;&nbsp;' + case_(!fiche.dispense_sport) + ' Non</th></tr>'
-      + (cep && cep.numero_table ? '<tr><td>NUMÉRO DE TABLE</td><th>' + ligne_(cep.numero_table) + '</th></tr>' : '')
-      + '</table>'
-
-      + '<p class="certification">Je certifie exacts les renseignements ci-dessus.</p>'
-      + '<p class="lieu-date">Fait à ' + echapper(contexte.commune || '') + ' , le '
-      + echapper(U.dateCourte(new Date().toISOString())) + '</p>'
-      + '<table class="signatures-fiche"><tr>'
-      + '<td>NOM, PRÉNOM ET SIGNATURE DU PARENT :<br>' + ligne_(fiche.parent_nom)
-      + '<div class="espace-signature"></div></td>'
-      + '<td>CONTACT TÉLÉPHONIQUE DU PARENT :<br>' + ligne_(fiche.parent_contact)
-      + '<br><em>(degré de parenté : ' + echapper(fiche.degre_parente || '—') + ')</em></td>'
-      + '<td>SIGNATURE DU (DE LA) CANDIDAT (E) :'
-      + (eleve.signature_image
-        ? '<img class="signature-trace" src="' + eleve.signature_image + '" alt="Signature du candidat">'
-        : '<div class="espace-signature"></div>') + '</td>'
-      + '</tr></table>'
-
-      + '<table class="cadre-ddemp"><tr><th colspan="3">AGENT DE LA DDEMP</th></tr><tr>'
-      + '<td>DOSSIER ÉTUDIÉ PAR : ' + ligne_(fiche.dossier_etudie_par) + '</td>'
-      + '<td>CODE : ' + ligne_(fiche.code_ddemp) + '</td>'
-      + '<td>COLLATIONNÉ PAR : ' + ligne_(fiche.collationne_par) + '</td>'
-      + '</tr></table>'
-
-      + '<div class="tres-important"><strong>TRÈS IMPORTANT :</strong>'
-      + '<ul>'
-      + '<li>Les Directeurs d’écoles doivent remplir les fiches d’inscription conformément aux '
-      + 'informations telles qu’inscrites sur les actes de naissance. Ils doivent collationner les '
-      + 'différentes listes envoyées par la DDEMP afin que la liste d’inscription porte la bonne '
-      + 'graphie des noms et prénoms, date et lieu de naissance, sexe et école de provenance des candidats.</li>'
-      + '<li>Les Directeurs doivent s’assurer que sur les listes d’inscription, le nom de leur école '
-      + 'est exclusivement porté devant chacun de leurs candidats afin de garantir la fiabilité des '
-      + 'statistiques des résultats par école.</li>'
-      + '<li>Les Directeurs doivent associer les parents d’élèves aux choix des établissements '
-      + 'd’accueil de l’enseignement secondaire en cas de succès.</li>'
-      + '</ul></div>'
-
-      + '<p class="lieu-date">Certifié à ' + echapper(contexte.commune || '') + ' , le '
-      + echapper(U.dateCourte(new Date().toISOString())) + '</p>'
-      + '<div class="bloc-signature fiche-signature">'
-      + caseSignature(signataire, 'Le Directeur')
-      + '<div class="cachet-case">' + D.cachetComplet(ecole) + '</div>'
-      + '</div>'
-      + '</div>';
+    /* en-tête du MEMP */
+    out.push('<img src="' + ressource('embleme-memp.png') + '" alt="République du Bénin — MEMP" style="position:absolute;left:' + X(28) + ';top:' + Y(5) + ';width:523pt;height:' + (50 * KY).toFixed(1) + 'pt;object-fit:contain;object-position:left center">');
+    out.push('<div style="position:absolute;left:' + X(27) + ';top:' + Y(57) + ';width:525pt;border-top:1.4pt solid ' + OR_CL + '"></div>');
+    /* direction départementale + cartouche du titre */
+    txt(0, 80, 'Direction Départementale des Enseignements', { centre: 157, taille: 8.3, coul: TXT });
+    txt(0, 91, 'Maternel et Primaire : ' + (contexte.departement || '……………………'), { centre: 157, taille: 8.3, coul: TXT });
+    txt(0, 107, 'Service des Examens et Concours', { centre: 157, taille: 8.3, coul: TXT, gras: false });
+    out.push('<div style="position:absolute;left:' + X(287) + ';top:' + Y(67) + ';width:264pt;height:' + (54 * KY).toFixed(1) + 'pt;background:' + VERT + ';border-radius:5pt;color:#fff;text-align:center;font-family:\'Times New Roman\',Times,serif">'
+      + '<div style="font:700 11.5pt \'Times New Roman\',Times,serif;margin-top:5pt;line-height:12.4pt">FICHE D’INSCRIPTION À L’EXAMEN DU<br>CERTIFICAT D’ÉTUDES PRIMAIRES (CEP)</div>'
+      + '<div style="font-size:6.8pt;color:' + OR_CL + '">OPTION : CEP ' + (fiche.option_6e === false ? '<s style="text-decoration-color:#fff">+ entrée en 6è</s>' : '+ entrée en 6è') + '</div>'
+      + '<div style="font:italic 5pt \'Times New Roman\',Times,serif;color:#E3E8E3">(Rayer la mention inutile)</div></div>');
+    /* session, centre */
+    lab(178, 139, 'SESSION DE :', 8.3, TXT); champ(244, 363, 139, session, 8.5, true);
+    lab(178, 153, 'CENTRE DE :', 8.3, TXT); champ(244, 385, 153, fiche.centre || '', 8.5, true);
+    /* école de provenance */
+    section(168, 286, 'ÉCOLE DE PROVENANCE');
+    let x = lab(36, 201, 'COMMUNE DE :'); champ(x + 4, 270, 201, contexte.commune || ecole.commune);
+    x = lab(284, 201, 'CIRCONSCRIPTION SCOLAIRE DE :'); champ(x + 4, 543, 201, contexte.circonscription);
+    x = lab(36, 219, 'NOM DE L’ÉCOLE :'); champ(x + 4, 543, 219, ecole.nom);
+    lab(36, 237, 'STATUT DE L’ÉCOLE :'); caseC(134, 237, publique, 'Publique'); caseC(195, 237, !publique, 'Privée');
+    x = lab(36, 255, 'NOM ET PRÉNOM DU DIRECTEUR OU DE LA DIRECTRICE :'); champ(x + 4, 543, 255, contexte.directeur || ecole.directeur_nom);
+    x = lab(36, 273, 'CONTACT TÉLÉPHONIQUE DU DIRECTEUR OU DE LA DIRECTRICE :'); champ(x + 4, 543, 273, contexte.directeurContact || ecole.directeur_telephone);
+    /* candidat */
+    section(293, 592, 'CANDIDAT (E)');
+    out.push('<div style="position:absolute;left:' + X(468) + ';top:' + Y(318) + ';width:76pt;height:' + (85 * KY).toFixed(1) + 'pt;border:.9pt solid ' + VERT + ';border-radius:4pt;background:#EDF5ED;overflow:hidden">'
+      + (eleve.photo ? '<img src="' + eleve.photo + '" alt="Photo du candidat" style="width:100%;height:100%;object-fit:cover">' : '') + '</div>');
+    txt(0, 411, 'Photo du candidat', { centre: 506, taille: 5.2, coul: GRIS, gras: false, italique: true });
+    x = lab(36, 328, 'NOM :'); champ(x + 4, 457, 328, (eleve.nom || '').toUpperCase(), 9.5, true);
+    lab(38, 338.5, '(À écrire en lettres capitales)', 5, GRIS, false, true);
+    x = lab(36, 350, 'PRÉNOMS :'); champ(x + 4, 457, 350, eleve.prenoms, 9.5);
+    lab(38, 359.5, '(Écrire tous les prénoms sans abréviation suivant l’ordre et l’orthographe de la pièce d’état civil)', 5, GRIS, false, true);
+    x = lab(36, 371, 'SEXE :'); champ(x + 4, 197, 371, eleve.sexe === 'F' ? 'Féminin' : eleve.sexe === 'M' ? 'Masculin' : '');
+    x = lab(210, 371, 'DATE ET LIEU DE NAISSANCE :'); champ(x + 4, 457, 371, naiss);
+    x = lab(36, 390, 'NUMÉRO EDUCMASTER :'); champ(x + 4, 457, 390, eleve.educmaster_matricule || (cep && cep.numero_table ? 'N° de table ' + cep.numero_table : ''));
+    x = lab(36, 408, 'ÉTABLISSEMENTS CHOISIS'); lab(x + 8, 408, '(trois établissements par ordre de préférence, sans abréviation)', 5.4, GRIS, false, true);
+    [fiche.etablissement_1, fiche.etablissement_2, fiche.etablissement_3].forEach((e, k) => { const y = 422 + 15.5 * k; lab(36, y, (k + 1) + ' -', 7.6, TXT); champ(56, 457, y, e); });
+    x = lab(36, 475, 'RÉSIDENCE DES PARENTS :'); champ(x + 4, 543, 475, fiche.residence_parents);
+    lab(36, 493, 'DISPENSE D’ÂGE :'); caseC(118, 493, !!fiche.dispense_age, 'Oui'); caseC(157, 493, !fiche.dispense_age, 'Non');
+    lab(215, 493, 'DISPENSE DE SPORT :'); caseC(312, 493, !!fiche.dispense_sport, 'Oui'); caseC(351, 493, !fiche.dispense_sport, 'Non');
+    lab(36, 509, 'Je certifie exacts les renseignements ci-dessus.', 7.8, TXT, false, true);
+    lab(154, 525, 'Fait à', 7.8, TXT, false); champ(185, 298, 525, contexte.commune || ecole.commune);
+    lab(311, 525, 'le', 7.8, TXT, false); champ(325, 430, 525, auj);
+    x = lab(36, 542, 'NOM, PRÉNOM ET SIGNATURE DU PARENT :'); champ(x + 4, 543, 542, fiche.parent_nom);
+    x = lab(36, 561, 'CONTACT TÉLÉPHONIQUE DU PARENT :'); champ(x + 4, 543, 561, contactParent);
+    lab(38, 571.5, '(Préciser le degré de parenté)', 5, GRIS, false, true);
+    x = lab(36, 582, 'SIGNATURE DU (DE LA) CANDIDAT (E) :'); champ(x + 4, 543, 582, '');
+    if (eleve.signature_image) out.push('<img src="' + eleve.signature_image + '" alt="Signature du candidat" style="position:absolute;left:' + X(x + 30) + ';top:' + Y(568) + ';height:' + (17 * KY).toFixed(1) + 'pt">');
+    /* très important */
+    lab(28, 605, 'TRÈS IMPORTANT :', 8.3, TXT);
+    out.push('<div style="position:absolute;left:' + X(28) + ';top:' + Y(608) + ';width:525pt;font:6.4pt/7.3pt \'Times New Roman\',Times,serif;color:' + TXT + '">'
+      + NOTES_CEP.map((n, k) => '<div style="padding-left:8pt;text-indent:-8pt;margin-bottom:.5pt">' + (k + 1) + '. ' + echapper(n) + '</div>').join('') + '</div>');
+    lab(375, 668, 'Certifié à', 8, TXT, false); champ(413, 470, 668, contexte.commune || ecole.commune, 8);
+    lab(470, 668, ', le', 8, TXT, false); champ(486, 551, 668, auj, 8);
+    /* agent de la DDEMP */
+    out.push('<div style="position:absolute;left:' + X(28) + ';top:' + Y(694) + ';width:280pt;height:' + (75 * KY).toFixed(1) + 'pt;background:#FAF5ED;border:.7pt solid #DED6BF;box-sizing:border-box"></div>');
+    out.push('<div style="position:absolute;left:' + X(28) + ';top:' + Y(694) + ';width:280pt;height:' + (16 * KY).toFixed(1) + 'pt;background:' + OR + ';border-radius:3pt;color:#fff;font:700 8.3pt \'Times New Roman\',Times,serif;line-height:' + (16 * KY).toFixed(1) + 'pt;padding-left:11pt;box-sizing:border-box">AGENT DE LA DDEMP</div>');
+    ['DOSSIER ÉTUDIÉ PAR :', 'CODE :', 'COLLATIONNÉ PAR :'].forEach((t, k) => { const yy = 726 + 18 * k; const xx = lab(36, yy, t, 7); champ(xx + 4, 300, yy, [fiche.dossier_etudie_par, fiche.code_ddemp, fiche.collationne_par][k]); });
+    /* le directeur : titre, cachet, signature, nom */
+    const titreDir = /^LA /i.test(ecole.cachet_centre || '') ? 'LA DIRECTRICE' : 'LE DIRECTEUR';
+    txt(0, 714, titreDir, { centre: 358, taille: 8.3, coul: TXT });
+    txt(0, 735, '(Nom, prénom, signature et', { centre: 358, taille: 5.5, coul: GRIS, gras: false, italique: true });
+    txt(0, 743, 'cachet du Directeur)', { centre: 358, taille: 5.5, coul: GRIS, gras: false, italique: true });
+    out.push('<div style="position:absolute;left:' + X(408) + ';top:' + Y(698) + ';width:64pt;height:64pt">' + cachet(ecole, { taille: 64 }) + '</div>');
+    const griffeDir = D.griffeEcole(ecole, 120);
+    if (griffeDir && (ecole.cachet_type || 'ROND_ET_GRIFFE') !== 'ROND') out.push('<div style="position:absolute;left:' + X(476) + ';top:' + Y(702) + ';width:76pt">' + griffeDir.replace('<svg class="griffe"', '<svg class="griffe" style="width:76pt;height:auto"') + '</div>');
+    if (signataire && signataire.signature_image) out.push('<img src="' + signataire.signature_image + '" alt="Signature du directeur" style="position:absolute;left:' + X(418) + ';top:' + Y(708) + ';width:110pt;height:' + (40 * KY).toFixed(1) + 'pt;object-fit:contain">');
+    out.push('<div style="position:absolute;left:' + X(397) + ';top:' + Y(750) + ';width:154pt;border-top:.6pt solid ' + BORD + '"></div>');
+    txt(0, 760, contexte.directeur || ecole.directeur_nom || (signataire ? ((signataire.prenoms || '') + ' ' + (signataire.nom || '')).trim() : ''), { centre: 474, taille: 8.3, coul: TXT });
+    return '<div class="fiche-cep-officielle" style="-webkit-print-color-adjust:exact;print-color-adjust:exact;position:relative;width:535pt;height:' + (772 * KY).toFixed(0) + 'pt;margin:0 auto;overflow:hidden;color:' + TXT + '">' + out.join('') + '</div>';
+  }
+  const NOTES_CEP = [
+    'Les Directeurs d’écoles doivent remplir les fiches d’inscription conformément aux informations telles qu’inscrites sur les actes de naissance. Ils doivent collationner les différentes listes envoyées par la DDEMP afin que la liste d’inscription porte la bonne graphie des noms et prénoms, date et lieu de naissance, sexe et école de provenance des candidats.',
+    'Les Directeurs doivent s’assurer que sur les listes d’inscription, le nom de leur école est exclusivement porté devant chacun de leurs candidats afin de garantir la fiabilité des statistiques des résultats par école.',
+    'Les Directeurs doivent associer les parents d’élèves aux choix des établissements d’accueil de l’enseignement secondaire en cas de succès.'
+  ];
+  let _mes = null;
+  function largeurTimes(t, taille, gras) {
+    try { _mes = _mes || document.createElement('canvas').getContext('2d'); _mes.font = (gras ? 'bold ' : '') + taille + 'pt "Times New Roman", Times, serif'; return _mes.measureText(t).width * 0.75; }
+    catch (e) { return t.length * taille * 0.55; }
   }
 
   /* Feuille de style embarquée dans la fenêtre d'impression. */
