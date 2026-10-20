@@ -980,7 +980,11 @@
         el('button', {
           class: 'btn btn-primaire', text: 'Générer le bulletin', onclick: () => {
             fermer();
-            genererDocument('BULLETIN', 'Bulletin — ' + l.ins._nom, bulletinHTML(l, niveau));
+            /* Le bulletin porte les signatures de l'élève et du parent ; celle du titulaire vient avec la classe. */
+            DB.get('eleves', l.ins.eleve_id).then(eleve => genererDocument('BULLETIN', 'Bulletin — ' + l.ins._nom, bulletinHTML(l, niveau), {
+              classe_id: l.ins.classe_id, ecole_id: l.ins.ecole_id,
+              acteurs: eleve ? [{ personne: eleve, mention: 'L’élève' }, { personne: EG.Docs.parentDe(eleve), mention: 'Vu, le parent ou le tuteur' }] : []
+            }));
           }
         })
       ]);
@@ -1975,6 +1979,8 @@
 
   function genererDocument(typeCode, titre, html, options) {
     options = options || {};
+    /* Signatures des acteurs concernés (élève, parent, enseignant, agent, autorité) : scellées avec la pièce. */
+    if (options.acteurs && options.acteurs.length) html += EG.Docs.blocActeurs(options.acteurs);
     const numero = typeCode + '-' + new Date().getFullYear() + '-' + String(Date.now()).slice(-6);
     const hash = empreinte(html + numero);
     return DB.put('documents', {

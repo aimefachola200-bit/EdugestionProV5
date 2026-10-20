@@ -87,7 +87,7 @@
    * territoire : un compte de circonscription ne voit que ses écoles, ses unités,
    * ses contacts et ses événements. Rend une promesse de lignes filtrées.
    */
-  const PAR_TERRITOIRE = ['contacts', 'evenements_calendrier', 'courriers', 'signatures_categories'];
+  const PAR_TERRITOIRE = ['contacts', 'evenements_calendrier', 'courriers', 'signatures_categories', 'divisions_structure', 'lignes_action'];
   const GEOGRAPHIE = ['NATIONAL', 'DEPARTEMENT', 'COMMUNE', 'ARRONDISSEMENT', 'VILLAGE_QUARTIER'];
   /* Ce qui appartient à d'autres écoles que celles du compte : élèves, inscriptions, agents, classes.
      On n'exclut que ce dont on sait qu'il est ailleurs, pour ne jamais masquer une saisie toute récente. */

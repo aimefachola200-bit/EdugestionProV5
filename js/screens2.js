@@ -512,6 +512,14 @@
             });
           }
         }));
+        if (EG.peutEcrire()) actions.push(el('button', {
+          class: 'btn btn-fantome',
+          text: (eleve && eleve.signature_parent) ? 'Modifier la signature du parent' : '✍️ Signature du parent ou du tuteur',
+          onclick: () => EG.Docs.capturerSignature(eleve, () => Routeur.aller('eleve/' + insId), {
+            table: 'eleves', champ: 'signature_parent', titre: 'Signature du parent de ' + nomEleve(eleve),
+            mention: 'Le parent ou le tuteur signe ici. Sa signature sera apposée sur la fiche d’inscription, la fiche du CEP et les bulletins de l’élève.'
+          })
+        }));
         actions.push(el('button', {
           class: 'btn btn-fantome', text: '🪪 Fiche d’inscription + carte d’identité',
           onclick: () => EG.imprimerFicheInscription(eleve || {}, ins)
@@ -766,7 +774,7 @@
                 + '</strong> — matricule ' + (a.matricule || '—') + '<br>Né(e) le ' + U.dateCourte(a.date_naissance)
                 + ' • départ à la retraite prévu le ' + U.dateCourte(p.date_retraite) + ' (' + p.age_retraite + ' ans)</p>'
                 + '<table><thead><tr><th>Date d’effet</th><th>Grade</th><th>Catégorie</th><th>Échelon</th><th>Acte</th></tr></thead><tbody>'
-                + (lignes || '<tr><td colspan="5">Aucun acte enregistré</td></tr>') + '</tbody></table>');
+                + (lignes || '<tr><td colspan="5">Aucun acte enregistré</td></tr>') + '</tbody></table>', { acteurs: [{ personne: a, mention: 'L’agent' }] });
             }
           }),
           el('button', { class: 'btn btn-fantome', text: 'Fiche d’évaluation', onclick: () => EG.editerFicheAgent(id) }),
@@ -1122,9 +1130,7 @@
             + '<h3>Observations</h3><ul>' + (obs || '<li>Aucune</li>') + '</ul>'
             + '<h3>Recommandations</h3><table><thead><tr><th>Recommandation</th><th>Priorité</th><th>Échéance</th></tr></thead><tbody>'
             + (rec || '<tr><td colspan="3">Aucune</td></tr>') + '</tbody></table>'
-            + '<p><strong>Conclusion :</strong> ' + (v.conclusion || '—') + '</p>'
-            + '<p style="margin-top:40px">Signature du visiteur : ____________________  '
-            + 'Signature de l’agent : ____________________</p>');
+            + '<p><strong>Conclusion :</strong> ' + (v.conclusion || '—') + '</p>', { acteurs: [agent ? { personne: agent, mention: 'L’agent visité' } : null, { personne: (session().user.role === 'CONSEILLER_PEDAGOGIQUE' || session().user.role === 'CS') ? session().user : { nom: v.visiteur_label || '' }, mention: 'Le visiteur' }] });
         }
       }));
       zone.appendChild(el('div', { class: 'barre-actions' }, actions));

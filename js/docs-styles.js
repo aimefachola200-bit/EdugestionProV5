@@ -39,6 +39,7 @@
     .fi-cadre { display: inline-block; width: 55mm; height: 14mm; border-bottom: .3mm dotted #647067; }
     .fi-cartes { margin-top: 4px; }
     .fiche-cep-officielle, .fiche-cep-officielle * { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    .bloc-acteurs { justify-content: flex-start; gap: 18px; flex-wrap: wrap; margin-top: 10px; }
     .cachets-duo { display: inline-flex; align-items: center; gap: 8px; }
     .griffe { transform: rotate(-3deg); opacity: .95; max-width: 46vw; height: auto; }
     .fiche-signature .griffe, .cert-signature .griffe { width: 150px; }

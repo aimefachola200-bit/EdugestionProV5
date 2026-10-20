@@ -1,4 +1,4 @@
-# ÉduGestion Pro Master V5.8
+# ÉduGestion Pro Master V5.9
 
 Application de gestion des écoles maternelles et primaires du Bénin, conforme à la
 spécification V5.2. Elle s'installe sur téléphone, tablette et ordinateur, et
@@ -126,6 +126,25 @@ d'exemple des versions précédentes (codes EP001, EP002 et EM010) et tout ce qu
 dépendait — élèves, classes, notes, agents, budget, comptes `dir.ep001`, `ens.cm2` et
 `parent.demo`. Seules les écoles dont le code **et** le nom sont ceux de l'exemple sont
 concernées : les écoles saisies par les utilisateurs ne sont jamais touchées.
+
+### Nouveautés de la version 5.9 — signatures de tous les acteurs, divisions avec statistiques et courbes
+
+**Signatures digitales de tous les acteurs** (`js/signatures.js`, écran *Signatures des acteurs*). Chacun signe une fois,
+au doigt ou à la souris : élèves et parents (classe par classe), enseignants, directeur, chef de circonscription,
+directeur départemental, chefs de division. La signature figure ensuite d'elle-même sur les pièces qui concernent la
+personne : élève (carte d'identité scolaire, fiche d'inscription, fiche du CEP, bulletins), parent (fiche d'inscription,
+fiche du CEP, bulletins), enseignant (pièces de sa classe, procès-verbaux de visite, fiche de carrière), directeur
+(toutes les pièces de l'école, même éditées par la circonscription ou la DDEMP), autorités (visas, états, rapports et
+plans d'action). Bouton « Signature du parent ou du tuteur » dans le dossier de chaque élève.
+
+**Divisions et services** (`js/divisions.js`, écran *Divisions et services*), comme dans SCOLARIS et GESCOL. CS : CCS,
+Conseillers pédagogiques, Secrétariat, Ressources humaines, Animation pédagogique, Administration et finances,
+Organisation scolaire et prévision ; DDEMP : Direction, Examens et concours, Écoles maternelles et primaires, Ressources
+humaines, Planification-administration-finances, Cantines scolaires, Statistiques, Infrastructures et équipements.
+Chaque division a sa rubrique (attributions de l'AOF, chef, signature), ses **statistiques et courbes** (au choix :
+courbe, histogramme, barres empilées, aires, points), ses tableaux par école (CS) ou par circonscription (DDEMP), et son
+**plan d'action** (lignes tirées des attributions, état, taux de réalisation). Impression PDF avec en-tête, signature
+du chef et cachet ; export Excel.
 
 ### Nouveautés de la version 5.8 — espace CP, CCS et DDEMP, appareil photo, cachets, installation
 

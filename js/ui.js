@@ -55,6 +55,7 @@
   /* Les codes techniques sont stockés en majuscules sans accent ; ce lexique
      rend l'affichage lisible et correctement orthographié pour l'utilisateur. */
   const LEXIQUE = {
+    PREVUE: 'Prévue', EN_COURS: 'En cours', REALISEE: 'Réalisée', REPORTEE: 'Reportée',
     ROND_ET_GRIFFE: 'Rond et rectangulaire (griffe)', ROND: 'Rond seul', RECTANGULAIRE: 'Rectangulaire seul',
     PREPARATION: 'Préparation', OUVERTE: 'Ouverte', CLOTURE_EN_COURS: 'Clôture en cours',
     CLOTUREE: 'Clôturée', CLOTURE: 'Clôturé', ARCHIVEE: 'Archivée', ARCHIVE: 'Archivé',

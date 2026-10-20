@@ -56,6 +56,8 @@
     { code: 'caisse-privee', cat: 'FINANCES', nom: 'Cahier de gestion des fonds (école privée)', icone: '📒', entites: ['cahier_fonds'], ecran: 'caisse-privee',
       annexes: [['caisse-privee/cahier', 'Cahier de caisse', '📒'], ['caisse-privee/bilan', 'Bilan financier', '📊']] },
     { code: 'salaires-privee', cat: 'FINANCES', nom: 'Salaires des enseignants (école privée)', icone: '👛', entites: ['salaires_ecole'], ecran: 'salaires-privee' },
+    { code: 'divisions', cat: 'PILOTAGE', nom: 'Divisions et services (statistiques, courbes, plans d’action)', icone: '🏛️', entites: ['divisions_structure', 'lignes_action'], ecran: 'divisions' },
+    { code: 'signatures', cat: 'PEDAGOGIE', nom: 'Signatures des acteurs', icone: '✍️', entites: [], ecran: 'signatures' },
     { code: 'courriers', cat: 'ADMIN', nom: 'Archive des courriers', icone: '📬', entites: ['courriers'], ecran: 'courriers' },
     { code: 'ecoles-cm2', cat: 'PILOTAGE', nom: 'Écoles à CM2 et CEP', icone: '🎯', entites: [], ecran: 'ecoles-cm2' },
     { code: 'ecarts-cs', cat: 'PILOTAGE', nom: 'Analyses et écarts', icone: '📈', entites: [], ecran: 'ecarts-cs' },
@@ -1194,6 +1196,37 @@
     },
 
     /* ---------------- PERSONNEL PAR STATUT : SIGNATURE DE CATÉGORIE ---------------- */
+    divisions_structure: {
+      label: 'Divisions et services (chefs, attributions)', singulier: 'Division', icone: '🏛️',
+      titre: r => (r.sigle || r.division_code || '') + ' — ' + (r.chef_nom || ''),
+      champs: [
+        f('territoire_id', 'Circonscription ou département', 'ref', { ref: 'territoires', req: 1, list: 1 }),
+        f('division_code', 'Code de la division', 'text', { req: 1, list: 1 }),
+        f('sigle', 'Sigle', 'text', { list: 1 }),
+        f('chef_nom', 'Chef de la division', 'text', { list: 1 }),
+        f('chef_titre', 'Titre du signataire', 'text'),
+        f('chef_telephone', 'Téléphone', 'text'),
+        f('attributions', 'Attributions (texte officiel)', 'textarea'),
+        f('article_aof', 'Article de l’AOF', 'text')
+      ]
+    },
+    lignes_action: {
+      label: 'Lignes d’action des divisions', singulier: 'Ligne d’action', icone: '🎯',
+      titre: r => r.libelle,
+      champs: [
+        f('territoire_id', 'Circonscription ou département', 'ref', { ref: 'territoires', req: 1, list: 1 }),
+        f('division_code', 'Division', 'text', { req: 1, list: 1 }),
+        f('annee_code', 'Année scolaire', 'text', { req: 1, list: 1 }),
+        f('libelle', 'Ligne d’action (attribution)', 'textarea', { req: 1, list: 1 }),
+        f('indicateur', 'Indicateur', 'text'),
+        f('cible', 'Cible', 'text'),
+        f('echeance', 'Échéance', 'date'),
+        f('responsable', 'Responsable', 'text'),
+        f('etat', 'État', 'select', { list: 1, o: ['PREVUE', 'EN_COURS', 'REALISEE', 'REPORTEE'], def: 'PREVUE' }),
+        f('taux', 'Taux de réalisation (%)', 'number', { min: 0, max: 100 }),
+        f('observations', 'Observations', 'textarea')
+      ]
+    },
     signatures_categories: {
       label: 'Signatures des catégories', singulier: 'Signature de catégorie', icone: '✍️',
       titre: r => (r.categorie || '') + ' — ' + (r.signataire_nom || ''),

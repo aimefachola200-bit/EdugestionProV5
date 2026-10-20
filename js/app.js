@@ -16,15 +16,15 @@
       ecrire: true, modules: ['eleves', 'inscriptions', 'presences', 'evaluations', 'cep', 'personnel',
         'visites', 'risques', 'alertes', 'analytics', 'rapports', 'documents', 'recensement',
         'reseau', 'telechargements', 'espace-cs', 'unites-pedagogiques', 'repertoire', 'calendrier-scolaire',
-        'carte-ecole', 'carte-eleve', 'fiche-cep', 'stats-cs']
+        'carte-ecole', 'carte-eleve', 'fiche-cep', 'stats-cs', 'divisions', 'signatures']
     },
     DIRECTEUR: {
-      ecrire: true, modules: '*', sauf: ['securite', 'support', 'reseau', 'espace-cs', 'unites-pedagogiques', 'personnel-cs', 'statuts-personnel', 'courriers', 'ecoles-cm2', 'ecarts-cs', 'rapport-rentree']
+      ecrire: true, modules: '*', sauf: ['securite', 'support', 'reseau', 'espace-cs', 'unites-pedagogiques', 'personnel-cs', 'statuts-personnel', 'courriers', 'ecoles-cm2', 'ecarts-cs', 'rapport-rentree', 'divisions']
     },
     ENSEIGNANT: {
       ecrire: true, modules: ['eleves', 'inscriptions', 'presences', 'evaluations', 'cep', 'cantine',
         'risques', 'documents', 'parents', 'educmaster', 'telechargements', 'repertoire', 'calendrier-scolaire',
-        'carte-ecole', 'carte-eleve']
+        'carte-ecole', 'carte-eleve', 'signatures']
     },
     PARENT: { ecrire: false, modules: ['parents'] },
     ELEVE: { ecrire: false, modules: ['parents'] }
@@ -298,6 +298,7 @@
       { nom: 'Administration', icone: '🏛️', coul: '#7B4FA8', items: [
         ['telechargements', '🗂️', 'Fiches officielles', 'telechargements'], ['certificats', '📜', 'Certificats', 'personnel'],
         ['rapport-rentree', '📄', 'Rapports de rentrée', 'rapport-rentree'], ['courriers', '📬', 'Archive courriers', 'courriers'],
+        ['divisions', '🏛️', 'Divisions et services (statistiques, courbes)', 'divisions'], ['signatures', '✍️', 'Signatures des acteurs', 'signatures'],
         ['ecarts-cs', '📈', 'Analyses et écarts', 'ecarts-cs'], ['cachet', '🔏', 'Cachets et signatures', 'cachets'],
         ['entite/annees_scolaires', '🗓️', 'Années scolaires', 'socle'], ['calendrier-scolaire?type=FERIE&vue=agenda', '📆', 'Jours fériés', 'calendrier-scolaire'],
         ['import-export/import', '📥', 'Import Excel', 'import-export'], ['import-export/sauvegarde', '💾', 'Sauvegarde', 'import-export']
@@ -478,7 +479,7 @@
     U.modal('Mon compte', el('div', {}, [
       el('p', {}, [el('strong', { text: (u.prenoms || '') + ' ' + u.nom }), el('br'), document.createTextNode(U.libelle(u.role))]),
       el('p', { class: 'muet', text: EG.session.ecole_nom + ' • année ' + EG.session.annee_code }),
-      el('p', { class: 'muet petit', text: 'ÉduGestion Pro Master V5.8 — fonctionne hors ligne, les données restent sur cet appareil jusqu’à la synchronisation.' }),
+      el('p', { class: 'muet petit', text: 'ÉduGestion Pro Master V5.9 — fonctionne hors ligne, les données restent sur cet appareil jusqu’à la synchronisation.' }),
       el('p', { class: 'muet petit', text: u.signature_image ? 'Signature enregistrée : elle est apposée sur les documents que vous éditez.' : 'Aucune signature enregistrée : vos documents porteront un emplacement à signer à la main.' }),
       el('div', { class: 'barre-actions' }, [
         el('button', {

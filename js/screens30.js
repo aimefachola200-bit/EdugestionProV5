@@ -247,7 +247,7 @@
           el('button', { class: 'btn btn-fantome', text: '← Carrières', onclick: () => Routeur.aller('carrieres') }),
           ecrire ? el('button', { class: 'btn btn-primaire', text: '⏫ Avancement d’échelon', onclick: () => modalAvancement(p, s, raf) }) : null,
           ecrire ? el('button', { class: 'btn btn-fantome', text: '＋ Acte de carrière', onclick: () => E.editer('carrieres_personnel', { personnel_id: id, categorie: p.categorie, echelon: p.echelon, grade: p.grade }, raf) }) : null,
-          el('button', { class: 'btn btn-fantome', text: '🖨️ Fiche de carrière (signée, avec QR)', onclick: () => EG.genererDocument('FICHE_CARRIERE', 'Fiche de carrière — ' + nomAgent(p), ficheHtml(p, s, ctx), { ecole_id: p.ecole_id }) }),
+          el('button', { class: 'btn btn-fantome', text: '🖨️ Fiche de carrière (signée, avec QR)', onclick: () => EG.genererDocument('FICHE_CARRIERE', 'Fiche de carrière — ' + nomAgent(p), ficheHtml(p, s, ctx), { acteurs: [{ personne: p, mention: 'L’agent' }], ecole_id: p.ecole_id }) }),
           el('button', { class: 'btn btn-fantome', text: '🪪 Carte d’identité', onclick: () => Routeur.aller('agent-identite/' + id) })
         ]));
 

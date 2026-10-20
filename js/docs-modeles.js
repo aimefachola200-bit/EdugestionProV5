@@ -116,7 +116,7 @@
       + '<div class="carte-signatures">'
       + signature(eleve, 'L’élève')
       + '<div class="carte-cachet">' + cachet(ecole, { taille: 54 }) + '</div>'
-      + signature(signataire, 'Le Directeur')
+      + signature(D.signataireEcole(signataire, ecole), 'Le Directeur')
       + '</div>'
 
       + '<div class="carte-pied"><span>N° ' + echapper(numero) + '</span>'
@@ -179,7 +179,7 @@
       + echapper(U.dateCourte(new Date().toISOString())) + '</p>'
       + '</div>'
       + '<div class="bloc-signature cert-signature">'
-      + caseSignature(signataire, 'Le Directeur')
+      + caseSignature(D.signataireEcole(signataire, ecole), 'Le Directeur')
       + '<div class="cachet-case">' + D.cachetComplet(ecole) + '</div>'
       + '</div>'
       + '</div>';
@@ -319,6 +319,7 @@
    */
   function ficheCEP(eleve, ins, ecole, annee, fiche, cep, contexte, signataire) {
     contexte = contexte || {}; fiche = fiche || {}; eleve = eleve || {}; ecole = ecole || {};
+    signataire = D.signataireEcole(signataire, ecole);
     const VERT = '#194730', OR = '#A3780D', OR_CL = '#C9962B', BORD = '#BAC4BA', TXT = '#1C1A14', GRIS = '#6B6553';
     const KY = 0.955, X = x => (x - 24).toFixed(1) + 'pt', Y = y => ((y - 3) * KY).toFixed(1) + 'pt';
     const out = [];
@@ -392,7 +393,8 @@
     lab(36, 509, 'Je certifie exacts les renseignements ci-dessus.', 7.8, TXT, false, true);
     lab(154, 525, 'Fait à', 7.8, TXT, false); champ(185, 298, 525, contexte.commune || ecole.commune);
     lab(311, 525, 'le', 7.8, TXT, false); champ(325, 430, 525, auj);
-    x = lab(36, 542, 'NOM, PRÉNOM ET SIGNATURE DU PARENT :'); champ(x + 4, 543, 542, fiche.parent_nom);
+    x = lab(36, 542, 'NOM, PRÉNOM ET SIGNATURE DU PARENT :'); champ(x + 4, 543, 542, fiche.parent_nom || D.parentDe(eleve).nom);
+    if (eleve.signature_parent) out.push('<img src="' + eleve.signature_parent + '" alt="Signature du parent" style="position:absolute;left:' + X(452) + ';top:' + Y(527) + ';width:88pt;height:' + (19 * KY).toFixed(1) + 'pt;object-fit:contain;object-position:right center">');
     x = lab(36, 561, 'CONTACT TÉLÉPHONIQUE DU PARENT :'); champ(x + 4, 543, 561, contactParent);
     lab(38, 571.5, '(Préciser le degré de parenté)', 5, GRIS, false, true);
     x = lab(36, 582, 'SIGNATURE DU (DE LA) CANDIDAT (E) :'); champ(x + 4, 543, 582, '');
@@ -476,7 +478,8 @@
       + ligne('Téléphone des parents / du tuteur', v(eleve.tuteur_telephone))
       + ligne('Adresse', v(eleve.adresse_parents))
       + '</tbody></table>'
-      + '<div class="fi-signature-parent"><span>Signature du parent ou du tuteur</span><span class="fi-cadre"></span></div>'
+      + D.blocActeurs([{ personne: { nom: eleve.nom || '', prenoms: eleve.prenoms || '', signature_image: eleve.signature_image || '' }, mention: 'L’élève' },
+        { personne: D.parentDe(eleve), mention: 'Le parent ou le tuteur' }])
       + '<h3 class="fi-rubrique">Carte d’identité scolaire (à découper)</h3>'
       + '<div class="planche-cartes fi-cartes">' + carteScolaire(eleve, ins, ecole, annee, numeroCarte, signataire)
       + carteScolaireVerso(eleve, ins, ecole, annee, numeroCarte, contexte) + '</div>'

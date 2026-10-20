@@ -6,7 +6,7 @@
   /* Variante Master : sur github.io, où ÉduGestion Pro est servie à la même adresse, une base à elle ; ailleurs la base
      d'origine (les données déjà saisies sur l'adresse de la Master restent en place). */
   const DB_NAME = (global.location && /github\.io$/.test(location.hostname)) ? 'edugestion_pro_master' : 'edugestion_pro';
-  const DB_VERSION = 12;
+  const DB_VERSION = 13;
   const SYSTEM_STORES = ['outbox', 'meta'];
   const ALL_STORES = EG.STORES.concat(SYSTEM_STORES);
 

@@ -212,6 +212,33 @@
      Signature numérique
      ======================================================================= */
 
+  /**
+   * Qui signe pour l'école : le directeur connecté lui-même ; sinon (pièce éditée par la circonscription, la
+   * direction départementale, un adjoint…) le directeur de l'école, avec la signature qu'il a enregistrée.
+   */
+  function signataireEcole(user, ecole) {
+    ecole = ecole || {};
+    if (user && user.role === 'DIRECTEUR' && (!ecole.id || user.ecole_id === ecole.id)) return user;
+    if (ecole.signature_directeur || ecole.directeur_nom) return { nom: ecole.directeur_nom || '', prenoms: '', signature_image: ecole.signature_directeur || '' };
+    return user;
+  }
+
+  /** Le parent (ou le tuteur) d'un élève, avec la signature recueillie sur sa fiche. */
+  function parentDe(eleve) {
+    eleve = eleve || {};
+    return { nom: eleve.tuteur_nom || eleve.nom_pere || eleve.nom_mere || '', prenoms: '', signature_image: eleve.signature_parent || '' };
+  }
+
+  /**
+   * Signatures des acteurs concernés par une pièce (élève, parent, enseignant, agent, autorité…),
+   * en ligne, chacune avec sa mention. acteurs : [{ personne, mention }].
+   */
+  function blocActeurs(acteurs) {
+    const l = (acteurs || []).filter(a => a && a.personne);
+    if (!l.length) return '';
+    return '<div class="bloc-signature bloc-acteurs">' + l.map(a => caseSignature(a.personne, a.mention)).join('') + '</div>';
+  }
+
   /** Une case de signature : mention, tracé s'il existe, nom en dessous. */
   function caseSignature(personne, mention) {
     const image = personne && personne.signature_image
@@ -232,7 +259,7 @@
   function blocSignature(user, ecole, mention, titulaire) {
     return '<div class="bloc-signature">'
       + (titulaire ? caseSignature(titulaire, 'Le titulaire de la classe') : '')
-      + caseSignature(user, mention === '' ? '' : (mention || 'Le directeur'))
+      + caseSignature(mention && !/directeur|directrice/i.test(mention) ? user : signataireEcole(user, ecole), mention === '' ? '' : (mention || 'Le directeur'))
       + '<div class="cachet-case">' + cachetComplet(ecole) + '</div>'
       + '</div>';
   }
@@ -278,7 +305,7 @@
     t = t || {};
     return '<p class="fait-a">Fait à ' + echapper(t.ville || '……………………') + ', le ' + '……………………' + '</p>'
       + '<div class="bloc-signature">'
-      + caseSignature({ nom: t.responsable || '' }, mention || (t.type === 'DEPARTEMENT' ? 'Le Directeur départemental' : 'Le Chef de la circonscription scolaire'))
+      + caseSignature({ nom: t.responsable || '', signature_image: t.signature_image || '' }, mention || (t.type === 'DEPARTEMENT' ? 'Le Directeur départemental' : 'Le Chef de la circonscription scolaire'))
       + '<div class="cachet-case">' + cachetTerritoireComplet(t) + '</div></div>';
   }
 
@@ -291,6 +318,7 @@
   function capturerSignature(enregistrement, apres, options) {
     options = options || {};
     const table = options.table || 'users';
+    const champ = options.champ || 'signature_image';   // ex. signature_parent (élève), signature_directeur (école)
     const user = enregistrement;
     const largeur = 520, hauteur = 200;
     const toile = U.el('canvas', { width: largeur, height: hauteur, class: 'toile-signature',
@@ -299,10 +327,10 @@
     ctx.lineWidth = 2.4; ctx.lineCap = 'round'; ctx.lineJoin = 'round'; ctx.strokeStyle = '#17201B';
     let trace = false, vide = true;
 
-    if (user && user.signature_image) {
+    if (user && user[champ]) {
       const img = new Image();
       img.onload = () => { ctx.drawImage(img, 0, 0, largeur, hauteur); vide = false; };
-      img.src = user.signature_image;
+      img.src = user[champ];
     }
 
     function point(e) {
@@ -333,10 +361,14 @@
         class: 'btn btn-primaire', text: 'Enregistrer', onclick: () => {
           if (vide) { U.toast('La zone de signature est vide', 'attention'); return; }
           const image = toile.toDataURL('image/png');
-          DB.put(table, Object.assign({}, user, { signature_image: image }))
+          DB.put(table, Object.assign({}, user, { [champ]: image }))
             .then(enregistre => {
               if (table === 'users' && EG.session.user.id === enregistre.id) EG.session.user = enregistre;
-              return DB.audit('SIGNATURE_ENREGISTREE', table, enregistre.id);
+              /* Le directeur qui signe pour lui-même signe aussi pour son école : sa signature figure ainsi
+                 sur les pièces de l'école éditées par la circonscription ou la direction départementale. */
+              const suite = (table === 'users' && enregistre.role === 'DIRECTEUR' && enregistre.ecole_id)
+                ? DB.get('ecoles', enregistre.ecole_id).then(e => e ? DB.put('ecoles', Object.assign({}, e, { signature_directeur: image })) : null) : Promise.resolve();
+              return suite.then(() => DB.audit('SIGNATURE_ENREGISTREE', table, enregistre.id, { champ }));
             })
             .then(() => { fermer(); U.toast('Signature enregistrée'); EG.majSynchro(); if (apres) apres(); });
         }
@@ -382,7 +414,7 @@
     echapper, ressource, cachet, COULEURS_CACHET, cachetTerritoire, mentionsTerritoire, visaEcole, visaTerritoire,
     griffe, griffeEcole, griffeTerritoire, cachetComplet, cachetTerritoireComplet,
     adresseVerification, qrDocument, qrEleve,
-    caseSignature, blocSignature, capturerSignature,
+    caseSignature, blocSignature, capturerSignature, signataireEcole, parentDe, blocActeurs,
     enteteMEMP, enteteAdministratif
   });
 })(window);
