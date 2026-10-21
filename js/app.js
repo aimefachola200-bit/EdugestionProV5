@@ -106,6 +106,7 @@
       el('div', { class: 'champ' }, [el('label', { for: 'mdp', text: 'Mot de passe' }), motdepasse]),
       erreur,
       el('button', { class: 'btn btn-primaire pleine', type: 'submit', text: 'Se connecter' }),
+      el('a', { class: 'oubli-lien', href: '#', text: '🔑 Mot de passe oublié ?', onclick: e => { e.preventDefault(); EG.MotDePasse.dialogueOubli(identifiant.value.trim()); } }),
       el('details', { class: 'comptes' }, [
         el('summary', { text: 'Comptes de démonstration' }),
         el('ul', {}, [
@@ -222,6 +223,7 @@
         class: 'icone-btn bouton-menu', id: 'bouton-menu', 'aria-label': 'Ouvrir le menu', 'aria-controls': 'menu-lateral',
         'aria-expanded': 'false', text: '☰', onclick: basculerMenu
       }),
+      EG.MotDePasse.boutonRetour(),
       el('button', {
         class: 'marque-mini', onclick: () => Routeur.aller('accueil'), 'aria-label': 'Accueil'
       }, [el('span', { class: 'marque-drapeau petit-drapeau', 'aria-hidden': 'true' }), el('span', { text: 'ÉduGestion Pro Master' })]),
@@ -490,6 +492,8 @@
           class: 'btn btn-fantome', text: 'Installer l’application',
           onclick: () => { document.querySelector('.modal-fond').remove(); EG.proposerInstallation(); }
         }),
+        el('button', { class: 'btn btn-fantome', text: 'Changer mon mot de passe', onclick: () => { document.querySelector('.modal-fond').remove(); EG.MotDePasse.changerMotDePasse(); } }),
+        el('button', { class: 'btn btn-fantome', text: u.secours_question ? '🔑 Changer ma question de secours' : '🔑 Définir ma question de secours', onclick: () => { document.querySelector('.modal-fond').remove(); EG.MotDePasse.questionSecours(); } }),
         el('button', { class: 'btn btn-fantome', text: 'Synchronisation', onclick: () => { document.querySelector('.modal-fond').remove(); Routeur.aller('sync'); } }),
         el('button', { class: 'btn btn-fantome', text: 'Tous les modules', onclick: () => { document.querySelector('.modal-fond').remove(); Routeur.aller('modules'); } })
       ])
