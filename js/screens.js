@@ -390,6 +390,7 @@
     if (!lecture) actions.push(el('button', {
       class: 'btn btn-primaire', text: 'Ajouter', onclick: () => editer(nom, null, rafraichir)
     }));
+    actions.push(el('button', { class: 'btn btn-fantome', text: '📊 Exporter en Excel', onclick: () => exporterExcel(nom) }));
     actions.push(el('button', { class: 'btn btn-fantome', text: 'Exporter en CSV', onclick: () => exporterCSV(nom) }));
 
     racine.appendChild(entete(def.label, def.champs.length + ' champs', actions));
@@ -512,6 +513,22 @@
           }
         })
       ]);
+    });
+  }
+
+  /** Excel : une feuille, rubriques = libellés des champs (en clair), une ligne par enregistrement. */
+  function exporterExcel(entite) {
+    charger(entite).then(rows => {
+      if (!rows.length) return U.toast('Aucune donnée à exporter', 'attention');
+      const champs = EG.SCHEMA[entite].champs.filter(c => c.t !== 'password');
+      const lignes = [champs.map(c => c.l || c.n)].concat(rows.map(r => champs.map(c => {
+        const v = r[c.n];
+        if (v === null || v === undefined) return '';
+        if (typeof v === 'object') return JSON.stringify(v);
+        if (c.t === 'select' || c.o) return U.libelle(v);
+        return v;
+      })));
+      EG.Sortie.excel(entite, [{ nom: EG.SCHEMA[entite].label || entite, lignes }]);
     });
   }
 
@@ -2292,8 +2309,8 @@
       zone.appendChild(U.carte('Exporter les données brutes', el('div', { class: 'raccourcis' },
         ['eleves', 'inscriptions_eleves', 'presences', 'notes', 'personnels', 'infrastructures'].map(e =>
           el('button', {
-            class: 'raccourci', onclick: () => exporterCSV(e)
-          }, [el('span', { class: 'raccourci-icone', text: '📑' }), el('span', { text: EG.SCHEMA[e].label + ' (CSV)' })])))));
+            class: 'raccourci', onclick: () => exporterExcel(e)
+          }, [el('span', { class: 'raccourci-icone', text: '📊' }), el('span', { text: EG.SCHEMA[e].label + ' (Excel)' })])))));
     });
 
     function produire(m) {
@@ -2422,5 +2439,5 @@
     function restaurer() { Routeur.aller('import-export/sauvegarde'); }
   });
 
-  EG.Ecrans = { charger, refsPour, editer, fiche, exporterCSV, telecharger, inscriptionsEnrichies, indexer, entete };
+  EG.Ecrans = { charger, refsPour, editer, fiche, exporterCSV, exporterExcel, telecharger, inscriptionsEnrichies, indexer, entete };
 })(window);
