@@ -489,9 +489,33 @@
       });
   }
 
+  /** Toutes les feuilles d'un classeur, dans l'ordre du classeur : [{ nom, lignes }]. */
+  function lireClasseur(fichier) {
+    return fichier.arrayBuffer().then(dezipper).then(parties => {
+      const chaines = analyserChaines(parties['xl/sharedStrings.xml']);
+      const wb = parties['xl/workbook.xml'] || '', rels = parties['xl/_rels/workbook.xml.rels'] || '';
+      const cibles = {};
+      rels.replace(/<Relationship\b[^>]*>/g, r => {
+        const id = /Id="([^"]+)"/.exec(r), t = /Target="([^"]+)"/.exec(r);
+        if (id && t) cibles[id[1]] = t[1].replace(/^\/?xl\//, '').replace(/^\//, '');
+        return r;
+      });
+      const deco = t => t.replace(/&amp;/g, '&').replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&quot;/g, '"').replace(/&apos;/g, "'");
+      const feuilles = [];
+      wb.replace(/<sheet\b[^>]*>/g, s => {
+        const nom = /name="([^"]*)"/.exec(s), rid = /r:id="([^"]+)"/.exec(s);
+        const chemin = rid && cibles[rid[1]] ? 'xl/' + cibles[rid[1]] : null;
+        if (nom && chemin && parties[chemin]) feuilles.push({ nom: deco(nom[1]), lignes: analyserFeuille(parties[chemin], chaines) });
+        return s;
+      });
+      if (!feuilles.length) throw new Error('Aucune feuille de calcul dans ce fichier.');
+      return feuilles;
+    });
+  }
+
   /* Écriture : classeur standard (chaînes partagées, styles, en-têtes) — voir XlsxEcrire en tête de fichier.
      L'ancien format (chaînes en ligne, sans styles) s'ouvrait vide sur beaucoup de téléphones Android. */
   const construireStandard = (feuilles) => global.XlsxEcrire.classeur(feuilles);
   void construire;
-  EG.Tableur = { construire: construireStandard, lire, zipper, dezipper, analyserCSV };
+  EG.Tableur = { construire: construireStandard, lire, lireClasseur, zipper, dezipper, analyserCSV };
 })(window);

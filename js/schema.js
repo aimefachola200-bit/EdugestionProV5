@@ -1646,6 +1646,7 @@
         f('sensibilite', 'Sensibilité', 'select', { o: ['PUBLIC', 'INTERNE', 'CONFIDENTIEL', 'SENSIBLE'], def: 'INTERNE' }),
         f('statut', 'Statut', 'select', { list: 1, o: ['BROUILLON', 'GENERE', 'A_SIGNER', 'SIGNE', 'VALIDE', 'VERROUILLE', 'ARCHIVE', 'ANNULE'], def: 'GENERE' }),
         f('hash_sha256', 'Empreinte', 'text', { list: 1 }),
+        f('orientation', 'Orientation', 'select', { o: ['PORTRAIT', 'PAYSAGE'], def: 'PORTRAIT' }),
         f('contenu_html', 'Contenu', 'textarea')
       ]
     },

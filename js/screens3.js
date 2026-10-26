@@ -41,6 +41,7 @@
       'Répertoire national : attribution des matricules, rapprochement des dossiers, arbitrage des conflits.',
       [el('button', { class: 'btn btn-fantome', text: 'Synchronisation', onclick: () => Routeur.aller('sync') })]));
     const zone = el('div');
+    racine.appendChild(EG.EducMasterModeles.bloc());
     racine.appendChild(zone);
     const raf = () => Routeur.aller('educmaster');
 

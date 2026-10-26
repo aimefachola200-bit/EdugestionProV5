@@ -451,7 +451,9 @@
       + '<p class="fait-a">Fait à ' + ech(t.ville || '……………………') + ', le ' + ech(U.dateCourte(new Date().toISOString())) + '</p>'
       + '<div class="bloc-signature">' + EG.Docs.caseSignature({ nom: (chef && chef.chef_nom) || '', signature_image: (chef && chef.signature_image) || '' }, (chef && chef.chef_titre) || div.signataire)
       + '<div class="cachet-case">' + EG.Docs.cachetTerritoireComplet(t) + '</div></div>';
-    S().imprimer(div.sigle + ' — ' + t.nom, corps, { ecole: pseudo });
+    /* Pièce scellée : numéro, empreinte et code QR de vérification sous la signature et le cachet. */
+    const scelle = () => { const h = corps(); return EG.DocsSco ? EG.DocsSco.sceller('DIVISION_STATS', div.sigle + ' — ' + t.nom, h).then(b => h + b) : h; };
+    S().imprimer(div.sigle + ' — ' + t.nom, scelle, { ecole: pseudo });
   }
 
   function excel(t, div, st, lignes) {

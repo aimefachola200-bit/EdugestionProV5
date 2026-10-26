@@ -779,3 +779,7 @@ body.connexion { background: var(--fond); }
 .onglet-page.actif { background: var(--primaire); border-color: var(--primaire); }
 .raccourcis { grid-template-columns: repeat(auto-fill, minmax(min(100%, 140px), 1fr)); }
 .marque-drapeau { background: linear-gradient(to bottom, var(--jaune) 0 50%, var(--rouge) 50% 100%) right / 58% 100% no-repeat, #008751; }
+
+.educmaster-plie{margin:0 0 14px;background:#fff;border:1px solid var(--bordure);border-radius:10px;padding:8px 12px}
+.educmaster-plie>summary{cursor:pointer;font-weight:600;color:var(--primaire)}
+.educmaster-plie .carte{margin:10px 0 4px;box-shadow:none}

@@ -156,7 +156,8 @@
     .tres-important ul { margin: 3px 0 0; padding-left: 14px; column-count: 2; column-gap: 14px; }
     .tres-important li { margin-bottom: 2px; text-align: justify; }
     .mention-directeur { text-align: right; font-size: 12px; margin-top: 10px; }
-    .pied-qr { display: flex; justify-content: space-between; align-items: center; gap: 20px; }
+    .pied-qr { display: flex; justify-content: space-between; align-items: center; gap: 20px; break-before: avoid; page-break-before: avoid; break-inside: avoid; }
+    .bloc-signature { break-inside: avoid; page-break-inside: avoid; }
     .certificat-agent { max-width: 190mm; margin: 0 auto; font-size: 12px; line-height: 1.9; }
     .certificat-agent .reference-so { font-size: 10px; margin: 6px 0 0; }
     .certificat-agent h2 { text-align: center; font-size: 17px; letter-spacing: .04em;
@@ -211,5 +212,38 @@
     .saut-page { page-break-after: always; }
     .saut-page:last-child { page-break-after: auto; }
     @media print { .carte-scolaire { break-inside: avoid; } }
-  `;
+  
+    /* ---- Pièces au format SCOLARIS / GESCOL : titre, cadre d'informations, tableaux à en-tête bleu ---- */
+    .titre-officiel { text-align: center; margin: 6px 0 8px; }
+    .titre-officiel h2 { color: #1F4E79; font-family: Arial, Helvetica, sans-serif; font-size: 17px; letter-spacing: .02em; margin: 0; text-transform: uppercase; }
+    .titre-officiel p { margin: 2px 0 0; font-family: Arial, Helvetica, sans-serif; font-size: 11px; }
+    table.infos-doc { margin: 6px 0 8px; }
+    table.infos-doc td { border: .2mm solid #98A2B3; padding: 3px 6px; font-family: Arial, Helvetica, sans-serif; font-size: 10px; }
+    table.infos-doc td.l { font-weight: 700; width: 12%; background: #F4F6F9; }
+    table.sco { font-family: Arial, Helvetica, sans-serif; margin: 6px 0 10px; }
+    table.sco th { background: #1F4E79; color: #fff; border: .2mm solid #1F4E79; font-size: 9.5px; text-align: center; padding: 3px 4px; }
+    table.sco td { border: .2mm solid #98A2B3; font-size: 9.5px; padding: 2px 4px; text-align: center; }
+    table.sco td.g, table.sco th.g { text-align: left; }
+    table.sco tr.tot td { font-weight: 700; background: #EEF4FA; }
+    table.sco .chome { background: #E4E7EC; }
+    table.sco .abs { color: #B42318; font-weight: 700; }
+    h3.sco { font-family: Arial, Helvetica, sans-serif; font-size: 12px; color: #1D2939; margin: 10px 0 2px; text-transform: uppercase; }
+    .note-sco { font-family: Arial, Helvetica, sans-serif; font-size: 9px; color: #475467; margin: 2px 0 6px; }
+    .deux-col { display: flex; gap: 14px; align-items: flex-start; }
+    .deux-col > div { flex: 1; min-width: 0; }
+    .capture-ecran svg { max-width: 100%; height: auto; }
+    .capture-ecran .grille { display: flex; flex-wrap: wrap; gap: 6px; }
+    .capture-ecran .stat { border: .2mm solid #98A2B3; border-radius: 2mm; padding: 4px 8px; min-width: 32mm; }
+    .capture-ecran .stat-valeur { font-size: 15px; font-weight: 700; }
+    .capture-ecran .stat-etiquette { font-size: 9px; text-transform: uppercase; color: #475467; }
+    .capture-ecran .carte { border: .2mm solid #D0D5DD; border-radius: 2mm; padding: 6px 8px; margin: 6px 0; page-break-inside: avoid; }
+    .capture-ecran .carte-titre, .capture-ecran h2, .capture-ecran h3 { font-family: Arial, Helvetica, sans-serif; font-size: 11px; text-transform: uppercase; color: #1D2939 !important; background: none !important; text-align: left; margin: 0 0 4px; padding: 0; }
+    .capture-ecran table th { background: #1F4E79; color: #fff; font-family: Arial, Helvetica, sans-serif; font-size: 9.5px; }
+    .capture-ecran table td { font-family: Arial, Helvetica, sans-serif; font-size: 9.5px; padding: 2px 4px; }
+    .capture-ecran .histogramme { display: flex; flex-direction: column; gap: 3px; }
+    .capture-ecran .histo-ligne { display: grid; grid-template-columns: 22mm 1fr 16mm; gap: 6px; align-items: center; font: 9.5px Arial, Helvetica, sans-serif; }
+    .capture-ecran .histo-piste { background: #EEF4FA; height: 3mm; border-radius: 1.5mm; overflow: hidden; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    .capture-ecran .histo-barre { display: block; height: 100%; background: #1F4E79; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    .capture-ecran p { font-family: Arial, Helvetica, sans-serif; font-size: 10px; }
+`;
 })(window);

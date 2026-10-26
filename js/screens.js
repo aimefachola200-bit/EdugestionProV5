@@ -691,6 +691,7 @@
     const filtres = el('div', { class: 'barre-filtres' });
     const zone = el('div');
     racine.appendChild(filtres); racine.appendChild(zone);
+    if (EG.EducMasterModeles) { const d = el('details', { class: 'educmaster-plie' }, [el('summary', { text: '📗 Notes au format EDUCMaster : exporter / importer' })]); d.addEventListener('toggle', () => { if (d.open && d.children.length === 1) d.appendChild(EG.EducMasterModeles.bloc()); }); racine.appendChild(d); }
 
     let evalId = '';
     charger('evaluations', { annee_scolaire_id: anneeCourante() }).then(evals => {
@@ -801,6 +802,35 @@
               }
             }));
           }
+          /* Résultats de l'évaluation au format SCOLARIS / GESCOL : notes, moyenne, maîtrises, rang, puis réussite par matière
+             et par sexe ; signatures, cachet et QR de vérification. */
+          actions.push(el('button', { class: 'btn btn-fantome', text: '🖨️ Résultats (signés, avec QR)', onclick: () => {
+            const D = EG.DocsSco;
+            const res = ins.map(i => {
+              const ls = cols.map(c => { const v = champs[cle(i.id, c.matiere.id)].value; return { note: v === '' ? null : Number(v), coefficient: c.coefficient }; });
+              return { i, ls, moy: R.moyenne(ls), m: R.maitrises(ls), f: i._eleve && i._eleve.sexe === 'F' };
+            });
+            const classes = res.filter(x => x.moy !== null).map(x => x.moy).sort((a, b) => b - a);
+            const rang = v => v === null ? '—' : (classes.indexOf(v) + 1) + (classes.indexOf(v) === 0 ? 'er' : 'e');
+            const lignes = res.map((x, k) => [k + 1, { t: x.i._nom, g: true }, x.f ? 'F' : 'M'].concat(x.ls.map(l => l.note === null ? '—' : l.note),
+              [x.moy === null ? '—' : x.moy.toFixed(2), x.m.maitrisees + '/' + x.m.notees, rang(x.moy)]));
+            const parMat = cols.map((c, j) => {
+              const not = res.filter(x => x.ls[j].note !== null), ok = not.filter(x => x.ls[j].note >= 10);
+              const sx = f => { const a = not.filter(x => x.f === f), b = a.filter(x => x.ls[j].note >= 10); return a.length ? Math.round(b.length / a.length * 100) + ' %' : '—'; };
+              return [{ t: c.matiere.nom, g: true }, not.length, ok.length, not.length ? Math.round(ok.length / not.length * 100) + ' %' : '—', sx(false), sx(true)];
+            });
+            const comp = res.filter(x => x.moy !== null), reu = comp.filter(x => x.moy >= 10);
+            parMat.push({ tot: true, cells: [{ t: 'Moyenne générale ≥ 10', g: true }, comp.length, reu.length, comp.length ? Math.round(reu.length / comp.length * 100) + ' %' : '—',
+              (() => { const a = comp.filter(x => !x.f); return a.length ? Math.round(a.filter(x => x.moy >= 10).length / a.length * 100) + ' %' : '—'; })(),
+              (() => { const a = comp.filter(x => x.f); return a.length ? Math.round(a.filter(x => x.moy >= 10).length / a.length * 100) + ' %' : '—'; })()] });
+            const html = D.titre('Résultats de l’évaluation ' + (ev.numero || '') + (ev.libelle ? ' — ' + ev.libelle : ''), ev.niveau + ' — ' + U.libelle(ev.type_evaluation || '') + ' — Année scolaire ' + session().annee_code)
+              + D.infos([['Cours', ev.niveau], ['Évaluation', (ev.numero || '') + (ev.mois ? ' (' + ev.mois + ')' : '')], ['Statut', U.libelle(ev.statut)],
+                ['Élèves', ins.length], ['Ont composé', comp.length], ['Moyenne ≥ 10', reu.length]], 3)
+              + D.tableau(['N°', 'Nom et prénoms', 'Sexe'].concat(cols.map(c => c.matiere.code + (c.coefficient && c.coefficient !== 1 ? ' (×' + c.coefficient + ')' : '')), ['Moyenne', 'Maîtrises', 'Rang']), lignes)
+              + '<h3 class="sco">Réussite par matière (note ≥ 10)</h3>' + D.tableau(['Matière', 'Ont composé', 'Ont réussi', '% de réussite', '% garçons', '% filles'], parMat)
+              + '<p class="note-sco">' + cols.map(c => c.matiere.code + ' : ' + c.matiere.nom).join(' · ') + '. Une note ≥ 10 vaut maîtrise.</p>';
+            EG.genererDocument('RESULTATS_EVAL', 'Résultats — ' + ev.niveau + ' — évaluation ' + (ev.numero || ''), html, { classe_id: ev.classe_id || null, ecole_id: ev.ecole_id || null, paysage: true });
+          } }));
           actions.push(el('button', { class: 'btn btn-fantome', text: 'Bulletins et décisions', onclick: () => Routeur.aller('bulletins?niveau=' + ev.niveau) }));
           actions.push(el('button', { class: 'btn btn-fantome', text: 'Panneau de synthèse', onclick: () => Routeur.aller('synthese-evaluations') }));
           zone.appendChild(el('div', { class: 'barre-actions' }, actions));
@@ -2003,7 +2033,7 @@
     const hash = empreinte(html + numero);
     return DB.put('documents', {
       numero, type_code: typeCode, titre, ecole_id: options.ecole_id || ecoleCourante(), annee_scolaire_id: anneeCourante(),
-      classe_id: options.classe_id || null,
+      classe_id: options.classe_id || null, orientation: options.paysage ? 'PAYSAGE' : 'PORTRAIT',
       sensibilite: 'INTERNE', statut: 'GENERE', hash_sha256: hash, contenu_html: html
     }).then(doc => {
       const u = session().user;
@@ -2057,7 +2087,8 @@
       const enTete = autonomes.indexOf(doc.type_code) >= 0 ? ''
         : EG.Docs.enteteAdministratif(ecole, contexteAdmin);
       w.document.write('<!doctype html><html lang="fr"><head><meta charset="utf-8"><title>'
-        + EG.Docs.echapper(doc.titre) + '</title><style>' + EG.Docs.stylesImpression + '</style></head><body>'
+        + EG.Docs.echapper(doc.titre) + '</title><style>' + EG.Docs.stylesImpression
+        + (doc.orientation === 'PAYSAGE' ? '@page { size: A4 landscape; margin: 8mm; }' : '') + '</style></head><body>'
         + enTete + doc.contenu_html + signature
         + '<div class="pied pied-qr"><div>Document n° ' + EG.Docs.echapper(doc.numero) + ' — empreinte ' + EG.Docs.echapper(doc.hash_sha256)
         + '<br>Édité le ' + U.dateFR(new Date().toISOString()) + ' par ' + EG.Docs.echapper((u.prenoms || '') + ' ' + u.nom)
@@ -2209,8 +2240,9 @@
      ======================================================================= */
 
   Routeur.definir('analytics', function (racine) {
-    racine.appendChild(entete('Statistiques', 'Indicateurs calculés sur les données disponibles localement.'));
     const zone = el('div');
+    racine.appendChild(entete('Statistiques', 'Indicateurs calculés sur les données disponibles localement.',
+      EG.DocsSco ? [EG.DocsSco.boutonEditer('STATISTIQUES', 'Statistiques et courbes', zone)] : null));
     racine.appendChild(zone);
 
     Promise.all([

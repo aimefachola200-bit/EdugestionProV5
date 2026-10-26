@@ -45,6 +45,7 @@
 
     const filtres = el('div', { class: 'barre-filtres' });
     const zone = el('div');
+    if (EG.EducMasterModeles) { const d = el('details', { class: 'educmaster-plie' }, [el('summary', { text: '📗 Élèves au format EDUCMaster : exporter / importer' })]); d.addEventListener('toggle', () => { if (d.open && d.children.length === 1) d.appendChild(EG.EducMasterModeles.bloc()); }); racine.appendChild(d); }
     racine.appendChild(filtres); racine.appendChild(zone);
 
     let recherche = '', niveau = '', afficherSortis = false;

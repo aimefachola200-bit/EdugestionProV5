@@ -102,6 +102,13 @@
    * changement d'empreinte : scanner un second code ne doit jamais laisser
    * le verdict du premier à l'écran.
    */
+  /* Libellés des pièces éditées (registres, tableaux d'affichage, synthèses, statistiques, bulletins…). */
+  const TYPES = { REGISTRE_APPEL: 'Registre de présence (appel)', RELEVE_MENSUEL: 'Relevé mensuel de fréquentation', AFFICHAGE_CLASSE: 'Tableau d’affichage de la classe',
+    SYNTHESE_EVAL: 'Synthèse de l’évaluation', RESULTATS_EVAL: 'Résultats de l’évaluation', STATISTIQUES: 'Statistiques et courbes', DIVISION_STATS: 'Division / service : statistiques, courbes, plan d’action', BILAN_PRESENCE: 'Bilan de présence',
+    BULLETIN: 'Bulletin de notes', LISTE_CLASSE: 'Liste de classe', CERT_SCOLARITE: 'Certificat de scolarité', CARTE_SCOLAIRE: 'Carte d’identité scolaire',
+    FICHE_CEP: 'Fiche d’inscription au CEP', FICHE_INSCRIPTION: 'Fiche d’inscription', RELEVE_CENTRE: 'Relevé de centre', REPARTITION_CLASSES: 'Répartition des classes',
+    ETAT_BUDGET: 'État budgétaire', FICHE_CARRIERE: 'Fiche de carrière', PV_VISITE: 'Procès-verbal de visite', LISTE_PAIEMENT: 'Liste de paiement' };
+
   function verifier() {
     const params = new URLSearchParams(location.search);
     let numero = params.get('n');
@@ -135,7 +142,7 @@
       const concorde = !empreinte || doc.hash_sha256 === empreinte;
       const details = [
       el('p', {}, [el('strong', { text: doc.titre || '—' })]),
-      el('p', { class: 'muet', text: 'Type : ' + (doc.type_code || '—')
+      el('p', { class: 'muet', text: 'Type : ' + (TYPES[doc.type_code] || doc.type_code || '—')
         + ' • édité le ' + dateFR(doc.created_at) + ' • version ' + (doc.version || 1) }),
       el('p', { class: 'muet', text: 'Statut : ' + (doc.statut || '—') })
     ].concat(reference(numero, doc.hash_sha256));

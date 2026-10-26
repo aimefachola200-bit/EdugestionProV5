@@ -410,33 +410,32 @@
     }
 
     function editerSynthese(numero, lignes, quantitative, qualitative, genre, parEpreuve) {
-      const t = (entetes, corps) => '<table><thead><tr>' + entetes.map(h => '<th>' + h + '</th>').join('')
+      const t = (entetes, corps) => '<table class="sco"><thead><tr>' + entetes.map(h => '<th>' + h + '</th>').join('')
         + '</tr></thead><tbody>' + corps + '</tbody></table>';
       EG.genererDocument('SYNTHESE_EVAL', 'Synthèse de l’évaluation n° ' + numero,
-        '<h2>Synthèse de l’évaluation n° ' + numero + '</h2>'
-        + '<p>' + EG.Docs.echapper(session().ecole_nom) + ' — année scolaire ' + session().annee_code
-        + ' — agrégation ' + libelleAgregation() + '</p>'
-        + '<h3>Résultats</h3>'
+        EG.DocsSco.titre('Synthèse de l’évaluation n° ' + numero, (session().ecole_nom ? session().ecole_nom + ' — ' : '') + 'Année scolaire ' + session().annee_code
+          + ' — agrégation ' + libelleAgregation())
+        + '<h3 class="sco">Résultats</h3>'
         + t([libelleColonne(), 'Inscrits', 'Ont composé', 'Maîtrise minimale', 'Maîtrise partielle', 'Moyenne', 'Réussite'],
           lignes.map(l => '<tr><td>' + EG.Docs.echapper(l.libelle) + '</td><td>' + l.inscrits + '</td><td>'
             + l.compose + '</td><td>' + l.maitriseMinimale + '</td><td>' + l.maitrisePartielle + '</td><td>'
             + (l.moyenne === null ? '—' : l.moyenne.toFixed(2)) + '</td><td>'
             + (l.taux === null ? '—' : l.taux + ' %') + '</td></tr>').join(''))
-        + '<h3>Analyse quantitative</h3>'
+        + '<h3 class="sco">Analyse quantitative</h3>'
         + t(['Indicateur', 'Valeur', 'Lecture'], quantitative.map(q =>
           '<tr><td>' + q.indicateur + '</td><td>' + q.valeur + '</td><td>' + EG.Docs.echapper(q.lecture) + '</td></tr>').join(''))
-        + '<h3>Analyse qualitative</h3>'
+        + '<h3 class="sco">Analyse qualitative</h3>'
         + t([libelleColonne(), 'Réussite', 'Appréciation', 'Ce que cela appelle'], qualitative.map(q =>
           '<tr><td>' + EG.Docs.echapper(q.libelle) + '</td><td>' + (q.taux === null ? '—' : q.taux + ' %')
           + '</td><td>' + q.appreciation + '</td><td>' + q.commentaire + '</td></tr>').join(''))
-        + '<h3>Écarts entre filles et garçons</h3>'
+        + '<h3 class="sco">Écarts entre filles et garçons</h3>'
         + t(['Indicateur', 'Garçons', 'Filles', 'Écart F − G'], genre.map(x =>
           '<tr><td>' + x.i + '</td><td>' + (x.g === null ? '—' : x.g) + '</td><td>'
           + (x.f === null ? '—' : x.f) + '</td><td>' + (x.ecart === null ? '—' : x.ecart) + '</td></tr>').join(''))
-        + '<h3>Épreuves fortes et faibles</h3>'
+        + '<h3 class="sco">Épreuves fortes et faibles</h3>'
         + t(['Épreuve', 'Ont composé', 'Atteignent le seuil', 'Moyenne', 'Réussite'], parEpreuve.map(x =>
           '<tr><td>' + x.epreuve + '</td><td>' + x.composants + '</td><td>' + x.maitrises + '</td><td>'
-          + (x.moyenne === null ? '—' : x.moyenne.toFixed(2)) + '</td><td>' + x.taux + ' %</td></tr>').join('')));
+          + (x.moyenne === null ? '—' : x.moyenne.toFixed(2)) + '</td><td>' + x.taux + ' %</td></tr>').join('')), { paysage: true });
     }
 
     function exporterSynthese(numero, lignes, quantitative, qualitative, genre, parEpreuve) {

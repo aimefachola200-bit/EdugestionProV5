@@ -462,26 +462,43 @@
       ]);
     }
 
+    /* Registre de présence au format SCOLARIS / GESCOL : cadre (cours, titulaire, effectif, demi-journées, absences),
+       N°, nom et prénoms, deux cases par jour (M matin, S soir), absences par élève et ligne « Absents » par demi-journée ;
+       paysage, signatures du titulaire et du directeur, cachet, code QR de vérification. */
     function editerRegistre(classe, jours, eleves, etat, cle) {
-      const ech = EG.Docs.echapper;
+      const D = EG.DocsSco, ech = D.ech;
       const titreMois = MOIS[Number(mois.slice(5, 7)) - 1] + ' ' + mois.slice(0, 4);
-      const enTete = '<tr><th rowspan="2">Élèves</th>' + jours.map(j => '<th colspan="2"' + (j.ouvrable ? '' : ' class="jour-chome"') + '>' + Number(j.date_jour.slice(8, 10)) + '</th>').join('')
-        + '<th rowspan="2">Abs.<br>(demi-j.)</th></tr><tr>' + jours.map(j => '<th>M</th><th>Ap</th>').join('') + '</tr>';
-      const corps = eleves.map(e => {
-        let absences = 0;
-        const cases = jours.map(j => PERIODES.map(per => {
-          if (!j.ouvrable) return '<td class="jour-chome">·</td>';
-          const absent = etat[cle(e.id, j.date_jour, per)];
-          if (absent) absences++;
-          return '<td class="' + (absent ? 'case-absent' : 'case-present') + '">' + (absent ? 'A' : 'P') + '</td>';
-        }).join('')).join('');
-        return '<tr><td class="nom-eleve">' + ech(e._nom) + '</td>' + cases + '<td><strong>' + absences + '</strong></td></tr>';
-      }).join('');
-      EG.genererDocument('REGISTRE_APPEL', 'Registre d’appel — ' + nomClasse(classe) + ' — ' + titreMois,
-        '<h2>Registre d’appel</h2><p>' + ech(session().ecole_nom) + ' — ' + ech(nomClasse(classe)) + ' — ' + titreMois + '</p>'
-        + '<table class="registre-imprime"><thead>' + enTete + '</thead><tbody>' + corps + '</tbody></table>'
-        + '<p class="muet">M : matin · Ap : après-midi · P : présent · A : absent · les colonnes grisées sont des jours chômés, exclus du décompte.</p>',
-        { classe_id: classe ? classe.id : null, ecole_id: classe ? classe.ecole_id : null });
+      const ouvrables = jours.filter(j => j.ouvrable);
+      const titulaire = classe && classe.titulaire_id ? DB.get('personnels', classe.titulaire_id) : Promise.resolve(null);
+      titulaire.then(tit => {
+        const parCol = {}; let totalAbs = 0;
+        const lignes = eleves.map((e, n) => {
+          let absences = 0;
+          const cases = [];
+          jours.forEach(j => PERIODES.forEach(per => {
+            if (!j.ouvrable) { cases.push({ t: '', cls: 'chome' }); return; }
+            const absent = etat[cle(e.id, j.date_jour, per)];
+            if (absent) { absences++; parCol[j.date_jour + per] = (parCol[j.date_jour + per] || 0) + 1; }
+            cases.push({ t: absent ? 'A' : '', cls: absent ? 'abs' : '' });
+          }));
+          totalAbs += absences;
+          return [n + 1, { t: (e._nom || '').trim(), g: true }].concat(cases, [{ t: absences || '', cls: absences ? 'abs' : '' }]);
+        });
+        const absents = { tot: true, cells: [{ t: '', cs: 1 }, { t: 'Absents', g: true }].concat([].concat(...jours.map(j => PERIODES.map(per => j.ouvrable ? { t: parCol[j.date_jour + per] || '' } : { t: '', cls: 'chome' }))), [{ t: totalAbs }]) };
+        const enTetes = [
+          [{ t: 'N°', rs: 2 }, { t: 'Nom et prénoms', rs: 2 }].concat(jours.map(j => ({ t: D.jourCourt(j.date_jour), cs: 2, cls: j.ouvrable ? '' : 'chome' })), [{ t: 'Abs.', rs: 2 }]),
+          [].concat(...jours.map(() => ['M', 'S']))
+        ];
+        const nomTit = tit ? ((tit.nom || '').toUpperCase() + ' ' + (tit.prenoms || '')).trim() : '';
+        const html = D.titre('Registre de présence', titreMois + ' — Année scolaire ' + session().annee_code + ' — A = absent(e), case vide = présent(e) ; M = matin, S = soir (après-midi)')
+          + D.infos([['Cours', classe ? classe.niveau : ''], ['Titulaire', nomTit], ['Effectif', eleves.length],
+            ['Demi-journées', ouvrables.length * 2], ['Absences du mois', totalAbs], ['Année scolaire', session().annee_code]], 3)
+          + D.tableau(enTetes, lignes.concat([absents]))
+          + '<p class="note-sco">Jours grisés : jours chômés (exclus du décompte). Présences possibles du mois : ' + (eleves.length * ouvrables.length * 2)
+          + ' — présences effectives : ' + (eleves.length * ouvrables.length * 2 - totalAbs) + '.</p>';
+        EG.genererDocument('REGISTRE_APPEL', 'Registre de présence — ' + nomClasse(classe) + ' — ' + titreMois, html,
+          { classe_id: classe ? classe.id : null, ecole_id: classe ? classe.ecole_id : null, paysage: true });
+      });
     }
   });
 
@@ -592,13 +609,13 @@
       const pied = [['Total de l’année scolaire', R.total], ['Moyenne générale de l’année scolaire', R.moyenne]].map(([n, v]) =>
         '<tr><th>' + n + '</th>' + RUBRIQUES.map(r => '<th>' + val(r, v[r.cle]) + '</th>').join('') + '</tr>').join('');
       const legende = '<ol class="petit">' + RUBRIQUES.map(r => '<li>' + ech(r.titre) + '</li>').join('') + '</ol>';
-      const parCours = synthese && synthese.length ? '<h3>Moyenne générale de l’année scolaire par cours</h3><table><thead><tr><th>Cours</th><th>Demi-journées</th><th>Présences possibles</th><th>Absences</th><th>Présences effectives</th><th>% effectives</th></tr></thead><tbody>'
+      const parCours = synthese && synthese.length ? '<h3 class="sco">Moyenne générale de l’année scolaire par cours</h3><table class="sco"><thead><tr><th>Cours</th><th>Demi-journées</th><th>Présences possibles</th><th>Absences</th><th>Présences effectives</th><th>% effectives</th></tr></thead><tbody>'
         + synthese.map(x => '<tr><td>' + ech(x.niveau) + '</td><td>' + x.R.total.demiJournees + '</td><td>' + x.R.total.possibles + '</td><td>' + x.R.total.absences + '</td><td>' + x.R.total.effectives + '</td><td>' + (x.R.total.taux === null ? '—' : x.R.total.taux + ' %') + '</td></tr>').join('') + '</tbody></table>' : '';
       EG.genererDocument('RELEVE_MENSUEL', 'Relevé mensuel de fréquentation — ' + session().annee_code,
-        '<h2>Relevé mensuel de fréquentation</h2><p>' + ech(perimetre || '') + ' — année scolaire ' + ech(session().annee_code) + '</p>'
-        + '<table><thead>' + enTete + '</thead><tbody>' + corps + pied + '</tbody></table>' + legende
+        EG.DocsSco.titre('Relevé mensuel de fréquentation', (perimetre || '') + ' — Année scolaire ' + session().annee_code)
+        + '<table class="sco"><thead>' + enTete + '</thead><tbody>' + corps + pied + '</tbody></table>' + legende
         + '<p class="muet">Une journée de classe compte deux demi-journées. Moyenne générale des présences effectives de l’année : ' + (R.tauxAnnee === null ? '—' : R.tauxAnnee + ' %') + '.</p>' + parCours,
-        { classe_id: P && P.classe ? P.classe : null, ecole_id: P && P.ecole ? P.ecole : null });
+        { classe_id: P && P.classe ? P.classe : null, ecole_id: P && P.ecole ? P.ecole : null, paysage: true });
     }
 
     function exporter(R, synthese, perimetre) {

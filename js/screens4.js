@@ -696,22 +696,45 @@
         zone.appendChild(el('div', { class: 'barre-actions' }, [
           el('button', {
             class: 'btn btn-primaire', text: 'Éditer le tableau d’affichage', onclick: () => {
+              /* Format SCOLARIS / GESCOL : cadre (cours, classe, titulaire, directeur, effectif, année), liste des élèves
+                 (N°, nom, prénoms, sexe, âge au 31/12, scolarité, contact des parents), répartition par sexe, récapitulatifs
+                 scolarité × sexe et âge × sexe avec graphiques, courbes de la classe ; signatures, cachet, QR. */
               const nomClasse = classe ? (classe.libelle || classe.code) : '';
-              EG.genererDocument('AFFICHAGE_CLASSE', 'Tableau d’affichage — ' + nomClasse,
-                '<h2>Tableau d’affichage — ' + EG.Docs.echapper(nomClasse) + '</h2>'
-                + '<p>' + EG.Docs.echapper(session().ecole_nom) + ' — année scolaire ' + session().annee_code + '</p>'
-                + '<table><tbody>'
-                + '<tr><td>Effectif</td><th>' + total + '</th><td>Filles / garçons</td><th>' + filles + ' / ' + (total - filles) + '</th></tr>'
-                + '<tr><td>Âge moyen</td><th>' + (ageMoyen === null ? '—' : ageMoyen + ' ans') + '</th>'
-                + '<td>Âge théorique</td><th>' + theorique + ' ans</th></tr>'
-                + '<tr><td>En retard d’âge</td><th>' + enRetard + '</th><td>Redoublants</td><th>'
-                + ins.filter(i => i.redoublant).length + '</th></tr>'
-                + '</tbody></table>'
-                + '<h3>Courbe des âges</h3>' + histogrammeSexe(categories, { largeur: 640 })
-                + (pointsAssiduite.length ? '<h3>Assiduité mensuelle</h3>'
-                  + courbe(pointsAssiduite, { maxY: 100, unite: ' %', largeur: 640 }) : '')
-                + (pointsMoyenne.length ? '<h3>Moyenne de la classe</h3>'
-                  + courbe(pointsMoyenne, { maxY: 20, couleur: '#2166AC', largeur: 640 }) : ''));
+              const D = EG.DocsSco;
+              const an1 = Number(String(session().annee_code || '').slice(0, 4)) || new Date().getFullYear();
+              const ref = new Date(an1, 11, 31);
+              const ageAu = d => { if (!d) return null; const n = new Date(d + 'T12:00:00'); if (isNaN(n)) return null; return ref.getFullYear() - n.getFullYear() - ((ref.getMonth() < n.getMonth() || (ref.getMonth() === n.getMonth() && ref.getDate() < n.getDate())) ? 1 : 0); };
+              Promise.all([classe && classe.titulaire_id ? DB.get('personnels', classe.titulaire_id) : null, classe ? DB.get('ecoles', classe.ecole_id) : null, DB.all('inscriptions_eleves')]).then(([tit, ecole, toutes]) => {
+                const annees = {}; toutes.forEach(x => { (annees[x.eleve_id] = annees[x.eleve_id] || {})[x.annee_scolaire_id] = 1; });
+                const liste = ins.slice().sort((x, y) => x._nom.localeCompare(y._nom, 'fr')).map(i => {
+                  const e = i._eleve || {};
+                  return { nom: (e.nom || '').toUpperCase(), prenoms: e.prenoms || '', sexe: e.sexe === 'F' ? 'F' : 'M', age: ageAu(e.date_naissance),
+                    scol: Object.keys(annees[i.eleve_id] || {}).length || 1, tel: e.tuteur_telephone || '' };
+                });
+                const nF = liste.filter(x => x.sexe === 'F').length, nT = liste.length, pc = n => nT ? Math.round(n / nT * 1000) / 10 + ' %' : '—';
+                const croise = cleF => {
+                  const v = {}; liste.forEach(x => { const k = x[cleF] === null ? 'Non renseigné' : x[cleF]; const c = v[k] = v[k] || { F: 0, G: 0 }; c[x.sexe === 'F' ? 'F' : 'G']++; });
+                  const ks = Object.keys(v).sort((p, q) => (Number(p) || 999) - (Number(q) || 999));
+                  return { ks, v, lignes: ks.map(k => [k, v[k].F, v[k].G, v[k].F + v[k].G, pc(v[k].F + v[k].G)]).concat([{ tot: true, cells: ['TOTAL', nF, nT - nF, nT, nT ? '100 %' : '—'] }]) };
+                };
+                const sc = croise('scol'), ag = croise('age');
+                const nomTit = tit ? ((tit.nom || '').toUpperCase() + ' ' + (tit.prenoms || '')).trim() : '';
+                const html = D.titre('Liste des élèves — tableau d’affichage', 'Année scolaire ' + session().annee_code + ' — Âge calculé au 31/12/' + an1)
+                  + D.infos([['Cours', classe ? classe.niveau : ''], ['Classe', nomClasse], ['Titulaire', nomTit], ['Directeur', ecole ? ecole.directeur_nom || '' : ''],
+                    ['Effectif', nT + ' (F : ' + nF + ' — G : ' + (nT - nF) + ')'], ['Année', session().annee_code]], 2)
+                  + D.tableau(['N°', 'Nom', 'Prénoms', 'Sexe', 'Âge', 'Scolarité', 'Contact parents'],
+                    liste.map((x, k) => [k + 1, { t: x.nom, g: true }, { t: x.prenoms, g: true }, x.sexe, x.age === null ? '—' : x.age, x.scol, x.tel]))
+                  + '<h3 class="sco">Répartition par sexe</h3>' + D.tableau(['', 'Filles', 'Garçons', 'Total'], [[{ t: 'Effectif', g: true }, nF, nT - nF, nT], [{ t: 'Pourcentage', g: true }, pc(nF), pc(nT - nF), nT ? '100 %' : '—']])
+                  + '<div class="deux-col"><div><h3 class="sco">Récapitulatif : scolarité par sexe</h3>' + D.tableau(['Scolarité (ans)', 'F', 'G', 'Total', '%'], sc.lignes)
+                  + histogrammeSexe(sc.ks.map(k => ({ etiquette: k + ' an(s)', f: sc.v[k].F, m: sc.v[k].G })), { largeur: 320 }) + '</div>'
+                  + '<div><h3 class="sco">Récapitulatif : âge par sexe (au 31/12/' + an1 + ')</h3>' + D.tableau(['Âge', 'F', 'G', 'Total', '%'], ag.lignes)
+                  + histogrammeSexe(ag.ks.map(k => ({ etiquette: k + (isNaN(k) ? '' : ' ans'), f: ag.v[k].F, m: ag.v[k].G })), { largeur: 320 }) + '</div></div>'
+                  + '<p class="note-sco">Scolarité : nombre d’années de scolarité de l’élève (années inscrites). Âge : âge révolu au 31/12/' + an1 + '. Âge théorique du cours : ' + theorique + ' ans — '
+                  + enRetard + ' élève(s) au-dessus, ' + enAvance + ' en dessous ; redoublants : ' + ins.filter(i => i.redoublant).length + '.</p>'
+                  + (pointsAssiduite.length ? '<h3 class="sco">Courbe de scolarité — assiduité mensuelle</h3>' + courbe(pointsAssiduite, { maxY: 100, unite: ' %', largeur: 640 }) : '')
+                  + (pointsMoyenne.length ? '<h3 class="sco">Courbe de scolarité — moyenne de la classe</h3>' + courbe(pointsMoyenne, { maxY: 20, couleur: '#2166AC', largeur: 640 }) : '');
+                EG.genererDocument('AFFICHAGE_CLASSE', 'Tableau d’affichage — ' + nomClasse, html, { classe_id: classe ? classe.id : null, ecole_id: classe ? classe.ecole_id : null });
+              });
             }
           })
         ]));
