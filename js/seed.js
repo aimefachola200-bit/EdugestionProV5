@@ -239,8 +239,7 @@
       })
       .then(() => DB.all('territoires'))
       .then(terr => {
-        /* Les comptes territoriaux de démonstration s'appuient sur la vraie
-           circonscription NATITINGOU 1 et sa première zone. */
+        /* (repère historique : première zone de la CS n° 14, utilisée par le nettoyage des anciennes versions) */
         const cs = terr.filter(t => t.type === 'CIRCONSCRIPTION' && t.code === 'CS-014')[0];
         ids.circo = cs ? cs.id : null;
         const zone = cs ? terr.filter(t => t.type === 'ZONE_PEDAGOGIQUE' && t.parent_id === cs.id && t.code === EG.codeZone(14, 1))[0] : null;
@@ -269,16 +268,15 @@
        ajoutées, dans Modules › Utilisateurs & sécurité. --- */
       .then(() => {
         const comptes = [
-          { identifiant: 'admin', nom: 'ADMIN', prenoms: 'MEMP', role: 'ADMIN_MEMP', mdp: 'admin123', territoire_id: ids.national },
-          { identifiant: 'ddemp.atacora', nom: 'KOUAGOU', prenoms: 'Théodore', role: 'DDEMP', mdp: 'demo123', territoire_id: ids.atacora },
-          { identifiant: 'cs.natitingou', nom: 'N\'TCHA', prenoms: 'Bienvenu', role: 'CS', mdp: 'demo123', territoire_id: ids.circo },
-          { identifiant: 'cp.zone1a', nom: 'YAROU', prenoms: 'Judith', role: 'CONSEILLER_PEDAGOGIQUE', mdp: 'demo123', territoire_id: ids.zone }
+          /* Un seul compte de départ (administrateur, mot de passe à changer) : les comptes des DDEMP, CS, CP,
+             directeurs et enseignants se créent avec les vraies personnes (Modules › Utilisateurs & sécurité). */
+          { identifiant: 'admin', nom: 'ADMINISTRATEUR', prenoms: '', role: 'ADMIN_MEMP', mdp: 'admin123', territoire_id: ids.national, doit_changer_mdp: true }
         ];
         return Promise.all(comptes.map(c =>
           hash(c.mdp).then(h => push('users', {
             identifiant: c.identifiant, password_hash: h, nom: c.nom, prenoms: c.prenoms,
             role: c.role, ecole_id: null, territoire_id: c.territoire_id || null,
-            telephone: '+229 9' + entre(1000000, 9999999), actif: true
+            telephone: '', actif: true, doit_changer_mdp: !!c.doit_changer_mdp
           }))
         ));
       })
@@ -467,6 +465,24 @@
     });
   }
   EG.retirerExemples = retirerExemples;
+
+  /* Comptes de démonstration des versions précédentes (personnes fictives, circonscription NATITINGOU 1) :
+     retirés une fois des appareils déjà en service. Seuls les comptes dont l'identifiant ET le nom sont ceux de
+     l'exemple sont concernés ; un compte que l'utilisateur a renommé est conservé. */
+  const COMPTES_EXEMPLE = [['ddemp.atacora', 'KOUAGOU'], ['cs.natitingou', "N'TCHA"], ['cp.zone1a', 'YAROU']];
+  EG.retirerComptesExemple = function () {
+    return DB.meta('comptes_exemple_retires_v1').then(fait => {
+      if (fait) return null;
+      return DB.all('users').then(us => {
+        const a = us.filter(u => COMPTES_EXEMPLE.some(([i, n]) => u.identifiant === i && u.nom === n));
+        return Promise.all(a.map(u => DB.remove('users', u.id))).then(() => {
+          const admin = us.filter(u => u.identifiant === 'admin' && u.nom === 'ADMIN' && u.prenoms === 'MEMP')[0];
+          return admin ? DB.put('users', Object.assign({}, admin, { nom: 'ADMINISTRATEUR', prenoms: '' }), { silencieux: true, synced: true }) : null;
+        }).then(() => DB.setMeta('comptes_exemple_retires_v1', true))
+          .then(() => a.length ? DB.audit('NETTOYAGE_COMPTES_EXEMPLE', 'users', null, { comptes: a.map(u => u.identifiant) }) : null);
+      });
+    });
+  };
 
   /**
    * Le rôle « conseiller pédagogique » s'appelait CP, comme le cours préparatoire :

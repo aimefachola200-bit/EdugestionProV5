@@ -75,10 +75,11 @@ l'application. Les comptes ci-dessous servent à la découvrir.
 
 | Identifiant | Mot de passe | Rôle |
 |---|---|---|
-| `admin` | `admin123` | Administrateur MEMP (tout le pays) |
-| `ddemp.atacora` | `demo123` | Direction départementale (Atacora) |
-| `cs.natitingou` | `demo123` | Circonscription NATITINGOU 1 |
-| `cp.zone1a` | `demo123` | Conseiller pédagogique (zone 1 de NATITINGOU 1, lecture seule) |
+| `admin` | `admin123` | Administrateur (mot de passe à changer à la première connexion) |
+
+Aucune personne fictive ni circonscription d'exemple n'est installée : les comptes des DDEMP, CS, CP, directeurs et
+enseignants se créent avec les vraies personnes. Les comptes d'exemple des anciennes versions (`ddemp.atacora`,
+`cs.natitingou`, `cp.zone1a`) sont retirés automatiquement des appareils déjà en service.
 
 **Avant tout déploiement réel :** créez vos propres comptes dans
 *Plus → Utilisateurs & sécurité*, puis désactivez ceux-ci. Les comptes de directeur
@@ -108,8 +109,8 @@ pédagogique consulte sa zone sans pouvoir la modifier.
 
 Elles proviennent du document « Liste des 118 circonscriptions scolaires et zones
 pédagogiques ». Ce document donne le **nombre** de zones de chaque circonscription, pas
-leur nom : les zones sont donc créées sous la forme « NATITINGOU 1 — Zone 1 »,
-« NATITINGOU 1 — Zone 2 »… et se renomment dans l'onglet Écoles. Les arrondissements
+leur nom : les zones sont donc créées sous la forme « NOM DE LA CS — Zone 1 »,
+« NOM DE LA CS — Zone 2 »… et se renomment dans l'onglet Écoles. Les arrondissements
 couverts, quand le document les précise, figurent sur la fiche de la circonscription.
 
 Le document annonce 344 zones au total (21 pour le Plateau), mais le détail des six

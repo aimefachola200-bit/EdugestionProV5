@@ -73,6 +73,7 @@
         ['comptes/parents', 'Comptes des parents', '👨‍👩‍👧'], ['comptes/eleves', 'Comptes des élèves', '🎒']] },
     { code: 'classes-roles', cat: 'ADMIN', nom: 'Classes & rôles de gestion', icone: '🧑‍🏫', entites: ['classes', 'membres_instances'], ecran: 'classes-roles',
       annexes: [['classes-roles/classes', 'Classes et titulaires', '🚪'], ['classes-roles/roles', 'Rôles de gestion collégiale', '🤝']] },
+    { code: 'documents-officiels', cat: 'PEDAGOGIE', nom: 'Documents officiels (SCOLARIS / GESCOL)', icone: '📚', entites: [], ecran: 'documents-officiels' },
     { code: 'telechargements', cat: 'ADMIN', nom: 'Téléchargements', icone: '⬇️', entites: [], ecran: 'telechargements',
       annexes: [['telechargements/recensement', 'Fiches de recensement', '🧮'], ['telechargements/fiches', 'Fiches à remplir', '📝'],
         ['telechargements/certificats', 'Certificats et attestations', '📜']] },

@@ -2404,7 +2404,7 @@
           ])));
 
           zone.appendChild(U.carte('Réinitialisation', el('div', {}, [
-            el('p', { class: 'muet', text: 'Efface toutes les données de cet appareil et réinstalle le jeu de démonstration.' }),
+            el('p', { class: 'muet', text: 'Efface toutes les données de cet appareil et repart d’une installation neuve (plan national, compte administrateur).' }),
             el('button', {
               class: 'btn btn-danger', text: 'Réinitialiser l’appareil', onclick: () => {
                 U.confirmer('Réinitialiser', 'Toutes les données locales seront effacées. Sauvegardez d’abord si nécessaire.',

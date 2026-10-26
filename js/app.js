@@ -16,7 +16,7 @@
       ecrire: true, modules: ['eleves', 'inscriptions', 'presences', 'evaluations', 'cep', 'personnel',
         'visites', 'risques', 'alertes', 'analytics', 'rapports', 'documents', 'recensement',
         'reseau', 'telechargements', 'espace-cs', 'unites-pedagogiques', 'repertoire', 'calendrier-scolaire',
-        'carte-ecole', 'carte-eleve', 'fiche-cep', 'stats-cs', 'divisions', 'signatures']
+        'carte-ecole', 'carte-eleve', 'fiche-cep', 'stats-cs', 'divisions', 'signatures', 'documents-officiels']
     },
     DIRECTEUR: {
       ecrire: true, modules: '*', sauf: ['securite', 'support', 'reseau', 'espace-cs', 'unites-pedagogiques', 'personnel-cs', 'statuts-personnel', 'courriers', 'ecoles-cm2', 'ecarts-cs', 'rapport-rentree', 'divisions']
@@ -24,7 +24,7 @@
     ENSEIGNANT: {
       ecrire: true, modules: ['eleves', 'inscriptions', 'presences', 'evaluations', 'cep', 'cantine',
         'risques', 'documents', 'parents', 'educmaster', 'telechargements', 'repertoire', 'calendrier-scolaire',
-        'carte-ecole', 'carte-eleve', 'signatures']
+        'carte-ecole', 'carte-eleve', 'signatures', 'documents-officiels']
     },
     PARENT: { ecrire: false, modules: ['parents'] },
     ELEVE: { ecrire: false, modules: ['parents'] }
@@ -107,18 +107,8 @@
       erreur,
       el('button', { class: 'btn btn-primaire pleine', type: 'submit', text: 'Se connecter' }),
       el('a', { class: 'oubli-lien', href: '#', text: '🔑 Mot de passe oublié ?', onclick: e => { e.preventDefault(); EG.MotDePasse.dialogueOubli(identifiant.value.trim()); } }),
-      el('details', { class: 'comptes' }, [
-        el('summary', { text: 'Comptes de démonstration' }),
-        el('ul', {}, [
-          ['admin', 'admin123', 'Administrateur MEMP'],
-          ['ddemp.atacora', 'demo123', 'Direction départementale'],
-          ['cs.natitingou', 'demo123', 'Circonscription scolaire'],
-          ['cp.zone1a', 'demo123', 'Conseiller pédagogique']
-        ].map(([i, m, r]) => el('li', {}, el('button', {
-          type: 'button', class: 'lien-compte',
-          onclick: () => { identifiant.value = i; motdepasse.value = m; tenter(); }
-        }, [el('strong', { text: r }), el('span', { class: 'muet petit', text: ' — ' + i })]))))
-      ])
+      el('p', { class: 'muet petit', style: 'margin-top:12px' }, [el('strong', { text: 'Premier démarrage : ' }), document.createTextNode('identifiant '), el('code', { text: 'admin' }),
+        document.createTextNode(', mot de passe '), el('code', { text: 'admin123' }), document.createTextNode(' (à changer aussitôt). Créez ensuite les comptes des vraies personnes dans Modules › Utilisateurs & sécurité.')])
     ]);
 
     racine.appendChild(el('div', { class: 'ecran-connexion' }, form));
@@ -298,7 +288,7 @@
         ['carte-eleve', '🪪', 'Cartes d’identité', 'carte-eleve']
       ] },
       { nom: 'Administration', icone: '🏛️', coul: '#7B4FA8', items: [
-        ['telechargements', '🗂️', 'Fiches officielles', 'telechargements'], ['certificats', '📜', 'Certificats', 'personnel'],
+        ['documents-officiels', '📚', 'Documents officiels', 'documents-officiels'], ['telechargements', '🗂️', 'Fiches officielles', 'telechargements'], ['certificats', '📜', 'Certificats', 'personnel'],
         ['rapport-rentree', '📄', 'Rapports de rentrée', 'rapport-rentree'], ['courriers', '📬', 'Archive courriers', 'courriers'],
         ['divisions', '🏛️', 'Divisions et services (statistiques, courbes)', 'divisions'], ['signatures', '✍️', 'Signatures des acteurs', 'signatures'],
         ['ecarts-cs', '📈', 'Analyses et écarts', 'ecarts-cs'], ['cachet', '🔏', 'Cachets et signatures', 'cachets'],
@@ -678,6 +668,7 @@
       .then(() => EG.majTerritoiresGeographie())
       .then(() => EG.majCirconscriptions())
       .then(() => EG.retirerExemples())
+      .then(() => EG.retirerComptesExemple())
       .then(() => EG.migrerLocalisationEcoles())
       .then(() => EG.migrerRoles())
       .then(() => EG.majProgrammes())
