@@ -710,3 +710,72 @@ span.cal-ev { cursor: default; }
   background: var(--surface-2, #F1F5F2); border: 1px dashed var(--bordure, #C9D3CC); border-radius: 10px; }
 .barre-ie .muet { margin-right: auto; }
 @media print { .barre-ie { display: none; } }
+
+/* =====================================================================
+   v6.21 — Présentation alignée sur SCOLARIS et GESCOL (téléphone, tablette, PC)
+   Bleu institutionnel, barre du haut blanche avec ☰, menu latéral bleu nuit
+   (tiroir sous 1000 px), pas de barre d'onglets en bas, tuiles « titre + icône ».
+   ===================================================================== */
+:root {
+  --primaire: #1F4E79; --primaire-fonce: #12324F; --primaire-clair: #EEF4FA;
+  --bleu: #2E6DA4; --info: #175CD3; --succes: #1B7F3B; --danger: #B42318; --attention: #B54708;
+  --fond: #F4F6F9; --texte: #1D2939; --muet: #667085; --bordure: #D0D5DD;
+  --rayon: 10px; --ombre: none; --barre-bas: 0px;
+}
+html, body { font-family: "Segoe UI", Roboto, Arial, system-ui, sans-serif; font-size: 15px; }
+h1 { font-size: 22px; }
+/* Connexion : fond clair, carte blanche, bouton bleu */
+body.connexion { background: var(--fond); }
+.carte-connexion { border: 1px solid var(--bordure); border-radius: 12px; }
+/* Barre du haut blanche */
+.barre-haut { background: #fff; color: var(--texte); border-bottom: 1px solid var(--bordure); box-shadow: 0 1px 3px rgba(16, 24, 40, .05); }
+.marque-mini { color: var(--texte); }
+.barre-haut .icone-btn { background: none; border: 1px solid var(--bordure); border-radius: 7px; color: var(--primaire); }
+.barre-haut .synchro { background: #F2F4F7; color: #344054; }
+.barre-haut .synchro.attente { background: #FFFAEB; color: var(--attention); }
+.barre-haut .synchro.hors-ligne { background: #FEF3F2; color: var(--danger); }
+.barre-haut .btn, .barre-haut button:not(.icone-btn):not(.synchro):not(.marque-mini) { border-color: var(--bordure); }
+/* Menu latéral bleu nuit */
+.menu-lateral { background: #12324F; color: #DCE6F2; border-right: 0; }
+.menu-utilisateur { border-bottom-color: rgba(255, 255, 255, .12); color: #fff; }
+.menu-utilisateur .muet, .menu-lateral .muet { color: #9FB6CE; }
+.menu-recherche { background: #0E2840; border-color: #2B4C6C; color: #fff; }
+.menu-recherche::placeholder { color: #9FB6CE; }
+.menu-lien { color: #C9D7E6; border-left-color: transparent; }
+.menu-lien:hover { background: rgba(255, 255, 255, .07); color: #fff; }
+.menu-lien.actif { background: #2E6DA4; color: #fff; border-left-color: transparent; }
+.menu-lien.sous { color: #C9D7E6; }
+.menu-categorie > summary { background: none; color: #E8EEF5; border-left: 0; font-size: 12px; }
+.menu-categorie > summary:hover { background: rgba(255, 255, 255, .07); }
+.menu-compte { background: rgba(255, 255, 255, .16); }
+.menu-deplier { color: #9FB6CE; }
+.menu-deplier:hover { background: rgba(255, 255, 255, .07); }
+.menu-sous { border-left-color: rgba(255, 255, 255, .18); }
+/* Pas de barre d'onglets en bas : tout passe par le menu ☰, comme SCOLARIS */
+.barre-onglets { display: none !important; }
+.toast { bottom: 24px !important; }
+@media (max-width: 719px) { .bandeau-install { bottom: 12px; } }
+/* Tiroir jusqu'à 1000 px (tablettes en portrait comprises) ; menu fixe au-delà */
+@media (min-width: 900px) and (max-width: 999px) {
+  .bouton-menu { display: inline-flex !important; align-items: center; justify-content: center; }
+  .voile-menu { display: none !important; }
+  body.menu-ouvert .voile-menu { display: block !important; }
+  .menu-lateral { position: fixed; z-index: 45; width: 280px; transform: translateX(-102%); box-shadow: 0 0 30px rgba(0, 0, 0, .3); padding-top: calc(12px + env(safe-area-inset-top)); }
+  body.menu-ouvert .menu-lateral { transform: none; }
+}
+@media (min-width: 1000px) { .menu-lateral { width: 260px; } }
+/* Titres de page et cartes sobres */
+.page-tete h1 { padding-left: 0; border-left: 0; }
+.carte-titre { color: var(--texte); }
+.stat { border-top: 1px solid var(--bordure); border-radius: 10px; }
+.stat.attention { border-left: 3px solid var(--attention); }
+.stat-valeur { font-size: 24px; }
+.stat-etiquette { text-transform: uppercase; font-size: 12px; letter-spacing: .03em; }
+/* Tuiles d'accès rapide : icône en haut à gauche, titre bleu en gras (tableau de bord SCOLARIS) */
+.raccourcis { grid-template-columns: repeat(auto-fill, minmax(min(100%, 160px), 1fr)); gap: 12px; }
+.raccourci { align-items: flex-start; justify-content: flex-start; text-align: left; padding: 14px; min-height: 92px; border-radius: 10px; color: var(--primaire); font-size: 14.5px; font-weight: 700; }
+.raccourci-icone { font-size: 26px; }
+.tuile-module { border-radius: 10px; }
+.onglet-page.actif { background: var(--primaire); border-color: var(--primaire); }
+.raccourcis { grid-template-columns: repeat(auto-fill, minmax(min(100%, 140px), 1fr)); }
+.marque-drapeau { background: linear-gradient(to bottom, var(--jaune) 0 50%, var(--rouge) 50% 100%) right / 58% 100% no-repeat, #008751; }

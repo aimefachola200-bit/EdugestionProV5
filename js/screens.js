@@ -206,6 +206,7 @@
         ajoute('🗂️', 'Rapports', 'rapports');
         ajoute('🔁', 'Clôture d’année', 'cloture');
       }
+      if (['PARENT', 'ELEVE'].indexOf(u.role) < 0) ajoute('📚', 'Documents officiels', 'documents-officiels');
       zone.appendChild(U.carte('Accès rapide', el('div', { class: 'raccourcis' }, liens)));
 
       /* Points de vigilance */
