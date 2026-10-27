@@ -32,7 +32,7 @@
       app: 'ÉduGestion Pro Master', base: 'memp-cp/data/pedagogie/', coursParDefaut: cours || undefined,
       peutAnnoter: ANNOTENT.indexOf(u.role) >= 0, auteur: ((u.prenoms || '') + ' ' + (u.nom || '')).trim(),
       notes: { charger: () => DB.meta('pedagogieNotes').then(v => v || {}), enregistrer: (o) => DB.setMeta('pedagogieNotes', o).then(() => { if (EG.majSynchro) EG.majSynchro(); }) },
-      imprimer: (titre, html) => EG.Sortie.imprimer(titre, html, { paysage: false }),
+      imprimer: (titre, html, o) => EG.Sortie.imprimer(titre, html, { paysage: false, enTete: o && o.epreuve ? false : undefined }),
       memo: { get: (k) => { try { return localStorage.getItem('eg.ped.' + k); } catch (e) { return null; } }, set: (k, v) => { try { localStorage.setItem('eg.ped.' + k, v); } catch (e) { /* indisponible */ } } },
       liens, ouvrir: (route) => { location.hash = '#/' + route; },
       examenBlanc: EG.peutEcrire() && u.role !== 'ENSEIGNANT' ? { lire: () => DB.meta('examenBlancSujets'), retenir: (s) => DB.setMeta('examenBlancSujets', s) } : undefined
