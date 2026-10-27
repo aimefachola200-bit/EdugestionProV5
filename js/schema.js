@@ -52,6 +52,8 @@
     { code: 'uascep', cat: 'ADMIN', nom: 'Bureaux UASCEP (école, UP, zone, CS, DDEMP)', icone: '\uE047', entites: [], ecran: 'uascep' },
     { code: 'pvs-sport', cat: 'PILOTAGE', nom: 'Sport scolaire (licences, compétitions, palmarès)', icone: '\uE04D', entites: [], ecran: 'pvs-sport' },
     { code: 'pvs-pilotage', cat: 'PILOTAGE', nom: 'Tableau de bord du pilotage (école → DDEMP)', icone: '\uE015', entites: [], ecran: 'pvs-pilotage' },
+    { code: 'pvs-communication', cat: 'PILOTAGE', nom: 'Communication et alertes (notes, convocations, accusés, échéances, parents, agenda)', icone: '\uE050', entites: [], ecran: 'pvs-communication' },
+    { code: 'pvs-sante', cat: 'PEDAGOGIE', nom: 'Santé et inclusion (visites médicales, infirmerie, besoins spécifiques, filles)', icone: '\uE07F', entites: [], ecran: 'pvs-sante' },
     { code: 'carrieres', cat: 'ADMIN', nom: 'Gestion des carrières', icone: '\uE016', entites: ['carrieres_personnel', 'affectations_personnel', 'diplomes_personnel', 'formations_personnel'], ecran: 'carrieres' },
     { code: 'scolarite-privee', cat: 'FINANCES', nom: 'Scolarité (école privée)', icone: '\uE020', entites: ['frais_scolarite', 'paiements_scolarite', 'remises_scolarite'], ecran: 'scolarite-privee',
       annexes: [['scolarite-privee/bareme', 'Barème et tranches', '\uE056'], ['scolarite-privee/paiements', 'Paiements et reçus', '\uE04E'],

@@ -34,7 +34,7 @@
         return true;
       };
       const tri = (a, b) => String(a.lib).localeCompare(String(b.lib), 'fr', { numeric: true });
-      const zones = terr.filter(t => t.type === 'ZONE_PEDAGOGIQUE' && dansP(t)).map(t => ({ cle: t.id, lib: t.nom, zone: t.id, alias: [t.code].filter(Boolean) })).sort(tri);
+      const zones = terr.filter(t => t.type === 'ZONE_PEDAGOGIQUE' && dansP(t)).map(t => ({ cle: t.id, lib: t.nom, zone: t.id, cs: (anc(t, 'CIRCONSCRIPTION') || {}).id || '', alias: [t.code].filter(Boolean) })).sort(tri);
       const multiZ = zones.length > 1;
       const ups = terr.filter(t => t.type === 'UNITE_PEDAGOGIQUE' && dansP(t)).map(t => {
         const z = anc(t, 'ZONE_PEDAGOGIQUE');
@@ -42,7 +42,8 @@
       }).sort(tri);
       const ecolesE = ecolesP.map(e => {
         const up = e.up_id ? index[e.up_id] : null;
-        return { cle: e.id, lib: e.nom, ecole: e.nom, zone: e.zone_id || '', up: up ? up.nom : '', rup: up ? up.responsable || '' : '', alias: [e.code, e.code_educmaster].filter(Boolean) };
+        const csE = e.territoire_id && index[e.territoire_id] && index[e.territoire_id].type === 'CIRCONSCRIPTION' ? e.territoire_id : ((anc(index[e.zone_id] || {}, 'CIRCONSCRIPTION') || {}).id || ''), depE = e.departement_id || (P.departementDe(e, index) || {}).id || P.departementDe(e, index) || '';
+        return { cle: e.id, lib: e.nom, ecole: e.nom, zone: e.zone_id || '', cs: csE, dep: typeof depE === 'object' ? '' : depE, up: up ? up.nom : '', rup: up ? up.responsable || '' : '', alias: [e.code, e.code_educmaster].filter(Boolean) };
       }).sort(tri);
       const css = directeur ? [] : terr.filter(t => t.type === 'CIRCONSCRIPTION' && dansP(t)).map(t => ({ cle: t.id, lib: /circonscription/i.test(t.nom) ? t.nom : 'Circonscription scolaire de ' + t.nom, alias: [t.nom, t.code].filter(Boolean) })).sort(tri);
       const deps = directeur ? [] : terr.filter(t => t.type === 'DEPARTEMENT' && (!p.dep ? !p.cs && !p.zone : t.id === p.dep)).map(t => ({ cle: t.id, lib: 'DDEMP ' + t.nom, alias: [t.nom, 'DDEMP du ' + t.nom, t.code].filter(Boolean) })).sort(tri);

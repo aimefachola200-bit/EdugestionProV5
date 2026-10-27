@@ -7,7 +7,9 @@
   'use strict';
   const EG = global.EG, DB = EG.DB, U = EG.UI, E = EG.Ecrans;
   const ECRANS = { 'pvs-sport': ['sport', 'Sport scolaire', 'Licences, compétitions par niveau, tirage au sort, calendrier, feuilles de match, classements, palmarès, qualifiés et diplômes signés.'],
-    'pvs-pilotage': ['pilotage', 'Tableau de bord du pilotage', 'Indicateurs par école, UP, zone, circonscription et département, graphiques et comparaisons.'] };
+    'pvs-pilotage': ['pilotage', 'Tableau de bord du pilotage', 'Indicateurs par école, UP, zone, circonscription et département, graphiques et comparaisons.'],
+    'pvs-communication': ['communication', 'Communication et alertes', 'Notes de service, circulaires, convocations avec accusé de réception, échéances, messages aux parents, agenda partagé.'],
+    'pvs-sante': ['sante', 'Santé et inclusion', 'Visites médicales et aptitude sportive, infirmerie, élèves à besoins spécifiques, scolarisation des filles.'] };
   const I = (n) => (global.Icones ? global.Icones.code(n) + ' ' : '');
 
   function signer(doc) {
@@ -56,17 +58,37 @@
     });
   }
 
+  /** Absences des 30 derniers jours (présences ABSENT, demi-journées ; JOURNEE = 2) par élève d'une école */
+  function absences(ecoleCle) {
+    const lim = new Date(Date.now() - 30 * 864e5).toISOString().slice(0, 10);
+    return Promise.all([DB.all('presences').catch(() => []), DB.all('inscriptions_eleves').catch(() => []), DB.all('eleves').catch(() => [])]).then(([pr, ins, els]) => {
+      const insE = new Map(ins.filter(i => i.ecole_id === ecoleCle).map(i => [i.id, i])), el = new Map(els.map(e => [e.id, e])), n = {};
+      pr.filter(x => x.statut === 'ABSENT' && insE.has(x.inscription_id) && String(x.date_presence || '') >= lim).forEach(x => { n[x.inscription_id] = (n[x.inscription_id] || 0) + (x.periode === 'JOURNEE' ? 2 : 1); });
+      return Object.entries(n).map(([id, k]) => { const i = insE.get(id), e = el.get(i.eleve_id) || {}; return { nom: e.nom || '', prenoms: e.prenoms || '', sexe: e.sexe || '', cours: i.niveau || '', absences: k }; });
+    });
+  }
+  /** Candidats du CEP déjà inscrits dans l'application (fiches CEP) */
+  function cepCandidats() {
+    return Promise.all([DB.all('fiches_cep').catch(() => []), DB.all('inscriptions_eleves').catch(() => []), DB.all('eleves').catch(() => [])]).then(([fc, ins, els]) => {
+      const i = new Map(ins.map(x => [x.id, x])), e = new Map(els.map(x => [x.id, x]));
+      return fc.map(f => { const n = i.get(f.inscription_id) || {}, el = e.get(n.eleve_id) || {}; return { ecole: n.ecole_id, nom: el.nom, prenoms: el.prenoms, sexe: el.sexe, dateNaissance: el.date_naissance, lieuNaissance: el.lieu_naissance }; }).filter(x => x.ecole && x.nom);
+    });
+  }
   function adaptateur() {
     const base = EG.Uascep.adaptateur();
     return Object.assign({}, base, {
       app: 'ÉduGestion Pro Master', sansTitre: true,
       charger: () => DB.meta('pvs'),
       enregistrer: (etat) => DB.setMeta('pvs', etat).then(() => { if (EG.majSynchro) EG.majSynchro(); }),
-      signer, indicateurs, eleves,
+      signer, indicateurs, eleves, absences,
+      utilisateur: () => { const u = EG.session.user || {}; return ((u.prenoms || '') + ' ' + (u.nom || '')).trim(); },
+      exclure: ['sante.cantine', 'sante.stocks', 'sante.decrochage'],
       uascep: () => ({ charger: base.charger, enregistrer: base.enregistrer }),
       memo: { get: (k) => { try { return localStorage.getItem('eg.pvs.' + k); } catch (e) { return null; } }, set: (k, v) => { try { localStorage.setItem('eg.pvs.' + k, v); } catch (e) { /* indisponible */ } } },
       ouvrir: (route) => { location.hash = '#/' + route; },
-      liens: { sport: [{ l: I('insigne') + 'Bureaux UASCEP', route: 'uascep' }], pilotage: [{ l: I('courbe') + 'Statistiques', route: 'analytics' }, { l: I('alerte') + 'Risques & décrochage', route: 'risques' }] }
+      liens: { communication: [{ l: I('courrier') + 'Archive des courriers', route: 'courriers' }, { l: I('cloche') + 'Centre d’alertes', route: 'alertes' }],
+        sante: [{ l: I('repas') + 'Cantine (module de l’application)', route: 'cantine' }, { l: I('alerte') + 'Risques & décrochage', route: 'risques' }],
+        sport: [{ l: I('insigne') + 'Bureaux UASCEP', route: 'uascep' }], pilotage: [{ l: I('courbe') + 'Statistiques', route: 'analytics' }, { l: I('alerte') + 'Risques & décrochage', route: 'risques' }] }
     });
   }
 
