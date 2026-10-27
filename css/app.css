@@ -783,3 +783,19 @@ body.connexion { background: var(--fond); }
 .educmaster-plie{margin:0 0 14px;background:#fff;border:1px solid var(--bordure);border-radius:10px;padding:8px 12px}
 .educmaster-plie>summary{cursor:pointer;font-weight:600;color:var(--primaire)}
 .educmaster-plie .carte{margin:10px 0 4px;box-shadow:none}
+
+/* ---------- v6.24 — En-têtes fixes : la ligne des rubriques reste visible pendant le défilement ----------
+   Les tableaux défilent dans leur cadre (.tableau-enveloppe, hauteur bornée à l'écran) : en-tête collé en haut
+   du cadre ou, si le cadre passe sous le haut de la page, juste sous le haut visible ; 1re colonne collée quand
+   le tableau déborde sur les côtés ; le titre de la carte (rubrique) reste visible, l'en-tête du tableau dessous. */
+.tableau-enveloppe { overflow: auto; max-height: calc(100vh - 120px); max-height: calc(100dvh - 120px); overscroll-behavior: contain; }
+.tableau-enveloppe.libre { max-height: none; }
+table .th-fixe { position: sticky !important; z-index: 4 !important; background-clip: padding-box; }
+table .th-fixe::after { content: ""; position: absolute; left: 0; right: 0; bottom: -1px; border-bottom: 1px solid var(--bordure); pointer-events: none; }
+table .col-fixe { position: sticky; left: 0; z-index: 2; background-clip: padding-box; box-shadow: 1px 0 0 var(--bordure); }
+table .th-fixe.col-fixe, table .th-fixe.colle { z-index: 5 !important; }
+.carte > .carte-titre, .titre-fixe { position: sticky; top: 0; z-index: 6; background: var(--surface); margin: -16px -16px 12px; padding: 12px 16px 8px; border-radius: var(--rayon) var(--rayon) 0 0; }
+@media print {
+  .tableau-enveloppe { max-height: none !important; overflow: visible !important; }
+  table .th-fixe, table .col-fixe, .carte > .carte-titre, .titre-fixe { position: static !important; box-shadow: none; }
+}
