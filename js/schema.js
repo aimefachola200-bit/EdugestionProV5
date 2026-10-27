@@ -81,6 +81,7 @@
         ['comptes/parents', 'Comptes des parents', '\uE01C'], ['comptes/eleves', 'Comptes des élèves', '\uE021']] },
     { code: 'classes-roles', cat: 'ADMIN', nom: 'Classes & rôles de gestion', icone: '\uE01E', entites: ['classes', 'membres_instances'], ecran: 'classes-roles',
       annexes: [['classes-roles/classes', 'Classes et titulaires', '\uE074'], ['classes-roles/roles', 'Rôles de gestion collégiale', '\uE044']] },
+    { code: 'pedagogie', cat: 'PEDAGOGIE', nom: 'Pédagogie : fiches, résumés, épreuves et guides', icone: '\uE031', entites: [], ecran: 'pedagogie' },
     { code: 'documents-officiels', cat: 'PEDAGOGIE', nom: 'Documents officiels (SCOLARIS / GESCOL)', icone: '\uE031', entites: [], ecran: 'documents-officiels' },
     { code: 'telechargements', cat: 'ADMIN', nom: 'Téléchargements', icone: '\uE009', entites: [], ecran: 'telechargements',
       annexes: [['telechargements/recensement', 'Fiches de recensement', '\uE040'], ['telechargements/fiches', 'Fiches à remplir', '\uE00E'],

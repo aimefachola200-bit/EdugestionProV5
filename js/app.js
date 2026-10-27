@@ -16,7 +16,7 @@
       ecrire: true, modules: ['eleves', 'inscriptions', 'presences', 'evaluations', 'cep', 'personnel',
         'visites', 'risques', 'alertes', 'analytics', 'rapports', 'documents', 'recensement',
         'reseau', 'telechargements', 'espace-cs', 'unites-pedagogiques', 'repertoire', 'calendrier-scolaire',
-        'carte-ecole', 'carte-eleve', 'fiche-cep', 'stats-cs', 'divisions', 'signatures', 'documents-officiels', 'uascep', 'pvs-sport', 'pvs-pilotage', 'pvs-communication', 'pvs-sante', 'pvs-inspection', 'pvs-patrimoine', 'pvs-examens']
+        'carte-ecole', 'carte-eleve', 'fiche-cep', 'stats-cs', 'divisions', 'signatures', 'documents-officiels', 'pedagogie', 'uascep', 'pvs-sport', 'pvs-pilotage', 'pvs-communication', 'pvs-sante', 'pvs-inspection', 'pvs-patrimoine', 'pvs-examens']
     },
     DIRECTEUR: {
       ecrire: true, modules: '*', sauf: ['securite', 'support', 'reseau', 'espace-cs', 'unites-pedagogiques', 'personnel-cs', 'statuts-personnel', 'courriers', 'ecoles-cm2', 'ecarts-cs', 'rapport-rentree', 'divisions']
@@ -24,7 +24,7 @@
     ENSEIGNANT: {
       ecrire: true, modules: ['eleves', 'inscriptions', 'presences', 'evaluations', 'cep', 'cantine',
         'risques', 'documents', 'parents', 'educmaster', 'telechargements', 'repertoire', 'calendrier-scolaire',
-        'carte-ecole', 'carte-eleve', 'signatures', 'documents-officiels']
+        'carte-ecole', 'carte-eleve', 'signatures', 'documents-officiels', 'pedagogie']
     },
     PARENT: { ecrire: false, modules: ['parents'] },
     ELEVE: { ecrire: false, modules: ['parents'] }
@@ -287,6 +287,7 @@
         ['pvs-inspection', '\uE082', 'Formation et animations', 'pvs-inspection'], ['pvs-patrimoine', '\uE083', 'Manuels, besoins et dotations', 'pvs-patrimoine'], ['pvs-examens', '\uE084', 'Examens et concours', 'pvs-examens']
       ] },
       { nom: 'Gestion pédagogique', icone: '\uE021', coul: '#2166AC', items: [
+        ['pedagogie', '\uE031', 'Fiches, résumés, épreuves et guides', 'pedagogie'],
         ['evaluations', '\uE00E', 'Évaluations', 'evaluations'], ['eleves', '\uE01F', 'Listes des apprenants', 'eleves'],
         ['presences', '\uE017', 'Présence des apprenants', 'presences'], ['presences-personnel', '\uE018', 'Présence du personnel', 'presences'],
         ['bulletins', '\uE010', 'Notes et bulletins', 'evaluations'], ['fiche-cep', '\uE00F', 'Inscription CEP', 'fiche-cep'],

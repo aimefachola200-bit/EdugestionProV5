@@ -207,6 +207,7 @@
         ajoute('\uE058', 'Clôture d’année', 'cloture');
       }
       if (['PARENT', 'ELEVE'].indexOf(u.role) < 0) ajoute('\uE031', 'Documents officiels', 'documents-officiels');
+      if (['PARENT', 'ELEVE'].indexOf(u.role) < 0) ajoute('\uE031', 'Fiches, résumés et épreuves', 'pedagogie');
       zone.appendChild(U.carte('Accès rapide', el('div', { class: 'raccourcis' }, liens)));
 
       /* Points de vigilance */
