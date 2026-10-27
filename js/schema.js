@@ -49,6 +49,7 @@
     { code: 'statuts-personnel', cat: 'ADMIN', nom: 'Personnel par statut (FE, ACDPE, privé, ACDPCTD)', icone: '🧾', entites: ['signatures_categories'], ecran: 'statuts-cs',
       annexes: [['statuts-cs/fe', 'Personnel FE : directeurs et adjoints', '🧑‍🏫'], ['statuts-cs/acdpe', 'Personnel ACDPE : directeurs et adjoints', '🧑‍🏫'],
         ['statuts-cs/prive', 'Écoles privées : directeurs et adjoints', '🏫'], ['statuts-cs/acdpctd', 'Enseignants ACDPCTD', '🧑‍🏫'], ['statuts-cs/recap', 'Récapitulatif par école', '📊']] },
+    { code: 'uascep', cat: 'ADMIN', nom: 'Bureaux UASCEP (école, UP, zone, CS, DDEMP)', icone: '🏵️', entites: [], ecran: 'uascep' },
     { code: 'carrieres', cat: 'ADMIN', nom: 'Gestion des carrières', icone: '📈', entites: ['carrieres_personnel', 'affectations_personnel', 'diplomes_personnel', 'formations_personnel'], ecran: 'carrieres' },
     { code: 'scolarite-privee', cat: 'FINANCES', nom: 'Scolarité (école privée)', icone: '🎓', entites: ['frais_scolarite', 'paiements_scolarite', 'remises_scolarite'], ecran: 'scolarite-privee',
       annexes: [['scolarite-privee/bareme', 'Barème et tranches', '🏷️'], ['scolarite-privee/paiements', 'Paiements et reçus', '💵'],

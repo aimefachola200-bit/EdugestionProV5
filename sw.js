@@ -1,12 +1,12 @@
 /* ÉduGestion Pro Master — service worker : l'application démarre sans réseau. */
 const PREFIXE = 'edugestion-master-v';
-const CACHE = PREFIXE + '6.25.0';
+const CACHE = PREFIXE + '6.26.0';
 const PORTEE = new URL(self.registration.scope).pathname;
 const RESSOURCES = [
   './', './index.html', './verification.html', './manifest.webmanifest', './css/app.css',
   './js/schema.js', './js/db.js', './js/rules.js', './js/tableur.js', './js/referentiel-cs.js', './js/seed.js',
   './js/choix.js', './data/referentiel_villages.json', './js/ui.js', './js/qr.js', './js/docs-styles.js', './js/docs-socle.js', './js/docs-modeles.js', './js/sortie.js', './js/geo-ref.js', './js/docs-scolaris.js', './js/screens.js', './js/screens2.js', './js/screens3.js', './js/screens4.js', './js/screens5.js', './js/screens6.js', './js/screens7.js', './js/screens8.js', './js/screens9.js', './js/screens10.js', './js/screens11.js', './js/screens12.js', './js/screens13.js', './js/screens14.js', './js/screens15.js', './js/screens16.js', './js/screens17.js', './js/screens18.js', './js/screens19.js', './js/screens20.js', './js/screens21.js', './js/screens22.js', './js/screens23.js', './js/screens24.js',
-  './js/screens25.js', './js/screens26.js', './js/screens27.js', './js/screens28.js', './js/screens29.js', './js/screens30.js', './js/documents-officiels.js', './js/educmaster-modeles.js', './js/graphiques.js', './js/divisions-donnees.js', './js/divisions.js', './js/signatures.js', './js/espace-memp-cp.js', './js/camera.js', './js/motdepasse.js', './js/app.js',
+  './js/screens25.js', './js/screens26.js', './js/screens27.js', './js/screens28.js', './js/screens29.js', './js/screens30.js', './js/uascep.js', './js/uascep-eg.js', './js/documents-officiels.js', './js/educmaster-modeles.js', './js/graphiques.js', './js/divisions-donnees.js', './js/divisions.js', './js/signatures.js', './js/espace-memp-cp.js', './js/camera.js', './js/motdepasse.js', './js/app.js',
   './donnees/paquet-pobe.js', './donnees/paquet-adja-ouere.js', './donnees/paquet-ifangni.js', './donnees/paquet-ketou-1.js', './donnees/paquet-ketou-2.js', './donnees/paquet-sakete.js',
   './assets/entete-memp.jpg', './assets/embleme-memp.png', './assets/armoiries-benin.png', './icons/favicon.ico', './icons/icon-180.png', './icons/icon-192.png',
   './icons/icon-512.png', './icons/icon-maskable-192.png', './icons/icon-maskable-512.png'

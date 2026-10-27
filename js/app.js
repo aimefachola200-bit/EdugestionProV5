@@ -16,7 +16,7 @@
       ecrire: true, modules: ['eleves', 'inscriptions', 'presences', 'evaluations', 'cep', 'personnel',
         'visites', 'risques', 'alertes', 'analytics', 'rapports', 'documents', 'recensement',
         'reseau', 'telechargements', 'espace-cs', 'unites-pedagogiques', 'repertoire', 'calendrier-scolaire',
-        'carte-ecole', 'carte-eleve', 'fiche-cep', 'stats-cs', 'divisions', 'signatures', 'documents-officiels']
+        'carte-ecole', 'carte-eleve', 'fiche-cep', 'stats-cs', 'divisions', 'signatures', 'documents-officiels', 'uascep']
     },
     DIRECTEUR: {
       ecrire: true, modules: '*', sauf: ['securite', 'support', 'reseau', 'espace-cs', 'unites-pedagogiques', 'personnel-cs', 'statuts-personnel', 'courriers', 'ecoles-cm2', 'ecarts-cs', 'rapport-rentree', 'divisions']
@@ -279,7 +279,7 @@
         ['visites', '🔎', 'Visites et inspections', 'visites'], ['retraite', '🎓', 'Retraite', 'retraite'],
         ['stats-cs', '👨‍🎓', 'Effectifs élèves', 'stats-cs'], ['entite/infrastructures', '🏗️', 'Infrastructures', 'infrastructure'],
         ['entite/inventaires_mobilier', '🪑', 'Mobilier & matériel', 'mobilier'], ['classes-roles/classes', '🧮', 'Attribution des classes', 'classes-roles'],
-        ['classes-roles/roles', '🤝', 'Gestion collégiale', 'classes-roles'], ['repertoire', '📕', 'Répertoires et contacts', 'repertoire']
+        ['classes-roles/roles', '🤝', 'Gestion collégiale', 'classes-roles'], ['uascep', '🏵️', 'Bureaux UASCEP', 'uascep'], ['repertoire', '📕', 'Répertoires et contacts', 'repertoire']
       ] },
       { nom: 'Gestion pédagogique', icone: '🎒', coul: '#2166AC', items: [
         ['evaluations', '📝', 'Évaluations', 'evaluations'], ['eleves', '🧒', 'Listes des apprenants', 'eleves'],
