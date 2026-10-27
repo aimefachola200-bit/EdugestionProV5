@@ -366,6 +366,13 @@
     }
 
     function reconstruireCascades() { reconstructeurs.forEach(fn => fn()); }
+    /* Commune ou arrondissement choisi : ses arrondissements / villages du référentiel national (js/geo-ref.js) */
+    function completerReferentiel(c, ctrl) {
+      if (c.ref !== 'territoires' || !EG.GeoRef || !refs || !refs.territoires) return;
+      const choisi = refs.territoires.find(r => String(r.id) === String(ctrl.value));
+      if (!choisi || (choisi.type !== 'COMMUNE' && choisi.type !== 'ARRONDISSEMENT')) return;
+      EG.GeoRef.completer(choisi, refs.territoires).then(n => { if (n) reconstruireCascades(); });
+    }
 
     def.champs.forEach(c => {
       if (options.masquer && options.masquer.indexOf(c.n) >= 0) return;
@@ -436,7 +443,9 @@
             return;
           }
           reconstruireCascades();
+          completerReferentiel(c, ctrl);
         });
+        if (c.casc && ctrl.value) setTimeout(() => completerReferentiel(c, ctrl), 0);
       } else if (c.t === 'image') {
         /* Une photo choisie sur l'appareil, redimensionnée puis conservée
            telle quelle dans la base : rien ne part sur le réseau. */

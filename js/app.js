@@ -146,6 +146,7 @@
     };
     return DB.setMeta('session_utilisateur', user.id)
       .then(() => DB.audit('CONNEXION', 'users', user.id))
+      .then(() => EG.GeoRef && EG.GeoRef.defautSession())
       .then(() => { construireCoquille(); Routeur.aller('accueil'); });
   }
 
