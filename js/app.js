@@ -16,7 +16,7 @@
       ecrire: true, modules: ['eleves', 'inscriptions', 'presences', 'evaluations', 'cep', 'personnel',
         'visites', 'risques', 'alertes', 'analytics', 'rapports', 'documents', 'recensement',
         'reseau', 'telechargements', 'espace-cs', 'unites-pedagogiques', 'repertoire', 'calendrier-scolaire',
-        'carte-ecole', 'carte-eleve', 'fiche-cep', 'stats-cs', 'divisions', 'signatures', 'documents-officiels', 'uascep', 'pvs-sport', 'pvs-pilotage', 'pvs-communication', 'pvs-sante']
+        'carte-ecole', 'carte-eleve', 'fiche-cep', 'stats-cs', 'divisions', 'signatures', 'documents-officiels', 'uascep', 'pvs-sport', 'pvs-pilotage', 'pvs-communication', 'pvs-sante', 'pvs-inspection', 'pvs-patrimoine', 'pvs-examens']
     },
     DIRECTEUR: {
       ecrire: true, modules: '*', sauf: ['securite', 'support', 'reseau', 'espace-cs', 'unites-pedagogiques', 'personnel-cs', 'statuts-personnel', 'courriers', 'ecoles-cm2', 'ecarts-cs', 'rapport-rentree', 'divisions']
@@ -283,7 +283,8 @@
       ] },
       { nom: 'Vie scolaire, sport et pilotage', icone: '\uE04D', coul: '#B45309', items: [
         ['pvs-sport', '\uE04D', 'Sport scolaire', 'pvs-sport'], ['pvs-pilotage', '\uE015', 'Tableau de bord du pilotage', 'pvs-pilotage'],
-        ['pvs-communication', '\uE050', 'Communication et alertes', 'pvs-communication'], ['pvs-sante', '\uE07F', 'Santé et inclusion', 'pvs-sante']
+        ['pvs-communication', '\uE050', 'Communication et alertes', 'pvs-communication'], ['pvs-sante', '\uE07F', 'Santé et inclusion', 'pvs-sante'],
+        ['pvs-inspection', '\uE082', 'Formation et animations', 'pvs-inspection'], ['pvs-patrimoine', '\uE083', 'Manuels, besoins et dotations', 'pvs-patrimoine'], ['pvs-examens', '\uE084', 'Examens et concours', 'pvs-examens']
       ] },
       { nom: 'Gestion pédagogique', icone: '\uE021', coul: '#2166AC', items: [
         ['evaluations', '\uE00E', 'Évaluations', 'evaluations'], ['eleves', '\uE01F', 'Listes des apprenants', 'eleves'],

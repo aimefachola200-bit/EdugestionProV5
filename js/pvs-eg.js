@@ -9,7 +9,10 @@
   const ECRANS = { 'pvs-sport': ['sport', 'Sport scolaire', 'Licences, compétitions par niveau, tirage au sort, calendrier, feuilles de match, classements, palmarès, qualifiés et diplômes signés.'],
     'pvs-pilotage': ['pilotage', 'Tableau de bord du pilotage', 'Indicateurs par école, UP, zone, circonscription et département, graphiques et comparaisons.'],
     'pvs-communication': ['communication', 'Communication et alertes', 'Notes de service, circulaires, convocations avec accusé de réception, échéances, messages aux parents, agenda partagé.'],
-    'pvs-sante': ['sante', 'Santé et inclusion', 'Visites médicales et aptitude sportive, infirmerie, élèves à besoins spécifiques, scolarisation des filles.'] };
+    'pvs-sante': ['sante', 'Santé et inclusion', 'Visites médicales et aptitude sportive, infirmerie, élèves à besoins spécifiques, scolarisation des filles.'],
+    'pvs-inspection': ['inspection', 'Formation et animations pédagogiques', 'Plans de formation, animations pédagogiques d’UP et de zone, attestations de participation.'],
+    'pvs-patrimoine': ['patrimoine', 'Manuels, besoins et dotations', 'Manuels scolaires par cours et matière, besoins exprimés, dotations reçues et PV de réception.'],
+    'pvs-examens': ['examens', 'Examens et concours', 'CEP : épreuves, centres, jurys, candidats, numéros de table, notes, délibération, résultats ; concours scolaires.'] };
   const I = (n) => (global.Icones ? global.Icones.code(n) + ' ' : '');
 
   function signer(doc) {
@@ -82,11 +85,13 @@
       enregistrer: (etat) => DB.setMeta('pvs', etat).then(() => { if (EG.majSynchro) EG.majSynchro(); }),
       signer, indicateurs, eleves, absences,
       utilisateur: () => { const u = EG.session.user || {}; return ((u.prenoms || '') + ' ' + (u.nom || '')).trim(); },
-      exclure: ['sante.cantine', 'sante.stocks', 'sante.decrochage'],
+      exclure: ['sante.cantine', 'sante.stocks', 'sante.decrochage', 'inspection.visites', 'inspection.recommandations', 'patrimoine.batiments', 'patrimoine.tables', 'patrimoine.materiel'],
+      cepCandidats,
       uascep: () => ({ charger: base.charger, enregistrer: base.enregistrer }),
       memo: { get: (k) => { try { return localStorage.getItem('eg.pvs.' + k); } catch (e) { return null; } }, set: (k, v) => { try { localStorage.setItem('eg.pvs.' + k, v); } catch (e) { /* indisponible */ } } },
       ouvrir: (route) => { location.hash = '#/' + route; },
-      liens: { communication: [{ l: I('courrier') + 'Archive des courriers', route: 'courriers' }, { l: I('cloche') + 'Centre d’alertes', route: 'alertes' }],
+      liens: { inspection: [{ l: I('inspection') + 'Visites & recommandations', route: 'visites' }], patrimoine: [{ l: I('patrimoine') + 'Infrastructures, mobilier et matériel', route: 'patrimoine' }], examens: [{ l: I('diplome') + 'CEP & examens blancs', route: 'cep' }],
+        communication: [{ l: I('courrier') + 'Archive des courriers', route: 'courriers' }, { l: I('cloche') + 'Centre d’alertes', route: 'alertes' }],
         sante: [{ l: I('repas') + 'Cantine (module de l’application)', route: 'cantine' }, { l: I('alerte') + 'Risques & décrochage', route: 'risques' }],
         sport: [{ l: I('insigne') + 'Bureaux UASCEP', route: 'uascep' }], pilotage: [{ l: I('courbe') + 'Statistiques', route: 'analytics' }, { l: I('alerte') + 'Risques & décrochage', route: 'risques' }] }
     });
