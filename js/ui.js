@@ -560,10 +560,90 @@
     }
   };
 
+
+  /* ---------- En-têtes fixes (v6.24) ----------
+     Chaque tableau garde sa ligne de rubriques visible : thead (ou premières lignes faites de <th>), lignes
+     empilées ; dans un cadre .tableau-enveloppe l'en-tête se colle en haut du cadre, ou juste sous le haut de la
+     zone de contenu quand le cadre passe dessous ; sous le titre collé de la carte s'il y en a un. 1re colonne
+     collée quand le tableau déborde sur les côtés. data-entete="non" : pas d'en-tête fixe. */
+  const EntetesFixes = (function () {
+    const vide = c => { const b = getComputedStyle(c).backgroundColor; return !b || b === 'transparent' || b === 'rgba(0, 0, 0, 0)'; };
+    function lignesEntete(t) {
+      if (t.tHead && t.tHead.rows.length) return Array.from(t.tHead.rows);
+      const rows = [];
+      for (let i = 0; i < t.rows.length && i < 4; i++) {
+        const cells = Array.from(t.rows[i].cells);
+        if (cells.length && cells.every(c => c.tagName === 'TH')) rows.push(t.rows[i]); else break;
+      }
+      return rows;
+    }
+    function titreAuDessus(elt) {
+      let a = elt.parentElement;
+      for (let i = 0; a && i < 6 && a.id !== 'contenu'; i++, a = a.parentElement) {
+        const titres = Array.from(a.children).filter(c => (c.classList.contains('carte-titre') || c.classList.contains('titre-fixe'))
+          && (c.compareDocumentPosition(elt) & Node.DOCUMENT_POSITION_FOLLOWING) && getComputedStyle(c).position === 'sticky');
+        if (titres.length) return titres[titres.length - 1];
+      }
+      return null;
+    }
+    function fixer(t) {
+      if (t.closest('[data-entete="non"], .modal, .apercu-document')) return;
+      const rows = lignesEntete(t), cadre = t.closest('.tableau-enveloppe');
+      let y = 0;
+      if (rows.length) t.classList.add('entete-fixe');
+      rows.forEach(r => {
+        Array.from(r.cells).forEach(c => { c.classList.add('th-fixe'); c.dataset.haut = y; if (vide(c)) c.style.backgroundColor = 'var(--primaire-clair)'; });
+        y += r.getBoundingClientRect().height;
+      });
+      let deborde = cadre && cadre.scrollWidth > cadre.clientWidth + 4;
+      const corps = t.tBodies[0] && t.tBodies[0].rows[0];
+      if (corps && Array.from(corps.cells).some(c => !c.classList.contains('col-fixe') && getComputedStyle(c).position === 'sticky' && getComputedStyle(c).left !== 'auto')) deborde = false;
+      let couvert = 0;   // lignes dont la 1re colonne est occupée par une cellule fusionnée (rowspan) d'au-dessus
+      Array.from(t.rows).forEach(r => {
+        const c = r.cells[0];
+        if (!c) return;
+        if (couvert > 0) { couvert--; c.classList.remove('col-fixe'); return; }
+        couvert = (c.rowSpan || 1) - 1;
+        if (deborde && (c.colSpan || 1) <= 2 && r.cells.length > 2) { c.classList.add('col-fixe'); if (vide(c)) c.style.backgroundColor = c.tagName === 'TH' ? 'var(--primaire-clair)' : 'var(--surface)'; }
+        else c.classList.remove('col-fixe');
+      });
+    }
+    function placer() {
+      const zone = document.getElementById('contenu');
+      const haut = zone ? zone.getBoundingClientRect().top : 0;
+      // les positions collées se mesurent depuis l'intérieur de la marge haute de la zone de contenu
+      const marge = zone ? parseFloat(getComputedStyle(zone).paddingTop) || 0 : 0;
+      document.querySelectorAll('table.entete-fixe').forEach(t => {
+        const cadre = t.closest('.tableau-enveloppe'), titre = titreAuDessus(cadre || t);
+        // ligne sous laquelle l'en-tête doit rester : haut de la zone de contenu, ou bas du titre collé de la carte
+        const ligne = titre ? Math.max(haut, titre.getBoundingClientRect().bottom) : haut;
+        const base = cadre ? Math.max(0, ligne - cadre.getBoundingClientRect().top) : ligne - haut - marge;
+        t.querySelectorAll('.th-fixe').forEach(c => { c.style.top = (base + (+c.dataset.haut || 0)) + 'px'; });
+      });
+    }
+    function tout() { document.querySelectorAll('#contenu table, .modal table').forEach(fixer); placer(); }
+    let minuterie = null, image = false;
+    const plusTard = () => { clearTimeout(minuterie); minuterie = setTimeout(tout, 120); };
+    document.addEventListener('scroll', () => { if (image) return; image = true; requestAnimationFrame(() => { image = false; placer(); }); }, { capture: true, passive: true });
+    window.addEventListener('resize', plusTard);
+    document.addEventListener('toggle', plusTard, true);
+    const obs = window.ResizeObserver ? new ResizeObserver(plusTard) : null;
+    document.addEventListener('DOMContentLoaded', () => {
+      if (!window.MutationObserver) return;
+      new MutationObserver(muts => {
+        if (muts.some(m => Array.from(m.addedNodes).some(n => n.nodeType === 1 && (n.tagName === 'TABLE' || (n.querySelector && n.querySelector('table')))))) {
+          if (obs) document.querySelectorAll('#contenu table').forEach(t => obs.observe(t));
+          plusTard();
+        }
+      }).observe(document.body, { childList: true, subtree: true });
+    });
+    return { tout, placer };
+  })();
+
   EG.UI = {
     el, $, dateFR, dateCourte, heure, fcfa, nombre, libelle, sansAccent,
     toast, modal, confirmer, saisieRapide, badge, statut, vide, carte, stat, barre, tableau,
-    champRecherche, selecteur, formulaire, Routeur,
+    champRecherche, selecteur, formulaire, Routeur, EntetesFixes,
     titreDe(entite, r) {
       const d = EG.SCHEMA[entite];
       if (!r) return '—';
