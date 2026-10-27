@@ -51,9 +51,40 @@
       const peutEcrire = EG.peutEcrire();
       const ecrire = (niv) => peutEcrire && (directeur ? niv === 'ECOLE' : niveaux.indexOf(niv) >= 0);
       const lieuT = directeur ? (p.cs && index[p.cs]) : (p.cs ? index[p.cs] : p.dep ? index[p.dep] : null);
-      return { niveaux, lieu: lieuT ? String(lieuT.nom).replace(/^(circonscription( scolaire)?|cs)\s+(de\s+)?/i, '') : '', fixe: { zone: directeur || !!p.zone },
+      const autorite = directeur ? (ecolesE[0] ? { niveau: 'ECOLE', cle: ecolesE[0].cle } : null) : p.zone ? { niveau: 'ZONE', cle: p.zone } : p.cs ? { niveau: 'CS', cle: p.cs } : p.dep ? { niveau: 'DDEMP', cle: p.dep } : null;
+      return { niveaux, autorite, lieu: lieuT ? String(lieuT.nom).replace(/^(circonscription( scolaire)?|cs)\s+(de\s+)?/i, '') : '', fixe: { zone: directeur || !!p.zone },
         entites: { ECOLE: ecolesE, UP: ups, ZONE: zones, CS: css, DDEMP: deps }, droits: { ecrire } };
     });
+  }
+
+  /* ---------- cachets, visas et code QR (outils de l'application : Cachets, Signatures des acteurs, registre des documents) ---------- */
+  const D = () => EG.Docs;
+  function cachet(o) {
+    const c = String(o.couleur || 'bleu').toUpperCase();
+    if (o.forme !== 'rond' || !D() || !D().COULEURS_CACHET[c]) return null;
+    return D().cachet({ cachet_haut: o.haut, cachet_centre: o.centre, cachet_bas: o.bas, cachet_couleur: c }, { taille: o.taille || 104 });
+  }
+  /** Visa : le directeur (signature et cachet de l'école), le RUP / CP (nom), le chef de circonscription et le DDEMP (signature et cachet du territoire) */
+  function visa(niv, cle) {
+    if (niv === 'ECOLE') return DB.get('ecoles', cle).then(e => e ? { titre: 'Le Directeur / La Directrice', nom: e.directeur_nom || '', signature: e.signature_directeur || '', cachet: D().cachetComplet(e) } : null);
+    return DB.get('territoires', cle).then(t => {
+      if (!t) return null;
+      if (niv === 'CS' || niv === 'DDEMP') return { titre: niv === 'CS' ? 'Le Chef de la circonscription scolaire' : 'Le Directeur départemental', nom: t.responsable || '', signature: t.signature_image || '', cachet: D().cachetTerritoireComplet(t) };
+      return t.responsable ? { nom: t.responsable } : null;
+    });
+  }
+  /** Pièce signée : numéro, empreinte, registre « documents » (page verification.html) et code QR */
+  function signer(doc) {
+    const u = EG.session.user, r = doc.resume || {};
+    const numero = 'UASCEP-' + new Date().getFullYear() + '-' + String(Date.now()).slice(-6);
+    const hash = EG.empreinte(doc.empreinte + numero);
+    return DB.put('documents', { numero, type_code: 'UASCEP', titre: doc.typeLib + ' — ' + (r.bureau || ''), ecole_id: EG.session.ecole_id || null, annee_scolaire_id: EG.session.annee_id,
+      orientation: 'PORTRAIT', sensibilite: 'INTERNE', statut: 'GENERE', hash_sha256: hash, uascep: Object.assign({ code: doc.type }, r) })
+      .then(d => DB.put('signatures_documents', { document_id: d.id, signataire_label: r.signataire || ((u.prenoms || '') + ' ' + u.nom).trim(), role_signature: 'UASCEP — ' + (r.fonction || doc.typeLib),
+        type_signature: 'NUMERIQUE', hash_document: hash, signed_at: new Date().toISOString() }))
+      .then(() => { DB.audit('GENERATION_DOCUMENT', 'documents', numero, { type: 'UASCEP', piece: doc.type }); if (EG.majSynchro) EG.majSynchro(); })
+      .then(() => ({ numero, code: hash, qr: D().qrDocument(numero, hash, 96),
+        mention: 'Scannez le code QR : la page de vérification d’ÉduGestion Pro Master retrouve la pièce dans le registre de l’établissement et contrôle son empreinte.' }));
   }
 
   Routeur.definir('uascep', function (racine) {
@@ -68,7 +99,8 @@
       contexte,
       toast: (m) => U.toast(m),
       memo: { get: (k) => { try { return localStorage.getItem('eg.uascep.' + k); } catch (e) { return null; } }, set: (k, v) => { try { localStorage.setItem('eg.uascep.' + k, v); } catch (e) { /* indisponible */ } } },
-      imprimer: (titre, corps) => EG.Sortie.imprimer(titre, corps, { paysage: true }),
+      cachet, visa, signer,
+      imprimer: (titre, corps, o) => EG.Sortie.imprimer(titre, corps, { paysage: !(o && o.portrait) }),
       xlsxEcrire: (feuilles) => Promise.resolve(global.XlsxEcrire.classeur(feuilles)),
       xlsxLire: (f) => EG.Tableur.lireClasseur(f).then(fs => fs.map(x => ({ nom: x.nom || x.name, lignes: x.lignes || x.rows || [] }))),
       telecharger: (nom, blob) => EG.Sortie.enregistrer(nom, blob)

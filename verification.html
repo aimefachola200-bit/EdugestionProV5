@@ -107,7 +107,7 @@
     SYNTHESE_EVAL: 'Synthèse de l’évaluation', RESULTATS_EVAL: 'Résultats de l’évaluation', STATISTIQUES: 'Statistiques et courbes', DIVISION_STATS: 'Division / service : statistiques, courbes, plan d’action', BILAN_PRESENCE: 'Bilan de présence',
     BULLETIN: 'Bulletin de notes', LISTE_CLASSE: 'Liste de classe', CERT_SCOLARITE: 'Certificat de scolarité', CARTE_SCOLAIRE: 'Carte d’identité scolaire',
     FICHE_CEP: 'Fiche d’inscription au CEP', FICHE_INSCRIPTION: 'Fiche d’inscription', RELEVE_CENTRE: 'Relevé de centre', REPARTITION_CLASSES: 'Répartition des classes',
-    ETAT_BUDGET: 'État budgétaire', FICHE_CARRIERE: 'Fiche de carrière', PV_VISITE: 'Procès-verbal de visite', LISTE_PAIEMENT: 'Liste de paiement' };
+    ETAT_BUDGET: 'État budgétaire', FICHE_CARRIERE: 'Fiche de carrière', PV_VISITE: 'Procès-verbal de visite', LISTE_PAIEMENT: 'Liste de paiement', UASCEP: 'Pièce UASCEP' };
 
   function verifier() {
     const params = new URLSearchParams(location.search);
@@ -145,7 +145,9 @@
       el('p', { class: 'muet', text: 'Type : ' + (TYPES[doc.type_code] || doc.type_code || '—')
         + ' • édité le ' + dateFR(doc.created_at) + ' • version ' + (doc.version || 1) }),
       el('p', { class: 'muet', text: 'Statut : ' + (doc.statut || '—') })
-    ].concat(reference(numero, doc.hash_sha256));
+    ].concat(doc.uascep ? [['Type', 'UASCEP — ' + (doc.uascep.type || '')], ['Bureau', doc.uascep.bureau], ['Membre', doc.uascep.membre], ['Fonction', doc.uascep.fonction],
+      ['Saison', doc.uascep.saison], ['Date', doc.uascep.date], ['Signataire', doc.uascep.signataire]].filter(x => x[1]).map(x => el('p', {}, [el('strong', { text: x[0] + ' : ' }), x[1]])) : [])
+      .concat(reference(numero, doc.hash_sha256));
 
       if (concorde) {
         verdict('ok', 'Document authentique', [
