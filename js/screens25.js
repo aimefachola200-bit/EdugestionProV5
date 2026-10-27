@@ -106,12 +106,12 @@
     const corps = () => '<h2 style="text-align:center">' + ech(o.titre) + '</h2>' + (o.avant || '') + htmlTableau(o.entetes, o.lignes) + (o.apres || '')
       + (EG.Docs.visaTerritoire ? EG.Docs.visaTerritoire(o.cs, o.visa || 'Le Chef de la circonscription scolaire') : '');
     return [
-      el('button', { class: 'btn btn-fantome', text: '📤 Excel', onclick: () => {
+      el('button', { class: 'btn btn-fantome', text: '\uE00C Excel', onclick: () => {
         if (o.lignes.length === 0) { U.toast('Rien à exporter', 'attention'); return; }
         S().excel(o.fichier + '-' + S().slug(o.cs.nom).slice(0, 30), [{ nom: o.titre.slice(0, 28), lignes: excelLignes() }]);
       } }),
-      el('button', { class: 'btn btn-fantome', text: '🖨️ Imprimer', onclick: () => S().imprimer(o.titre, corps, { ecole: pseudoEcole(o.C, o.cs), paysage: o.paysage !== false }) }),
-      el('button', { class: 'btn btn-fantome', text: '📄 Word', onclick: () => S().word(o.fichier + '-' + S().slug(o.cs.nom).slice(0, 30), o.titre, corps, { ecole: pseudoEcole(o.C, o.cs) }) })
+      el('button', { class: 'btn btn-fantome', text: '\uE008 Imprimer', onclick: () => S().imprimer(o.titre, corps, { ecole: pseudoEcole(o.C, o.cs), paysage: o.paysage !== false }) }),
+      el('button', { class: 'btn btn-fantome', text: '\uE00D Word', onclick: () => S().word(o.fichier + '-' + S().slug(o.cs.nom).slice(0, 30), o.titre, corps, { ecole: pseudoEcole(o.C, o.cs) }) })
     ];
   }
 
@@ -126,13 +126,13 @@
      ======================================================================= */
 
   const TYPES_PERSONNEL = {
-    enseignants: { icone: '👥', titre: 'Personnel enseignant', cat: 'ENSEIGNANT', fonction: 'ENSEIGNANT',
+    enseignants: { icone: '\uE01C', titre: 'Personnel enseignant', cat: 'ENSEIGNANT', fonction: 'ENSEIGNANT',
       sous: 'Directeurs et enseignants fonctionnaires (FE) et contractuels (ACDPE) des écoles de la circonscription.' },
-    administratif: { icone: '🗂️', titre: 'Personnel administratif', cat: 'ADMINISTRATIF', fonction: 'ADMINISTRATIF',
+    administratif: { icone: '\uE011', titre: 'Personnel administratif', cat: 'ADMINISTRATIF', fonction: 'ADMINISTRATIF',
       sous: 'Préposés des services administratifs, secrétaires, conseillers pédagogiques et collaborateurs.' },
-    ame: { icone: '🧑‍🏫', titre: 'Enseignants ACDPCTD', cat: 'AME', fonction: 'ENSEIGNANT',
+    ame: { icone: '\uE01E', titre: 'Enseignants ACDPCTD', cat: 'AME', fonction: 'ENSEIGNANT',
       sous: 'Agents mis à disposition par les collectivités territoriales (anciens AME) : enseignants des écoles de la circonscription.' },
-    soutien: { icone: '🧹', titre: 'Personnel de soutien', cat: 'SOUTIEN', fonction: 'SOUTIEN',
+    soutien: { icone: '\uE04A', titre: 'Personnel de soutien', cat: 'SOUTIEN', fonction: 'SOUTIEN',
       sous: 'Agents d’entretien, gardiens, cuisiniers et autres agents de service.' }
   };
 
@@ -188,7 +188,7 @@
           if (peutGerer()) {
             actions.appendChild(el('button', { class: 'btn btn-primaire', text: '＋ Agent', onclick: () => E.editer('personnels',
               { fonction: T.fonction, ecole_id: filtre.ecole || null, qualite: T.cat === 'AME' ? 'A.M.E.' : null, actif: true }, () => X.recharger()) }));
-            actions.appendChild(el('button', { class: 'btn btn-fantome', text: '📥 Importer le fichier du ministère', onclick: () => Routeur.aller('import-export/personnel?cs=' + cs.id) }));
+            actions.appendChild(el('button', { class: 'btn btn-fantome', text: '\uE00B Importer le fichier du ministère', onclick: () => Routeur.aller('import-export/personnel?cs=' + cs.id) }));
           }
           boutonsSortie({ C, cs, titre: T.titre + ' — ' + cs.nom, fichier: 'personnel-' + code, entetes: enTete, lignes: v.map(ligneDe), paysage: true })
             .forEach(b => actions.appendChild(b));
@@ -272,7 +272,7 @@
           actions.textContent = '';
           boutonsSortie({ C, cs, titre: 'Écoles à CM2 et CEP ' + session + ' — ' + cs.nom, fichier: 'ecoles-cm2', entetes: enTete, lignes: rows, paysage: false })
             .forEach(b => actions.appendChild(b));
-          actions.appendChild(el('button', { class: 'btn btn-fantome', text: '🗳️ Fiches d’inscription au CEP', onclick: () => Routeur.aller('fiche-cep') }));
+          actions.appendChild(el('button', { class: 'btn btn-fantome', text: '\uE070 Fiches d’inscription au CEP', onclick: () => Routeur.aller('fiche-cep') }));
           zoneListe.textContent = '';
           if (!v.length) { zoneListe.appendChild(U.vide(ecoles.length ? 'Aucune école à CM2 avec ces filtres.' : 'Cette circonscription n’a pas encore d’école : installez son jeu de données ou importez ses écoles.')); return; }
           zoneListe.appendChild(U.tableau([
@@ -447,9 +447,9 @@
           const btns = boutonsSortie(o);
           return btns[mode].click();
         };
-        actions.appendChild(el('button', { class: 'btn btn-primaire', text: '🖨️ Imprimer le rapport', onclick: () => sortie(1) }));
-        actions.appendChild(el('button', { class: 'btn btn-fantome', text: '📄 Word', onclick: () => sortie(2) }));
-        actions.appendChild(el('button', { class: 'btn btn-fantome', text: '📤 Excel', onclick: () => sortie(0) }));
+        actions.appendChild(el('button', { class: 'btn btn-primaire', text: '\uE008 Imprimer le rapport', onclick: () => sortie(1) }));
+        actions.appendChild(el('button', { class: 'btn btn-fantome', text: '\uE00D Word', onclick: () => sortie(2) }));
+        actions.appendChild(el('button', { class: 'btn btn-fantome', text: '\uE00C Excel', onclick: () => sortie(0) }));
         zone.appendChild(zoneStats);
         zone.appendChild(U.carte('Synthèse', el('p', { text: texte() })));
         zone.appendChild(U.carte('Observations de la circonscription', zoneObs));
@@ -606,9 +606,9 @@
             { titre: 'Suivi', valeur: c => gerer ? el('select', { 'aria-label': 'Suivi', onclick: ev => ev.stopPropagation(), onchange: ev => changerSuivi(c, ev.target.value) },
               Object.keys(SUIVIS).map(k => { const op = el('option', { value: k, text: SUIVIS[k] }); if (k === c.statut) op.selected = true; return op; })) : (SUIVIS[c.statut] || '—') },
             { titre: '', classe: 'col-etroite', valeur: c => el('span', { class: 'actions-mini' }, [
-              c.fichier_donnees ? el('button', { class: 'btn btn-fantome btn-petit', 'aria-label': 'Ouvrir la pièce jointe', text: '📎', onclick: ev => { ev.stopPropagation(); ouvrirPiece(c); } }) : null,
-              gerer ? el('button', { class: 'btn btn-fantome btn-petit', 'aria-label': 'Modifier', text: '✏️', onclick: ev => { ev.stopPropagation(); formulaire(c); } }) : null,
-              gerer ? el('button', { class: 'btn btn-fantome btn-petit btn-alerte', 'aria-label': 'Supprimer', text: '🗑', onclick: ev => { ev.stopPropagation(); supprimer(c); } }) : null
+              c.fichier_donnees ? el('button', { class: 'btn btn-fantome btn-petit', 'aria-label': 'Ouvrir la pièce jointe', text: '\uE060', onclick: ev => { ev.stopPropagation(); ouvrirPiece(c); } }) : null,
+              gerer ? el('button', { class: 'btn btn-fantome btn-petit', 'aria-label': 'Modifier', text: '\uE006', onclick: ev => { ev.stopPropagation(); formulaire(c); } }) : null,
+              gerer ? el('button', { class: 'btn btn-fantome btn-petit btn-alerte', 'aria-label': 'Supprimer', text: '\uE005', onclick: ev => { ev.stopPropagation(); supprimer(c); } }) : null
             ]) }
           ], v, { messageVide: 'Aucun courrier ne correspond.' }));
         }

@@ -508,7 +508,7 @@ body.menu-ouvert .voile-menu { display: block; }
 }
 
 /* À partir de 900 px : le tableau des menus reste affiché à gauche, à côté du
-   grand tableau ; la barre d'onglets du bas et le bouton ☰ disparaissent. */
+   grand tableau ; la barre d'onglets du bas et le bouton [menu] disparaissent. */
 @media (min-width: 900px) {
   .bouton-menu, .voile-menu, .barre-onglets { display: none !important; }
   .menu-lateral {
@@ -713,7 +713,7 @@ span.cal-ev { cursor: default; }
 
 /* =====================================================================
    v6.21 — Présentation alignée sur SCOLARIS et GESCOL (téléphone, tablette, PC)
-   Bleu institutionnel, barre du haut blanche avec ☰, menu latéral bleu nuit
+   Bleu institutionnel, barre du haut blanche avec [menu], menu latéral bleu nuit
    (tiroir sous 1000 px), pas de barre d'onglets en bas, tuiles « titre + icône ».
    ===================================================================== */
 :root {
@@ -751,7 +751,7 @@ body.connexion { background: var(--fond); }
 .menu-deplier { color: #9FB6CE; }
 .menu-deplier:hover { background: rgba(255, 255, 255, .07); }
 .menu-sous { border-left-color: rgba(255, 255, 255, .18); }
-/* Pas de barre d'onglets en bas : tout passe par le menu ☰, comme SCOLARIS */
+/* Pas de barre d'onglets en bas : tout passe par le menu [menu], comme SCOLARIS */
 .barre-onglets { display: none !important; }
 .toast { bottom: 24px !important; }
 @media (max-width: 719px) { .bandeau-install { bottom: 12px; } }

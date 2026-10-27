@@ -87,12 +87,9 @@
         mention: 'Scannez le code QR : la page de vérification d’ÉduGestion Pro Master retrouve la pièce dans le registre de l’établissement et contrôle son empreinte.' }));
   }
 
-  Routeur.definir('uascep', function (racine) {
-    if (!EG.peutVoirModule('uascep')) { racine.appendChild(U.vide('Ce module n’est pas ouvert à votre compte.')); return; }
-    racine.appendChild(E.entete('Bureaux UASCEP', 'Membres et responsables des bureaux de l’UASCEP par école, unité pédagogique, zone pédagogique, circonscription et département.'));
-    const zone = el('div'); racine.appendChild(zone);
-    if (!global.UASCEP) { zone.appendChild(U.vide('Module indisponible : rechargez l’application.')); return; }
-    global.UASCEP.monter(zone, {
+  /** Adaptateur des bureaux UASCEP (réutilisé par « Pilotage et vie scolaire ») */
+  function adaptateur() {
+    return {
       app: 'ÉduGestion Pro Master', sansTitre: true,
       charger: () => DB.meta('uascep'),
       enregistrer: (etat) => DB.setMeta('uascep', etat).then(() => { if (EG.majSynchro) EG.majSynchro(); }),
@@ -104,8 +101,16 @@
       xlsxEcrire: (feuilles) => Promise.resolve(global.XlsxEcrire.classeur(feuilles)),
       xlsxLire: (f) => EG.Tableur.lireClasseur(f).then(fs => fs.map(x => ({ nom: x.nom || x.name, lignes: x.lignes || x.rows || [] }))),
       telecharger: (nom, blob) => EG.Sortie.enregistrer(nom, blob)
-    }).catch(e => { console.error(e); zone.appendChild(U.vide('Le module n’a pas pu s’ouvrir.')); });
+    };
+  }
+
+  Routeur.definir('uascep', function (racine) {
+    if (!EG.peutVoirModule('uascep')) { racine.appendChild(U.vide('Ce module n’est pas ouvert à votre compte.')); return; }
+    racine.appendChild(E.entete('Bureaux UASCEP', 'Membres et responsables des bureaux de l’UASCEP par école, unité pédagogique, zone pédagogique, circonscription et département.'));
+    const zone = el('div'); racine.appendChild(zone);
+    if (!global.UASCEP) { zone.appendChild(U.vide('Module indisponible : rechargez l’application.')); return; }
+    global.UASCEP.monter(zone, adaptateur()).catch(e => { console.error(e); zone.appendChild(U.vide('Le module n’a pas pu s’ouvrir.')); });
   });
 
-  EG.Uascep = { contexte };
+  EG.Uascep = { contexte, adaptateur };
 })(window);

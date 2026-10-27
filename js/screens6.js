@@ -255,7 +255,7 @@
               class: 'raccourci', title: m.titre,
               onclick: () => ouvrir(m, actifs, ecole, contexte)
             }, [
-              el('span', { class: 'raccourci-icone', text: m.signataire === 'CS' ? '🏛️' : '🏫' }),
+              el('span', { class: 'raccourci-icone', text: m.signataire === 'CS' ? '\uE023' : '\uE022' }),
               el('span', { text: m.court })
             ])))));
 

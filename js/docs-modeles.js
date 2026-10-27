@@ -105,7 +105,7 @@
       + '<tr><td>Prénoms</td><th>' + echapper(eleve.prenoms) + '</th></tr>'
       + '<tr><td>Né(e) le</td><th>' + (eleve.date_naissance ? echapper(U.dateCourte(eleve.date_naissance)) + ' à ' + echapper(eleve.lieu_naissance || '—') : '&nbsp;')
       + '</th></tr>'
-      + '<tr><td>Sexe</td><th>' + (eleve.sexe === 'F' ? 'Féminin' : eleve.sexe === 'M' ? 'Masculin' : (eleve.nom ? 'Masculin' : '☐ M &nbsp; ☐ F')) + '</th></tr>'
+      + '<tr><td>Sexe</td><th>' + (eleve.sexe === 'F' ? 'Féminin' : eleve.sexe === 'M' ? 'Masculin' : (eleve.nom ? 'Masculin' : '\uE073 M &nbsp; \uE073 F')) + '</th></tr>'
       + '<tr><td>Classe</td><th>' + echapper(ins.niveau) + '</th></tr>'
       + '<tr><td>École</td><th>' + echapper(ecole ? ecole.nom : '—') + '</th></tr>'
       + '<tr><td>Matricule</td><th>' + echapper(eleve.educmaster_matricule || eleve.npi || 'en cours') + '</th></tr>'

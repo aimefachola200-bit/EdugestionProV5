@@ -25,8 +25,8 @@
   const DUREE_ECHELON = 24;        // mois entre deux avancements d'échelon
   const ECHELON_MAX = 15;          // borne du référentiel (voir la fiche « Échelon »)
   const ACTES_ECHELON = ['RECRUTEMENT', 'TITULARISATION', 'AVANCEMENT_ECHELON', 'PROMOTION_GRADE', 'RECLASSEMENT'];
-  const ICONES = { RECRUTEMENT: '🆕', TITULARISATION: '✅', AVANCEMENT_ECHELON: '⏫', PROMOTION_GRADE: '🎖️', RECLASSEMENT: '🔁', MUTATION: '📌', DETACHEMENT: '↔️',
-    DISPONIBILITE: '⏸️', MISE_A_DISPOSITION: '🤝', REPRISE_SERVICE: '▶️', CONGE: '🏖️', DISTINCTION: '🏅', SANCTION: '⚠️', ADMISSION_RETRAITE: '⏳', AUTRE: '📄' };
+  const ICONES = { RECRUTEMENT: '\uE05C', TITULARISATION: '\uE004', AVANCEMENT_ECHELON: '\uE076', PROMOTION_GRADE: '\uE04D', RECLASSEMENT: '\uE058', MUTATION: '\uE02D', DETACHEMENT: '\uE057',
+    DISPONIBILITE: '\uE06A', MISE_A_DISPOSITION: '\uE044', REPRISE_SERVICE: '\uE039', CONGE: '\uE06B', DISTINCTION: '\uE04D', SANCTION: '\uE041', ADMISSION_RETRAITE: '\uE019', AUTRE: '\uE00D' };
   const aujourdhui = () => new Date().toISOString().slice(0, 10);
   const nomAgent = a => a ? ((a.nom || '').toUpperCase() + ' ' + (a.prenoms || '')).trim() : '—';
 
@@ -173,8 +173,8 @@
           + ech(EG.session.annee_code || '') + ' — ' + v.length + ' agent(s)</p>' + X0.htmlTableau(enTete, v.map(ligne)), { paysage: true });
         else S().excel('suivi-carrieres', [{ nom: 'Carrières', lignes: [enTete].concat(v.map(ligne)) }]);
       };
-      actions.appendChild(el('button', { class: 'btn btn-fantome', text: '📤 Excel', onclick: () => exporter(false) }));
-      actions.appendChild(el('button', { class: 'btn btn-fantome', text: '🖨️ Imprimer', onclick: () => exporter(true) }));
+      actions.appendChild(el('button', { class: 'btn btn-fantome', text: '\uE00C Excel', onclick: () => exporter(false) }));
+      actions.appendChild(el('button', { class: 'btn btn-fantome', text: '\uE008 Imprimer', onclick: () => exporter(true) }));
 
       function liste() {
         const v = visibles();
@@ -197,7 +197,7 @@
           { titre: 'Prochain avancement', valeur: l => badgeEtat(l.s) },
           { titre: 'Retraite', valeur: l => l.s.prevision ? U.dateCourte(l.s.prevision.date_retraite) : '—' },
           { titre: 'Dossier', valeur: l => U.badge(l.s.complets + '/' + l.s.controles.length, l.s.complets === l.s.controles.length ? 'ok' : 'attention') },
-          { titre: '', classe: 'col-etroite', valeur: l => EG.peutEcrire() && l.s.etat === 'RETARD' ? el('button', { class: 'btn btn-fantome btn-petit', text: '⏫', title: 'Enregistrer l’avancement d’échelon', 'aria-label': 'Avancement d’échelon de ' + nomAgent(l.p),
+          { titre: '', classe: 'col-etroite', valeur: l => EG.peutEcrire() && l.s.etat === 'RETARD' ? el('button', { class: 'btn btn-fantome btn-petit', text: '\uE076', title: 'Enregistrer l’avancement d’échelon', 'aria-label': 'Avancement d’échelon de ' + nomAgent(l.p),
             onclick: ev => { ev.stopPropagation(); modalAvancement(l.p, l.s, () => Routeur.aller('carrieres')); } }) : '' }
         ], v, { onLigne: l => Routeur.aller('carriere/' + l.p.id), messageVide: 'Aucun agent ne correspond.' })));
         zoneListe.appendChild(el('p', { class: 'muet petit', text: 'L’avancement d’échelon est dû ' + DUREE_ECHELON / 12 + ' ans après le dernier acte fixant l’échelon. Sans acte enregistré, la date du dernier avancement est « à renseigner » : ouvrez le dossier de l’agent pour la saisir.' }));
@@ -245,10 +245,10 @@
 
         tete.appendChild(E.entete(nomAgent(p), (X0.LIB_FONCTION[p.fonction] || p.fonction || '') + ' • ' + (C.LIB_CAT[s.statut] || s.statut) + ' • ' + (ecole ? ecole.nom : 'sans affectation'), [
           el('button', { class: 'btn btn-fantome', text: '← Carrières', onclick: () => Routeur.aller('carrieres') }),
-          ecrire ? el('button', { class: 'btn btn-primaire', text: '⏫ Avancement d’échelon', onclick: () => modalAvancement(p, s, raf) }) : null,
+          ecrire ? el('button', { class: 'btn btn-primaire', text: '\uE076 Avancement d’échelon', onclick: () => modalAvancement(p, s, raf) }) : null,
           ecrire ? el('button', { class: 'btn btn-fantome', text: '＋ Acte de carrière', onclick: () => E.editer('carrieres_personnel', { personnel_id: id, categorie: p.categorie, echelon: p.echelon, grade: p.grade }, raf) }) : null,
-          el('button', { class: 'btn btn-fantome', text: '🖨️ Fiche de carrière (signée, avec QR)', onclick: () => EG.genererDocument('FICHE_CARRIERE', 'Fiche de carrière — ' + nomAgent(p), ficheHtml(p, s, ctx), { acteurs: [{ personne: p, mention: 'L’agent' }], ecole_id: p.ecole_id }) }),
-          el('button', { class: 'btn btn-fantome', text: '🪪 Carte d’identité', onclick: () => Routeur.aller('agent-identite/' + id) })
+          el('button', { class: 'btn btn-fantome', text: '\uE008 Fiche de carrière (signée, avec QR)', onclick: () => EG.genererDocument('FICHE_CARRIERE', 'Fiche de carrière — ' + nomAgent(p), ficheHtml(p, s, ctx), { acteurs: [{ personne: p, mention: 'L’agent' }], ecole_id: p.ecole_id }) }),
+          el('button', { class: 'btn btn-fantome', text: '\uE02B Carte d’identité', onclick: () => Routeur.aller('agent-identite/' + id) })
         ]));
 
         zone.appendChild(el('div', { class: 'grille grille-stats' }, [
@@ -260,16 +260,16 @@
         ]));
 
         /* Frise des actes */
-        const frise = s.actes.slice().reverse().map(a => ({ date: a.date_effet, icone: ICONES[a.type_acte] || '📄', titre: U.libelle(a.type_acte),
+        const frise = s.actes.slice().reverse().map(a => ({ date: a.date_effet, icone: ICONES[a.type_acte] || '\uE00D', titre: U.libelle(a.type_acte),
           detail: [a.grade, a.categorie ? 'catégorie ' + a.categorie : '', a.echelon ? 'échelon ' + a.echelon : '', a.reference_acte ? 'acte : ' + a.reference_acte : '', a.observations].filter(Boolean).join(' — '), acte: a }));
-        if (s.debut && !s.actes.some(a => a.type_acte === 'RECRUTEMENT')) frise.push({ date: s.debut, icone: '🆕', titre: 'Première prise de service', detail: 'Date de la fiche de l’agent', acte: null });
+        if (s.debut && !s.actes.some(a => a.type_acte === 'RECRUTEMENT')) frise.push({ date: s.debut, icone: '\uE05C', titre: 'Première prise de service', detail: 'Date de la fiche de l’agent', acte: null });
         zone.appendChild(U.carte('Frise de carrière', frise.length ? el('ol', { class: 'frise-carriere', style: 'list-style:none;padding:0;margin:0' }, frise.map(x => el('li', { style: 'display:flex;gap:12px;align-items:flex-start;padding:8px 0;border-bottom:1px solid var(--bordure, #e3e8e5)' }, [
           el('span', { 'aria-hidden': 'true', style: 'font-size:1.4em', text: x.icone }),
           el('div', { style: 'flex:1' }, [el('strong', { text: x.titre }), el('div', { class: 'muet petit', text: x.detail || '' })]),
           el('span', { class: 'muet', text: U.dateCourte(x.date) }),
           ecrire && x.acte ? el('span', { class: 'actions-mini' }, [
-            el('button', { class: 'btn btn-fantome btn-petit', text: '✏️', 'aria-label': 'Modifier l’acte', onclick: () => E.editer('carrieres_personnel', x.acte, raf) }),
-            el('button', { class: 'btn btn-fantome btn-petit btn-alerte', text: '🗑', 'aria-label': 'Supprimer l’acte', onclick: () => U.confirmer('Supprimer l’acte', 'L’acte « ' + x.titre + ' » du ' + U.dateCourte(x.date) + ' sera supprimé.', () => DB.remove('carrieres_personnel', x.acte.id).then(() => { EG.majSynchro(); raf(); }), 'Supprimer') })
+            el('button', { class: 'btn btn-fantome btn-petit', text: '\uE006', 'aria-label': 'Modifier l’acte', onclick: () => E.editer('carrieres_personnel', x.acte, raf) }),
+            el('button', { class: 'btn btn-fantome btn-petit btn-alerte', text: '\uE005', 'aria-label': 'Supprimer l’acte', onclick: () => U.confirmer('Supprimer l’acte', 'L’acte « ' + x.titre + ' » du ' + U.dateCourte(x.date) + ' sera supprimé.', () => DB.remove('carrieres_personnel', x.acte.id).then(() => { EG.majSynchro(); raf(); }), 'Supprimer') })
           ]) : null]))) : U.vide('Aucun acte de carrière enregistré. Ajoutez le recrutement, la titularisation et les avancements pour suivre la carrière.')));
 
         /* Projection */
@@ -280,7 +280,7 @@
         ], proj, {}) : el('p', { class: 'muet', text: s.dernier ? 'Aucun avancement d’échelon prévisible avant le départ à la retraite.' : 'La projection nécessite au moins un acte fixant l’échelon (recrutement, titularisation ou avancement) et l’échelon actuel de l’agent.' })));
 
         /* Dossier */
-        zone.appendChild(U.carte('Complétude du dossier — ' + s.complets + ' / ' + s.controles.length, el('ul', { class: 'liste-points' }, s.controles.map(c => el('li', { text: (c[1] ? '✔ ' : '✖ ') + c[0] })))));
+        zone.appendChild(U.carte('Complétude du dossier — ' + s.complets + ' / ' + s.controles.length, el('ul', { class: 'liste-points' }, s.controles.map(c => el('li', { text: (c[1] ? '\uE003 ' : '\uE002 ') + c[0] })))));
 
         /* Affectations, diplômes, formations */
         const bloc = (titre, entite, rows, cols, pre) => U.carte(titre, U.tableau(cols, rows, { messageVide: 'Aucun enregistrement.' }),

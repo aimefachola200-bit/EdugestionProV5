@@ -261,8 +261,8 @@
         const g = parPoste[k];
         const sel = el('select', { 'aria-label': 'École de ' + k, onchange: e => { choix[k] = e.target.value; majEtat(); } }, [
           el('option', { value: '', text: '— À choisir —' }),
-          el('option', { value: 'CS', text: '🏢 Personnel de la circonscription (répertoire)' }),
-          el('option', { value: 'NON', text: '⛔ Ne pas importer' })
+          el('option', { value: 'CS', text: '\uE024 Personnel de la circonscription (répertoire)' }),
+          el('option', { value: 'NON', text: '\uE036 Ne pas importer' })
         ].concat(ecolesCS.map(e => el('option', { value: e.id, text: e.nom }))));
         sel.value = choix[k];
         const badge = el('td');

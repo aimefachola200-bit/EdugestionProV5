@@ -45,7 +45,7 @@
 
     const filtres = el('div', { class: 'barre-filtres' });
     const zone = el('div');
-    if (EG.EducMasterModeles) { const d = el('details', { class: 'educmaster-plie' }, [el('summary', { text: '📗 Élèves au format EDUCMaster : exporter / importer' })]); d.addEventListener('toggle', () => { if (d.open && d.children.length === 1) d.appendChild(EG.EducMasterModeles.bloc()); }); racine.appendChild(d); }
+    if (EG.EducMasterModeles) { const d = el('details', { class: 'educmaster-plie' }, [el('summary', { text: '\uE030 Élèves au format EDUCMaster : exporter / importer' })]); d.addEventListener('toggle', () => { if (d.open && d.children.length === 1) d.appendChild(EG.EducMasterModeles.bloc()); }); racine.appendChild(d); }
     racine.appendChild(filtres); racine.appendChild(zone);
 
     let recherche = '', niveau = '', afficherSortis = false;
@@ -283,7 +283,7 @@
               f(); U.toast(v.nom + ' ' + v.prenoms + ' est inscrit(e)'); dessiner(); EG.majSynchro();
               U.modal('Inscription enregistrée', el('p', { text: 'Imprimer maintenant la fiche d’inscription de ' + v.nom + ' ' + v.prenoms + ', avec sa carte d’identité scolaire ?' }), f3 => [
                 el('button', { class: 'btn btn-fantome', text: 'Plus tard', onclick: f3 }),
-                el('button', { class: 'btn btn-primaire', text: '🖨 Fiche d’inscription + carte', onclick: () => { f3(); EG.imprimerFicheInscription(eleve, ins); } })
+                el('button', { class: 'btn btn-primaire', text: '\uE008 Fiche d’inscription + carte', onclick: () => { f3(); EG.imprimerFicheInscription(eleve, ins); } })
               ]);
             });
         }
@@ -391,7 +391,7 @@
           class: 'carte carte-lien', onclick: () => Routeur.aller('eleve-identite/' + insId)
         }, [
           el('div', { class: 'ligne-entre' }, [
-            el('h3', { class: 'carte-titre', text: '🪪 Carte d’identité' }),
+            el('h3', { class: 'carte-titre', text: '\uE02B Carte d’identité' }),
             el('span', { class: 'muet', 'aria-hidden': 'true', text: '›' })
           ]),
           el('p', { class: 'muet', text: 'Nom, sexe, naissance, NPI, matricule…' })
@@ -515,14 +515,14 @@
         }));
         if (EG.peutEcrire()) actions.push(el('button', {
           class: 'btn btn-fantome',
-          text: (eleve && eleve.signature_parent) ? 'Modifier la signature du parent' : '✍️ Signature du parent ou du tuteur',
+          text: (eleve && eleve.signature_parent) ? 'Modifier la signature du parent' : '\uE029 Signature du parent ou du tuteur',
           onclick: () => EG.Docs.capturerSignature(eleve, () => Routeur.aller('eleve/' + insId), {
             table: 'eleves', champ: 'signature_parent', titre: 'Signature du parent de ' + nomEleve(eleve),
             mention: 'Le parent ou le tuteur signe ici. Sa signature sera apposée sur la fiche d’inscription, la fiche du CEP et les bulletins de l’élève.'
           })
         }));
         actions.push(el('button', {
-          class: 'btn btn-fantome', text: '🪪 Fiche d’inscription + carte d’identité',
+          class: 'btn btn-fantome', text: '\uE02B Fiche d’inscription + carte d’identité',
           onclick: () => EG.imprimerFicheInscription(eleve || {}, ins)
         }));
         if (ins.niveau === 'CM2') {
@@ -589,7 +589,7 @@
     DB.get('inscriptions_eleves', insId).then(ins => {
       if (!ins) { racine.appendChild(U.vide('Cette inscription est introuvable.')); return; }
       return DB.get('eleves', ins.eleve_id).then(eleve => {
-        tete.appendChild(entete('🪪 Carte d’identité', nomEleve(eleve),
+        tete.appendChild(entete('\uE02B Carte d’identité', nomEleve(eleve),
           [retour('eleve/' + insId, 'Retour au dossier')]));
 
         const identite = el('dl', { class: 'fiche' });
@@ -702,14 +702,14 @@
         class: 'carte carte-lien', onclick: () => Routeur.aller('agent-identite/' + id)
       }, [
         el('div', { class: 'ligne-entre' }, [
-          el('h3', { class: 'carte-titre', text: '🪪 Carte d’identité' }),
+          el('h3', { class: 'carte-titre', text: '\uE02B Carte d’identité' }),
           el('span', { class: 'muet', 'aria-hidden': 'true', text: '›' })
         ]),
         el('p', { class: 'muet', text: 'État civil, contact, situation…' })
       ]));
 
       if (EG.peutVoirModule('carrieres')) zone.appendChild(el('button', { class: 'carte carte-lien', onclick: () => Routeur.aller('carriere/' + id) }, [
-        el('div', { class: 'ligne-entre' }, [el('h3', { class: 'carte-titre', text: '📈 Dossier de carrière' }), el('span', { class: 'muet', 'aria-hidden': 'true', text: '›' })]),
+        el('div', { class: 'ligne-entre' }, [el('h3', { class: 'carte-titre', text: '\uE016 Dossier de carrière' }), el('span', { class: 'muet', 'aria-hidden': 'true', text: '›' })]),
         el('p', { class: 'muet', text: 'Frise des actes, avancement d’échelon, projection, fiche de carrière signée…' })]));
 
       zone.appendChild(sousSection('Carrière', U.tableau([
@@ -803,7 +803,7 @@
 
     DB.get('personnels', id).then(a => {
       if (!a) { racine.appendChild(U.vide('Cet agent est introuvable.')); return; }
-      tete.appendChild(entete('🪪 Carte d’identité', (a.nom || '').toUpperCase() + ' ' + (a.prenoms || ''),
+      tete.appendChild(entete('\uE02B Carte d’identité', (a.nom || '').toUpperCase() + ' ' + (a.prenoms || ''),
         [retour('agent/' + id, 'Retour au dossier')]));
 
       const identite = el('dl', { class: 'fiche' });

@@ -356,7 +356,7 @@
           ]);
         })));
         zone.appendChild(el('div', { class: 'barre-actions' }, [
-          el('button', { class: 'btn btn-fantome', text: '✍️ Signatures des acteurs', onclick: () => Routeur.aller('signatures') }),
+          el('button', { class: 'btn btn-fantome', text: '\uE029 Signatures des acteurs', onclick: () => Routeur.aller('signatures') }),
           el('button', { class: 'btn btn-fantome', text: '⇩ Excel (toutes les divisions)', onclick: () => {
             const feuilles = divs.map(d => { const st = statsDivision(d.code, D); const lignes = [[d.sigle + ' — ' + d.nom], []]; st.kpis.forEach(k => lignes.push([k[0], k[1], k[2] || ''])); st.tableaux.forEach(tb => { lignes.push([], [tb.titre], tb.entetes); tb.lignes.forEach(x => lignes.push(x)); }); return { nom: d.sigle, lignes }; });
             S().excel('divisions-' + S().slug(t.nom) + '-' + EG.session.annee_code, feuilles);
@@ -384,7 +384,7 @@
         const taux = tauxDe(lignes);
         racine.appendChild(E.entete(div.sigle + ' — ' + div.nom, (t.type === 'DEPARTEMENT' ? 'Direction départementale ' : 'Circonscription scolaire de ') + t.nom + ' · année ' + EG.session.annee_code, [
           el('button', { class: 'btn btn-fantome', text: '← Divisions', onclick: () => Routeur.aller('divisions/' + t.id) }),
-          el('button', { class: 'btn btn-primaire', text: '🖨️ Imprimer / PDF', onclick: () => imprimer(t, div, chef, st, lignes, attributions, ctx.index) }),
+          el('button', { class: 'btn btn-primaire', text: '\uE008 Imprimer / PDF', onclick: () => imprimer(t, div, chef, st, lignes, attributions, ctx.index) }),
           el('button', { class: 'btn btn-fantome', text: '⇩ Excel', onclick: () => excel(t, div, st, lignes) })
         ]));
         /* Rubrique */
@@ -394,8 +394,8 @@
           div.parent ? el('p', { class: 'muet petit', text: 'Rattachée à : ' + ((divisionsDe(t).filter(x => x.code === div.parent)[0] || {}).nom || div.parent) + (div.article ? ' · ' + div.article : '') }) : null,
           el('div', { style: 'display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin:6px 0' }, [
             chef && chef.signature_image ? el('img', { src: chef.signature_image, alt: 'Signature du chef', style: 'height:40px;background:#fff;border:1px solid #DDE3DF;border-radius:4px' }) : el('span', { class: 'badge attention', text: 'signature à recueillir' }),
-            EG.peutEcrire() ? el('button', { class: 'btn btn-fantome', text: '✏️ Chef et attributions', onclick: () => E.editer('divisions_structure', Object.assign({ attributions: div.attributions, article_aof: div.article }, chefP), raf) }) : null,
-            EG.peutEcrire() ? el('button', { class: 'btn btn-fantome', text: '✍️ Signature du chef', onclick: () => {
+            EG.peutEcrire() ? el('button', { class: 'btn btn-fantome', text: '\uE006 Chef et attributions', onclick: () => E.editer('divisions_structure', Object.assign({ attributions: div.attributions, article_aof: div.article }, chefP), raf) }) : null,
+            EG.peutEcrire() ? el('button', { class: 'btn btn-fantome', text: '\uE029 Signature du chef', onclick: () => {
               const enreg = chef ? Promise.resolve(chef) : DB.put('divisions_structure', Object.assign({ chef_titre: div.signataire }, chefP));
               enreg.then(rec => EG.Docs.capturerSignature(rec, raf, { table: 'divisions_structure', titre: 'Signature — ' + div.sigle, mention: 'Le chef de la division signe ici. Sa signature figure sur le plan d’action et le rapport de la division.' }));
             } }) : null
@@ -418,7 +418,7 @@
             ETATS.map(k => el('option', { value: k, text: U.libelle(k), selected: (l.etat || 'PREVUE') === k }))) : U.libelle(l.etat) },
           { titre: 'Taux (%)', valeur: l => EG.peutEcrire() ? el('input', { type: 'number', min: '0', max: '100', value: String(tauxEffectif(l)), style: 'width:70px', 'aria-label': 'Taux de réalisation',
             onchange: e => DB.put('lignes_action', Object.assign({}, l, { taux: Math.max(0, Math.min(100, +e.target.value || 0)) })).then(raf) }) : String(tauxEffectif(l)) },
-          { titre: '', valeur: l => EG.peutEcrire() ? el('button', { class: 'btn btn-fantome', text: '✏️', 'aria-label': 'Modifier', onclick: () => E.editer('lignes_action', l, raf) }) : '' }
+          { titre: '', valeur: l => EG.peutEcrire() ? el('button', { class: 'btn btn-fantome', text: '\uE006', 'aria-label': 'Modifier', onclick: () => E.editer('lignes_action', l, raf) }) : '' }
         ], lignes, { messageVide: 'Aucune ligne d’action pour cette année.' }));
         if (EG.peutEcrire()) zonePlan.appendChild(el('div', { class: 'barre-actions' }, [
           el('button', { class: 'btn btn-fantome', text: '＋ Ligne d’action', onclick: () => E.editer('lignes_action', { territoire_id: t.id, division_code: div.code, annee_code: EG.session.annee_code, etat: 'PREVUE', taux: 0 }, raf) }),

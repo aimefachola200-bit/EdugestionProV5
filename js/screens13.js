@@ -79,7 +79,7 @@
   const ROLES_INST = ['PRESIDENT', 'VICE_PRESIDENT', 'SECRETAIRE', 'SECRETAIRE_ADJOINT', 'TRESORIER',
     'TRESORIER_ADJOINT', 'COMMISSAIRE_COMPTES', 'RAPPORTEUR', 'CONSEILLER', 'MEMBRE'];
 
-  const ONGLETS_CR = [['classes', '🚪 Classes et titulaires'], ['roles', '🤝 Rôles de gestion collégiale']];
+  const ONGLETS_CR = [['classes', '\uE074 Classes et titulaires'], ['roles', '\uE044 Rôles de gestion collégiale']];
 
   Routeur.definir('classes-roles', function (racine, args) {
     racine.appendChild(entete('Classes et rôles de gestion',
@@ -498,25 +498,25 @@
   const CATALOGUE = {
     recensement: [
       {
-        code: 'rec-ecole', nom: 'Fiche de recensement de l’école (pré-remplie)', icone: '🧮', needsEcole: true,
+        code: 'rec-ecole', nom: 'Fiche de recensement de l’école (pré-remplie)', icone: '\uE040', needsEcole: true,
         description: 'Les effectifs, le personnel, le patrimoine et les finances déjà saisis dans l’application, prêts à signer.',
         pdf: true, word: true, excel: true,
         corps: ctx => valeursRecensement(ctx.ecole).then(v => corpsRecensement(ctx, v)),
         feuilles: ctx => valeursRecensement(ctx.ecole).then(feuilleRecensement)
       },
       {
-        code: 'rec-vierge', nom: 'Fiche de recensement vierge', icone: '🧾',
+        code: 'rec-vierge', nom: 'Fiche de recensement vierge', icone: '\uE04B',
         description: 'Le même formulaire, à remplir à la main dans les écoles qui n’ont pas encore l’application.',
         pdf: true, word: true, excel: true,
         corps: ctx => corpsRecensement(ctx, null), feuilles: () => feuilleRecensement(null)
       },
       {
-        code: 'rec-recap', nom: 'Récapitulatif des recensements du périmètre', icone: '📊', reserve: true,
+        code: 'rec-recap', nom: 'Récapitulatif des recensements du périmètre', icone: '\uE015', reserve: true,
         description: 'Un tableau Excel : une ligne par école, avec l’état de sa fiche et toutes ses valeurs.',
         excel: true, feuilles: ctx => recapitulatif(ctx)
       },
       {
-        code: 'collecte', nom: 'Fiche de collecte — identification de l’école', icone: '🪪',
+        code: 'collecte', nom: 'Fiche de collecte — identification de l’école', icone: '\uE02B',
         description: 'Le formulaire papier de l’identification : localisation, accessibilité, équipements, instances.',
         pdf: true, word: true, corps: () => '<div class="fiche-vierge">' + EG.ficheCollecteCorps() + '</div>',
         liens: [{ lib: 'Annuaire des écoles', route: 'annuaire-ecoles' }]
@@ -524,7 +524,7 @@
     ],
     fiches: [
       {
-        code: 'liste-classe', nom: 'Liste de classe vierge', icone: '📋',
+        code: 'liste-classe', nom: 'Liste de classe vierge', icone: '\uE00F',
         description: 'Numéro, nom, sexe, date et lieu de naissance, redoublant : 60 lignes à remplir.',
         pdf: true, word: true, excel: true,
         corps: ctx => '<div class="fiche-vierge"><h2>Liste de classe</h2>' + identite(ctx)
@@ -535,7 +535,7 @@
         liens: [{ lib: 'Éditer avec les élèves', route: 'documents' }]
       },
       {
-        code: 'inscription', nom: 'Fiche d’inscription d’un élève', icone: '🎒',
+        code: 'inscription', nom: 'Fiche d’inscription d’un élève', icone: '\uE021',
         description: 'Identité de l’enfant, parents ou tuteur, scolarité antérieure, pièces fournies.',
         pdf: true, word: true,
         corps: ctx => '<div class="fiche-vierge"><h2>Fiche d’inscription</h2>' + identite(ctx)
@@ -546,7 +546,7 @@
           + signature('Le directeur') + '</div>'
       },
       {
-        code: 'registre-vierge', nom: 'Registre d’appel vierge', icone: '🗒️', paysage: true,
+        code: 'registre-vierge', nom: 'Registre d’appel vierge', icone: '\uE010', paysage: true,
         description: 'Un mois de présences : 45 lignes, une colonne par jour.',
         pdf: true, word: true, excel: true,
         corps: ctx => '<div class="fiche-vierge"><h2>Registre d’appel</h2>' + identite(ctx)
@@ -557,7 +557,7 @@
         liens: [{ lib: 'Registre d’appel du mois', route: 'registre-appel' }]
       },
       {
-        code: 'notes-vierge', nom: 'Fiche de notes vierge', icone: '📝', paysage: true,
+        code: 'notes-vierge', nom: 'Fiche de notes vierge', icone: '\uE00E', paysage: true,
         description: 'Une ligne par élève, une colonne par matière, moyenne et rang.',
         pdf: true, word: true, excel: true,
         corps: ctx => matieresPrimaire().then(m => '<div class="fiche-vierge"><h2>Fiche de notes</h2>' + identite(ctx)
@@ -568,7 +568,7 @@
         liens: [{ lib: 'Saisir les notes', route: 'evaluations' }]
       },
       {
-        code: 'presence-personnel', nom: 'Fiche de présence du personnel', icone: '🕗', paysage: true,
+        code: 'presence-personnel', nom: 'Fiche de présence du personnel', icone: '\uE018', paysage: true,
         description: 'Émargement mensuel du personnel : une ligne par agent, une colonne par jour.',
         pdf: true, word: true, excel: true,
         corps: ctx => '<div class="fiche-vierge"><h2>Fiche de présence du personnel</h2>' + identite(ctx)
@@ -579,7 +579,7 @@
         liens: [{ lib: 'Présence du personnel', route: 'presences-personnel' }]
       },
       {
-        code: 'fiche-agent', nom: 'Fiche de renseignements du personnel', icone: '👩‍🏫',
+        code: 'fiche-agent', nom: 'Fiche de renseignements du personnel', icone: '\uE01E',
         description: 'État civil, carrière, diplômes et affectation d’un agent.',
         pdf: true, word: true,
         corps: ctx => '<div class="fiche-vierge"><h2>Fiche de renseignements du personnel</h2>' + identite(ctx)
@@ -590,7 +590,7 @@
         liens: [{ lib: 'Personnel', route: 'personnel' }]
       },
       {
-        code: 'pv-reunion', nom: 'Procès-verbal de réunion', icone: '🗣️',
+        code: 'pv-reunion', nom: 'Procès-verbal de réunion', icone: '\uE035',
         description: 'Comité de direction, conseil des maîtres, APE, AME : présents, ordre du jour, décisions.',
         pdf: true, word: true,
         corps: ctx => '<div class="fiche-vierge"><h2>Procès-verbal de réunion</h2>' + identite(ctx)
@@ -604,7 +604,7 @@
     ],
     certificats: [
       {
-        code: 'cert-scolarite', nom: 'Certificat de scolarité vierge', icone: '📜',
+        code: 'cert-scolarite', nom: 'Certificat de scolarité vierge', icone: '\uE02F',
         description: 'Attestation d’inscription de l’élève, à compléter à la main et à signer.',
         pdf: true, word: true,
         corps: ctx => '<div class="fiche-vierge"><h2 style="text-align:center">CERTIFICAT DE SCOLARITÉ</h2>'
@@ -615,7 +615,7 @@
         liens: [{ lib: 'Certificat officiel à souche', fn: () => EG.editerCertificat && EG.editerCertificat() }]
       },
       {
-        code: 'attestation-frequentation', nom: 'Attestation de fréquentation vierge', icone: '📄',
+        code: 'attestation-frequentation', nom: 'Attestation de fréquentation vierge', icone: '\uE00D',
         description: 'Atteste que l’enfant fréquente l’école : pour une bourse, un dossier social, une administration.',
         pdf: true, word: true,
         corps: ctx => '<div class="fiche-vierge"><h2 style="text-align:center">ATTESTATION DE FRÉQUENTATION SCOLAIRE</h2>'
@@ -625,7 +625,7 @@
           + '<p>Cette attestation est délivrée à la demande de l’intéressé(e) pour servir et valoir ce que de droit.</p>' + signature('Le directeur') + '</div>'
       },
       {
-        code: 'cert-transfert', nom: 'Certificat de transfert (exeat) vierge', icone: '🔁',
+        code: 'cert-transfert', nom: 'Certificat de transfert (exeat) vierge', icone: '\uE058',
         description: 'Délivré à l’élève qui quitte l’école pour un autre établissement.',
         pdf: true, word: true,
         corps: ctx => '<div class="fiche-vierge"><h2 style="text-align:center">CERTIFICAT DE TRANSFERT</h2>'
@@ -637,29 +637,29 @@
           + signature('Le directeur') + '</div>'
       },
       {
-        code: 'cert-officiel', nom: 'Certificat de scolarité officiel (avec les données de l’élève)', icone: '🏛️',
+        code: 'cert-officiel', nom: 'Certificat de scolarité officiel (avec les données de l’élève)', icone: '\uE023',
         description: 'Modèle à souche, deux volets par feuille, rempli avec le dossier de l’élève choisi.',
         action: { lib: 'Choisir l’élève', fn: () => EG.editerCertificat && EG.editerCertificat() }
       },
       {
-        code: 'cartes', nom: 'Cartes d’identité scolaire', icone: '🪪',
+        code: 'cartes', nom: 'Cartes d’identité scolaire', icone: '\uE02B',
         description: 'Une carte par élève, cachet de l’école compris, prête à découper.',
         action: { lib: 'Ouvrir Documents', fn: () => Routeur.aller('documents') }
       },
       {
-        code: 'fiches-cep', nom: 'Fiches d’inscription au CEP', icone: '🎓',
+        code: 'fiches-cep', nom: 'Fiches d’inscription au CEP', icone: '\uE020',
         description: 'Fiches officielles des candidats de CM2.',
         action: { lib: 'Ouvrir les fiches CEP', fn: () => Routeur.aller('fiche-cep') }
       },
       {
-        code: 'cert-personnel', nom: 'Certificats du personnel', icone: '🧑‍💼',
+        code: 'cert-personnel', nom: 'Certificats du personnel', icone: '\uE01D',
         description: 'Prise de service, cessation, reprise, présence au poste : modèles officiels renseignés depuis le dossier de l’agent.',
         action: { lib: 'Ouvrir les certificats', fn: () => Routeur.aller('certificats') }
       }
     ]
   };
 
-  const ONGLETS_DL = [['recensement', '🧮 Fiches de recensement'], ['fiches', '📝 Fiches à remplir'], ['certificats', '📜 Certificats et attestations']];
+  const ONGLETS_DL = [['recensement', '\uE040 Fiches de recensement'], ['fiches', '\uE00E Fiches à remplir'], ['certificats', '\uE02F Certificats et attestations']];
 
   function matieresPrimaire() {
     return DB.all('matieres').then(ms => ms.filter(m => m.cycle === 'PRIMAIRE' && m.actif !== false)

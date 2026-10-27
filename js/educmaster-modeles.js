@@ -262,7 +262,7 @@
   function bloc(options) {
     options = options || {};
     const zone = el('div', { class: 'carte', style: 'padding:14px' });
-    zone.appendChild(el('h3', { class: 'carte-titre', text: '📗 Modèles officiels EDUCMaster (comme SCOLARIS et GESCOL)' }));
+    zone.appendChild(el('h3', { class: 'carte-titre', text: '\uE030 Modèles officiels EDUCMaster (comme SCOLARIS et GESCOL)' }));
     zone.appendChild(el('p', { class: 'muet petit', text: 'Élèves : une feuille par cours (CM2 … CI, Maternelle 2 et 1). Notes du primaire : Évaluation formative 1, sommative 1 à 3, deux colonnes par matière (note obtenue, note perf. sur 20). Le fichier exporté se dépose tel quel sur EDUCMaster et se réimporte ici.' }));
     const corps = el('div');
     zone.appendChild(corps);
@@ -280,19 +280,19 @@
         const fE = el('input', { type: 'file', accept: '.xlsx', 'aria-label': 'Modèle des élèves rempli', style: 'display:none' });
         fE.addEventListener('change', () => { const f = fE.files[0]; fE.value = ''; if (f) importerElevesUI(f, ecoleId, C, resultat); });
         zoneE.appendChild(el('div', { class: 'barre-actions' }, [
-          el('strong', { text: '👧 Élèves par classe' }),
-          el('button', { class: 'btn btn-primaire', type: 'button', text: '⬇ Exporter (modèle EDUCMaster rempli)', onclick: () => exporterEleves(ecoleId).then(n => U.toast(n + ' élève(s) exporté(s)')).catch(e => U.toast(e.message, 'danger')) }),
-          EG.peutEcrire() ? el('button', { class: 'btn btn-fantome', type: 'button', text: '⬆ Importer le modèle des élèves', onclick: () => fE.click() }) : null, fE
+          el('strong', { text: '\uE01F Élèves par classe' }),
+          el('button', { class: 'btn btn-primaire', type: 'button', text: '\uE009 Exporter (modèle EDUCMaster rempli)', onclick: () => exporterEleves(ecoleId).then(n => U.toast(n + ' élève(s) exporté(s)')).catch(e => U.toast(e.message, 'danger')) }),
+          EG.peutEcrire() ? el('button', { class: 'btn btn-fantome', type: 'button', text: '\uE00A Importer le modèle des élèves', onclick: () => fE.click() }) : null, fE
         ]));
         const cls = classesPrim();
         const fN = el('input', { type: 'file', accept: '.xlsx', 'aria-label': 'Modèle des notes rempli', style: 'display:none' });
         fN.addEventListener('change', () => { const f = fN.files[0]; fN.value = ''; if (f) importerNotesUI(f, classeId, C, resultat); });
         zoneN.appendChild(el('div', { class: 'barre-actions' }, cls.length ? [
-          el('strong', { text: '📝 Notes du primaire' }),
+          el('strong', { text: '\uE00E Notes du primaire' }),
           U.selecteur('Classe', cls.map(c => ({ value: c.id, label: c.libelle || c.code })), classeId, v => { classeId = v; }, { vide: false }),
-          el('button', { class: 'btn btn-primaire', type: 'button', text: '⬇ Exporter les notes (modèle EDUCMaster)', onclick: () => exporterNotes(classeId).then(x => U.toast(x.notes + ' note(s), ' + x.eleves + ' élève(s)' + (x.sansMatricule ? ' — ' + x.sansMatricule + ' sans matricule EDUCMaster' : ''), x.sansMatricule ? 'attention' : '')).catch(e => U.toast(e.message, 'danger')) }),
-          EG.peutEcrire() ? el('button', { class: 'btn btn-fantome', type: 'button', text: '⬆ Importer les notes', onclick: () => fN.click() }) : null, fN
-        ] : [el('strong', { text: '📝 Notes du primaire' }), el('span', { class: 'muet', text: 'Aucune classe du primaire dans cette école.' })]));
+          el('button', { class: 'btn btn-primaire', type: 'button', text: '\uE009 Exporter les notes (modèle EDUCMaster)', onclick: () => exporterNotes(classeId).then(x => U.toast(x.notes + ' note(s), ' + x.eleves + ' élève(s)' + (x.sansMatricule ? ' — ' + x.sansMatricule + ' sans matricule EDUCMaster' : ''), x.sansMatricule ? 'attention' : '')).catch(e => U.toast(e.message, 'danger')) }),
+          EG.peutEcrire() ? el('button', { class: 'btn btn-fantome', type: 'button', text: '\uE00A Importer les notes', onclick: () => fN.click() }) : null, fN
+        ] : [el('strong', { text: '\uE00E Notes du primaire' }), el('span', { class: 'muet', text: 'Aucune classe du primaire dans cette école.' })]));
       };
       corps.append(zoneE, zoneN, resultat);
       dessiner();

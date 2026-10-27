@@ -166,47 +166,47 @@
       }, [el('span', { class: 'raccourci-icone', text: icone }), el('span', { text: titre })]));
 
       if (u.role === 'ENSEIGNANT') {
-        ajoute('✅', 'Faire l’appel', 'presences');
-        ajoute('📝', 'Saisir les notes', 'evaluations');
-        ajoute('🍚', 'Cantine du jour', 'cantine');
-        ajoute('📌', 'Tableau d’affichage', 'affichage');
-        ajoute('🎒', 'Ma classe', 'eleves');
+        ajoute('\uE004', 'Faire l’appel', 'presences');
+        ajoute('\uE00E', 'Saisir les notes', 'evaluations');
+        ajoute('\uE05B', 'Cantine du jour', 'cantine');
+        ajoute('\uE02D', 'Tableau d’affichage', 'affichage');
+        ajoute('\uE021', 'Ma classe', 'eleves');
       } else if (u.role === 'DIRECTEUR') {
-        ajoute('🪪', 'Carte d’identité de l’école', 'carte-ecole');
-        ajoute('🎒', 'Inscrire un élève', 'eleves');
-        ajoute('✅', 'Présences', 'presences');
-        ajoute('🧮', 'Recensement', 'recensement');
-        ajoute('🏫', 'Patrimoine', 'patrimoine');
-        ajoute('👩‍🏫', 'Personnel', 'personnel');
-        ajoute('📑', 'Certificats du personnel', 'certificats');
-        ajoute('🏫', 'Annuaire des écoles', 'annuaire-ecoles');
-        ajoute('🧑‍🏫', 'Classes et rôles de gestion', 'classes-roles');
-        ajoute('🔑', 'Comptes d’accès', 'comptes');
-        ajoute('⬇️', 'Téléchargements', 'telechargements');
-        ajoute('💰', 'Budget', 'budget');
-        ajoute('📈', 'Synthèse des évaluations', 'synthese-evaluations');
-        ajoute('📋', 'Registre d’appel', 'registre-appel');
-        ajoute('🗓️', 'Relevé mensuel', 'releve-mensuel');
-        ajoute('🕗', 'Présence du personnel', 'presences-personnel');
-        ajoute('📄', 'Documents', 'documents');
+        ajoute('\uE02B', 'Carte d’identité de l’école', 'carte-ecole');
+        ajoute('\uE021', 'Inscrire un élève', 'eleves');
+        ajoute('\uE004', 'Présences', 'presences');
+        ajoute('\uE040', 'Recensement', 'recensement');
+        ajoute('\uE022', 'Patrimoine', 'patrimoine');
+        ajoute('\uE01E', 'Personnel', 'personnel');
+        ajoute('\uE00D', 'Certificats du personnel', 'certificats');
+        ajoute('\uE022', 'Annuaire des écoles', 'annuaire-ecoles');
+        ajoute('\uE01E', 'Classes et rôles de gestion', 'classes-roles');
+        ajoute('\uE032', 'Comptes d’accès', 'comptes');
+        ajoute('\uE009', 'Téléchargements', 'telechargements');
+        ajoute('\uE04E', 'Budget', 'budget');
+        ajoute('\uE016', 'Synthèse des évaluations', 'synthese-evaluations');
+        ajoute('\uE00F', 'Registre d’appel', 'registre-appel');
+        ajoute('\uE017', 'Relevé mensuel', 'releve-mensuel');
+        ajoute('\uE018', 'Présence du personnel', 'presences-personnel');
+        ajoute('\uE00D', 'Documents', 'documents');
       } else {
-        ajoute('🏫', 'Écoles', 'gestion-ecoles');
+        ajoute('\uE022', 'Écoles', 'gestion-ecoles');
         if (u.role !== 'CONSEILLER_PEDAGOGIQUE') {
-          ajoute('📥', 'Importer des écoles', 'import-ecoles');
-          ajoute('🔑', 'Comptes d’accès', 'comptes');
+          ajoute('\uE00B', 'Importer des écoles', 'import-ecoles');
+          ajoute('\uE032', 'Comptes d’accès', 'comptes');
         }
-        ajoute('⬇️', 'Téléchargements', 'telechargements');
-        ajoute('📊', 'Statistiques', 'analytics');
-        ajoute('📈', 'Synthèse officielle', 'synthese-officielle');
-        ajoute('🏟️', 'Examen blanc en centre', 'cep-blanc-centre');
-        ajoute('🧮', 'Recensement', 'recensement');
-        ajoute('🔔', 'Alertes', 'alertes');
-        ajoute('🧭', 'Visites', 'visites');
-        ajoute('⏳', 'Retraites', 'retraite');
-        ajoute('🗂️', 'Rapports', 'rapports');
-        ajoute('🔁', 'Clôture d’année', 'cloture');
+        ajoute('\uE009', 'Téléchargements', 'telechargements');
+        ajoute('\uE015', 'Statistiques', 'analytics');
+        ajoute('\uE016', 'Synthèse officielle', 'synthese-officielle');
+        ajoute('\uE027', 'Examen blanc en centre', 'cep-blanc-centre');
+        ajoute('\uE040', 'Recensement', 'recensement');
+        ajoute('\uE055', 'Alertes', 'alertes');
+        ajoute('\uE042', 'Visites', 'visites');
+        ajoute('\uE019', 'Retraites', 'retraite');
+        ajoute('\uE011', 'Rapports', 'rapports');
+        ajoute('\uE058', 'Clôture d’année', 'cloture');
       }
-      if (['PARENT', 'ELEVE'].indexOf(u.role) < 0) ajoute('📚', 'Documents officiels', 'documents-officiels');
+      if (['PARENT', 'ELEVE'].indexOf(u.role) < 0) ajoute('\uE031', 'Documents officiels', 'documents-officiels');
       zone.appendChild(U.carte('Accès rapide', el('div', { class: 'raccourcis' }, liens)));
 
       /* Points de vigilance */
@@ -280,7 +280,7 @@
           else { routePrincipale = 'entite/' + m.entites[0]; entitesRestantes = m.entites.slice(1); }
 
           const secondaires = [];
-          (m.annexes || []).forEach(([route, libelle, icone]) => secondaires.push({ route, libelle, icone: icone || '🔗' }));
+          (m.annexes || []).forEach(([route, libelle, icone]) => secondaires.push({ route, libelle, icone: icone || '\uE053' }));
           entitesRestantes.forEach(e => secondaires.push({ route: 'entite/' + e, libelle: EG.SCHEMA[e].label, icone: EG.SCHEMA[e].icone }));
 
           const conteneur = el('div', { class: 'tuile-conteneur' }, [
@@ -390,7 +390,7 @@
     if (!lecture) actions.push(el('button', {
       class: 'btn btn-primaire', text: 'Ajouter', onclick: () => editer(nom, null, rafraichir)
     }));
-    actions.push(el('button', { class: 'btn btn-fantome', text: '📊 Exporter en Excel', onclick: () => exporterExcel(nom) }));
+    actions.push(el('button', { class: 'btn btn-fantome', text: '\uE015 Exporter en Excel', onclick: () => exporterExcel(nom) }));
     actions.push(el('button', { class: 'btn btn-fantome', text: 'Exporter en CSV', onclick: () => exporterCSV(nom) }));
 
     racine.appendChild(entete(def.label, def.champs.length + ' champs', actions));
@@ -691,7 +691,7 @@
     const filtres = el('div', { class: 'barre-filtres' });
     const zone = el('div');
     racine.appendChild(filtres); racine.appendChild(zone);
-    if (EG.EducMasterModeles) { const d = el('details', { class: 'educmaster-plie' }, [el('summary', { text: '📗 Notes au format EDUCMaster : exporter / importer' })]); d.addEventListener('toggle', () => { if (d.open && d.children.length === 1) d.appendChild(EG.EducMasterModeles.bloc()); }); racine.appendChild(d); }
+    if (EG.EducMasterModeles) { const d = el('details', { class: 'educmaster-plie' }, [el('summary', { text: '\uE030 Notes au format EDUCMaster : exporter / importer' })]); d.addEventListener('toggle', () => { if (d.open && d.children.length === 1) d.appendChild(EG.EducMasterModeles.bloc()); }); racine.appendChild(d); }
 
     let evalId = '';
     charger('evaluations', { annee_scolaire_id: anneeCourante() }).then(evals => {
@@ -804,7 +804,7 @@
           }
           /* Résultats de l'évaluation au format SCOLARIS / GESCOL : notes, moyenne, maîtrises, rang, puis réussite par matière
              et par sexe ; signatures, cachet et QR de vérification. */
-          actions.push(el('button', { class: 'btn btn-fantome', text: '🖨️ Résultats (signés, avec QR)', onclick: () => {
+          actions.push(el('button', { class: 'btn btn-fantome', text: '\uE008 Résultats (signés, avec QR)', onclick: () => {
             const D = EG.DocsSco;
             const res = ins.map(i => {
               const ls = cols.map(c => { const v = champs[cle(i.id, c.matiere.id)].value; return { note: v === '' ? null : Number(v), coefficient: c.coefficient }; });
@@ -2120,7 +2120,7 @@
     zone.appendChild(U.carte('Éditer un document', el('div', { class: 'raccourcis' },
       modeles.map(m => el('button', {
         class: 'raccourci', onclick: () => editerModele(m.code)
-      }, [el('span', { class: 'raccourci-icone', text: '📄' }), el('span', { text: m.nom })])))));
+      }, [el('span', { class: 'raccourci-icone', text: '\uE00D' }), el('span', { text: m.nom })])))));
 
     charger('documents').then(docs => {
       zone.appendChild(U.carte('Documents édités', U.tableau([
@@ -2336,13 +2336,13 @@
       zone.appendChild(U.carte('Modèles disponibles', el('div', { class: 'raccourcis' },
         modeles.map(m => el('button', {
           class: 'raccourci', title: m.description, onclick: () => produire(m)
-        }, [el('span', { class: 'raccourci-icone', text: '🗂️' }), el('span', { text: m.nom })])))));
+        }, [el('span', { class: 'raccourci-icone', text: '\uE011' }), el('span', { text: m.nom })])))));
 
       zone.appendChild(U.carte('Exporter les données brutes', el('div', { class: 'raccourcis' },
         ['eleves', 'inscriptions_eleves', 'presences', 'notes', 'personnels', 'infrastructures'].map(e =>
           el('button', {
             class: 'raccourci', onclick: () => exporterExcel(e)
-          }, [el('span', { class: 'raccourci-icone', text: '📊' }), el('span', { text: EG.SCHEMA[e].label + ' (Excel)' })])))));
+          }, [el('span', { class: 'raccourci-icone', text: '\uE015' }), el('span', { text: EG.SCHEMA[e].label + ' (Excel)' })])))));
     });
 
     function produire(m) {

@@ -105,14 +105,14 @@
           el('dl', { class: 'fiche' }, l.map(([k, v]) => el('div', { class: 'fiche-ligne' }, [el('dt', { text: k }), el('dd', { text: val(v) })]))))));
 
         const actions = [];
-        if (peutEditer()) actions.push(el('button', { class: 'btn btn-primaire', text: '✏️ Modifier', onclick: () => E.editer('ecoles', ec, rafraichir_) }));
-        actions.push(el('button', { class: 'btn btn-fantome', text: '🖨️ Imprimer', onclick: () => sortie(ec, lignes, effectif, 'imprimer') }));
-        actions.push(el('button', { class: 'btn btn-fantome', text: '📄 Word', onclick: () => sortie(ec, lignes, effectif, 'word') }));
-        actions.push(el('button', { class: 'btn btn-fantome', text: '📤 Excel', onclick: () => S().excel('carte-identite-' + S().slug(ec.nom).slice(0, 30),
+        if (peutEditer()) actions.push(el('button', { class: 'btn btn-primaire', text: '\uE006 Modifier', onclick: () => E.editer('ecoles', ec, rafraichir_) }));
+        actions.push(el('button', { class: 'btn btn-fantome', text: '\uE008 Imprimer', onclick: () => sortie(ec, lignes, effectif, 'imprimer') }));
+        actions.push(el('button', { class: 'btn btn-fantome', text: '\uE00D Word', onclick: () => sortie(ec, lignes, effectif, 'word') }));
+        actions.push(el('button', { class: 'btn btn-fantome', text: '\uE00C Excel', onclick: () => S().excel('carte-identite-' + S().slug(ec.nom).slice(0, 30),
           [{ nom: 'Carte d’identité', lignes: [['Rubrique', 'Donnée', 'Valeur']].concat(lignes.reduce((s, [t, l]) => s.concat(l.map(([k, v]) => [t, k, v === null || v === undefined ? '' : v])), [])) }]) }));
-        if (EG.peutVoirModule('fiche-cep')) actions.push(el('button', { class: 'btn btn-fantome', text: '🎓 Fiche d’inscription au CEP', onclick: () => Routeur.aller('fiche-cep/' + ec.id) }));
-        if (EG.peutVoirModule('carte-eleve')) actions.push(el('button', { class: 'btn btn-fantome', text: '🪪 Cartes d’identité des élèves', onclick: () => Routeur.aller('carte-eleve/' + ec.id) }));
-        actions.push(el('button', { class: 'btn btn-fantome', text: '🖋️ Cachet de l’école', onclick: () => Routeur.aller('cachet/ecole/' + ec.id) }));
+        if (EG.peutVoirModule('fiche-cep')) actions.push(el('button', { class: 'btn btn-fantome', text: '\uE020 Fiche d’inscription au CEP', onclick: () => Routeur.aller('fiche-cep/' + ec.id) }));
+        if (EG.peutVoirModule('carte-eleve')) actions.push(el('button', { class: 'btn btn-fantome', text: '\uE02B Cartes d’identité des élèves', onclick: () => Routeur.aller('carte-eleve/' + ec.id) }));
+        actions.push(el('button', { class: 'btn btn-fantome', text: '\uE006 Cachet de l’école', onclick: () => Routeur.aller('cachet/ecole/' + ec.id) }));
         zone.appendChild(el('div', { class: 'barre-actions' }, actions));
 
         function rafraichir_() { Routeur.aller('carte-ecole/' + ec.id); }
@@ -159,11 +159,11 @@
 
         const actions = [];
         if (candidats.length) actions.push(el('button', {
-          class: 'btn btn-primaire', text: '🖨️ Éditer les ' + candidats.length + ' fiches', onclick: () => EG.editerFichesCEP(null, ecole.id, 'toutes')
+          class: 'btn btn-primaire', text: '\uE008 Éditer les ' + candidats.length + ' fiches', onclick: () => EG.editerFichesCEP(null, ecole.id, 'toutes')
         }));
-        actions.push(el('button', { class: 'btn btn-fantome', text: '📝 Fiche vierge (à remplir à la main)', onclick: () => vierge(ecole) }));
-        if (candidats.length) actions.push(el('button', { class: 'btn btn-fantome', text: '📤 Liste des candidats (Excel)', onclick: () => exporter(ecole, candidats, parIns) }));
-        actions.push(el('button', { class: 'btn btn-fantome', text: '🪪 Carte d’identité de l’école', onclick: () => Routeur.aller('carte-ecole/' + ecole.id) }));
+        actions.push(el('button', { class: 'btn btn-fantome', text: '\uE00E Fiche vierge (à remplir à la main)', onclick: () => vierge(ecole) }));
+        if (candidats.length) actions.push(el('button', { class: 'btn btn-fantome', text: '\uE00C Liste des candidats (Excel)', onclick: () => exporter(ecole, candidats, parIns) }));
+        actions.push(el('button', { class: 'btn btn-fantome', text: '\uE02B Carte d’identité de l’école', onclick: () => Routeur.aller('carte-ecole/' + ecole.id) }));
         zone.appendChild(el('div', { class: 'barre-actions' }, actions));
 
         if (!candidats.length) {

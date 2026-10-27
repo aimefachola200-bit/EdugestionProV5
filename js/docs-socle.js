@@ -71,7 +71,7 @@
     }
     arc(haut, true); arc(bas, false);
     [0, 180].forEach(a => parts.push('<text x="' + (r + rt * Math.cos(rad(a))).toFixed(2) + '" y="' + r + '" font-size="' + (fs * 1.1).toFixed(2)
-      + '" text-anchor="middle" dominant-baseline="central">★</text>'));
+      + '" text-anchor="middle" dominant-baseline="central">\uE05D</text>'));
     /* Texte central : coupé en lignes équilibrées s'il est long, puis taille ajustée pour tenir dans le cercle intérieur. */
     let lignes = centre.split('|').map(x => x.trim()).filter(Boolean);
     if (lignes.length === 1 && lignes[0].length > 14) {

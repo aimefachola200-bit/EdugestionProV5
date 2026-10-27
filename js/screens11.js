@@ -87,8 +87,8 @@
     racine.appendChild(entete('Écoles par circonscription',
       'Les écoles de chaque circonscription scolaire et zone pédagogique : ajout, modification, suppression.',
       ROLES_GESTION.indexOf(user.role) >= 0 && EG.peutEcrire() ? [
-        el('button', { class: 'btn btn-primaire', text: '📥 Importer les écoles d’une circonscription', onclick: () => Routeur.aller('import-ecoles') }),
-        EG.peutVoirModule('import-export') ? el('button', { class: 'btn btn-fantome', text: '🗃️ Jeux de données (Plateau)', onclick: () => Routeur.aller('import-export/jeux' + (params && params.cs ? '?cs=' + params.cs : '')) }) : null
+        el('button', { class: 'btn btn-primaire', text: '\uE00B Importer les écoles d’une circonscription', onclick: () => Routeur.aller('import-ecoles') }),
+        EG.peutVoirModule('import-export') ? el('button', { class: 'btn btn-fantome', text: '\uE011 Jeux de données (Plateau)', onclick: () => Routeur.aller('import-export/jeux' + (params && params.cs ? '?cs=' + params.cs : '')) }) : null
       ] : null));
 
     if (ROLES_ACCES.indexOf(user.role) < 0) {
@@ -344,7 +344,7 @@
           el('button', { class: 'btn btn-primaire btn-petit', text: '＋ École',
             onclick: () => ajouterEcole({ departement_id: (ancetre(D.index, cs.id, 'DEPARTEMENT') || {}).id, territoire_id: cs.id }) }),
           el('button', { class: 'btn btn-fantome btn-petit', text: '＋ Zone', onclick: () => ajouterZone(cs) }),
-          el('button', { class: 'btn btn-fantome btn-petit', text: '🏘️ Unités pédagogiques', onclick: () => Routeur.aller('unites-pedagogiques/' + cs.id) }),
+          el('button', { class: 'btn btn-fantome btn-petit', text: '\uE025 Unités pédagogiques', onclick: () => Routeur.aller('unites-pedagogiques/' + cs.id) }),
           el('button', { class: 'btn btn-fantome btn-petit', text: 'Modifier la circonscription',
             onclick: () => E.editer('territoires', cs, recharger) })
         ]));

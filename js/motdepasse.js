@@ -1,6 +1,6 @@
 /* ÉduGestion Pro Master — œil sur les mots de passe, mot de passe oublié, question de secours, bouton « ← Retour ».
 
-   · Œil 👁 : chaque champ de mot de passe (connexion, nouveau mot de passe, formulaires) reçoit un bouton
+   · Œil \uE043 : chaque champ de mot de passe (connexion, nouveau mot de passe, formulaires) reçoit un bouton
      « afficher / masquer ».
    · « Mot de passe oublié ? » (écran de connexion) :
        1. question de secours (définie dans Mon compte) : la bonne réponse permet de choisir un nouveau mot de passe ;
@@ -78,7 +78,7 @@
   /* ---------------- Mot de passe oublié ---------------- */
   function dialogueOubli(identInitial) {
     const corps = el('div', { class: 'oubli' });
-    const fermer = U.modal('🔑 Mot de passe oublié', corps, f => [el('button', { class: 'btn btn-fantome', text: 'Fermer', onclick: f })]);
+    const fermer = U.modal('\uE032 Mot de passe oublié', corps, f => [el('button', { class: 'btn btn-fantome', text: 'Fermer', onclick: f })]);
     function etape1() {
       const [bloc, id] = champ('oubli-id', 'Identifiant', 'text', { autocomplete: 'username', value: identInitial || '' });
       corps.textContent = '';
@@ -127,7 +127,7 @@
             });
           } }));
         const msg = encodeURIComponent('Bonjour, j’ai oublié mon mot de passe ÉduGestion Pro Master (identifiant : ' + u.identifiant + '). Merci de m’aider à le réinitialiser.');
-        corps.append(el('h3', { text: 'Ou demander de l’aide' }), el('a', { class: 'btn pleine', href: 'https://wa.me/2290196510333?text=' + msg, target: '_blank', rel: 'noopener', text: '💬 Demander par WhatsApp' }));
+        corps.append(el('h3', { text: 'Ou demander de l’aide' }), el('a', { class: 'btn pleine', href: 'https://wa.me/2290196510333?text=' + msg, target: '_blank', rel: 'noopener', text: '\uE035 Demander par WhatsApp' }));
       });
     }
     function nouveau(u) {
@@ -166,7 +166,7 @@
     const autre = el('input', { type: 'text', id: 'qs-autre', placeholder: 'Votre question' });
     if (actuelle && QUESTIONS.indexOf(actuelle) < 0) { sel.value = 'Autre question (à écrire)…'; autre.value = actuelle; } else if (actuelle) sel.value = actuelle;
     const [b1, rep] = champ('qs-r', 'Réponse (les majuscules et les accents ne comptent pas)', 'text', { autocomplete: 'off' }), [b2, mdp] = champ('qs-m', 'Mot de passe actuel', 'password');
-    U.modal('🔑 Ma question de secours', el('div', {}, [
+    U.modal('\uE032 Ma question de secours', el('div', {}, [
       el('p', { class: 'muet petit', text: 'En cas d’oubli du mot de passe, la bonne réponse permet d’en choisir un nouveau depuis l’écran de connexion (« Mot de passe oublié ? »).' }),
       el('div', { class: 'champ' }, [el('label', { for: 'qs-q', text: 'Question' }), sel]), el('div', { class: 'champ' }, [el('label', { for: 'qs-autre', text: 'Autre question (si choisie)' }), autre]), b1, b2
     ]), f => [el('button', { class: 'btn btn-fantome', text: 'Annuler', onclick: f }), el('button', { class: 'btn btn-primaire', text: 'Enregistrer', onclick: () => {

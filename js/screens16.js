@@ -116,11 +116,11 @@
 
       if (gerer) {
         zoneActions.appendChild(el('button', { class: 'btn btn-primaire', text: '＋ Contact', onclick: () => formulaireContact(cs, null) }));
-        zoneActions.appendChild(el('button', { class: 'btn btn-fantome', text: '📥 Importer une liste', onclick: () => importer(cs) }));
+        zoneActions.appendChild(el('button', { class: 'btn btn-fantome', text: '\uE00B Importer une liste', onclick: () => importer(cs) }));
       }
-      zoneActions.appendChild(el('button', { class: 'btn btn-fantome', text: '📤 Excel', onclick: () => exporter(cs) }));
-      zoneActions.appendChild(el('button', { class: 'btn btn-fantome', text: '🖨️ Imprimer', onclick: () => sortie(cs, 'imprimer') }));
-      zoneActions.appendChild(el('button', { class: 'btn btn-fantome', text: '📄 Word', onclick: () => sortie(cs, 'word') }));
+      zoneActions.appendChild(el('button', { class: 'btn btn-fantome', text: '\uE00C Excel', onclick: () => exporter(cs) }));
+      zoneActions.appendChild(el('button', { class: 'btn btn-fantome', text: '\uE008 Imprimer', onclick: () => sortie(cs, 'imprimer') }));
+      zoneActions.appendChild(el('button', { class: 'btn btn-fantome', text: '\uE00D Word', onclick: () => sortie(cs, 'word') }));
 
       zoneFiltres.appendChild(U.selecteur('Commune', communes.map(c => ({ value: c, label: c })), etat.commune,
         v => { etat.commune = v; dessiner(); }, { libelleVide: 'Toutes les communes' }));
@@ -160,14 +160,14 @@
 
     function lienTel(t, classe) {
       const n = chiffres(t);
-      return n ? el('a', { href: 'tel:' + (n.indexOf('229') === 0 && n.length > 10 ? '+' + n : '+229' + n), class: classe || '', text: '📞 ' + t }) : null;
+      return n ? el('a', { href: 'tel:' + (n.indexOf('229') === 0 && n.length > 10 ? '+' + n : '+229' + n), class: classe || '', text: '\uE045 ' + t }) : null;
     }
 
     function ligne(cs, en) {
       const infos = [en.structure, en.code].filter(Boolean).join(' · ');
       const liens = [lienTel(en.telephone), en.telephone2 ? lienTel(en.telephone2) : null,
-        en.whatsapp && chiffres(en.telephone) ? el('a', { href: 'https://wa.me/' + numeroWhatsApp(en.telephone), target: '_blank', rel: 'noopener', text: '💬 WhatsApp' }) : null,
-        en.email ? el('a', { href: 'mailto:' + en.email, text: '✉️ ' + en.email }) : null].filter(Boolean);
+        en.whatsapp && chiffres(en.telephone) ? el('a', { href: 'https://wa.me/' + numeroWhatsApp(en.telephone), target: '_blank', rel: 'noopener', text: '\uE035 WhatsApp' }) : null,
+        en.email ? el('a', { href: 'mailto:' + en.email, text: '\uE04F ' + en.email }) : null].filter(Boolean);
       const manque = en.source === 'ECOLE' && !en.nom;
       const actions = [];
       if (en.source === 'ECOLE') {
@@ -264,7 +264,7 @@
       });
       U.modal('Importer des contacts — ' + cs.nom, el('div', { class: 'formulaire' }, [
         el('div', { class: 'barre-actions' }, el('button', {
-          class: 'btn btn-fantome btn-petit', text: '⬇️ Modèle Excel', onclick: () => S().excel('modele-repertoire', [
+          class: 'btn btn-fantome btn-petit', text: '\uE009 Modèle Excel', onclick: () => S().excel('modele-repertoire', [
             { nom: 'Contacts', lignes: [ENTETES] },
             { nom: 'Aide', lignes: [['Une personne par ligne. Seul le nom est obligatoire.'],
               ['Fonction : ' + FONCTIONS().map(U.libelle).join(', ') + '.'],

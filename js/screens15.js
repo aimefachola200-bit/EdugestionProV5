@@ -230,10 +230,10 @@
       const actions = [];
       if (gerer) {
         actions.push(el('button', { class: 'btn btn-primaire', text: '＋ Unité pédagogique', onclick: () => formulaireUP(cs, null) }));
-        actions.push(el('button', { class: 'btn btn-fantome', text: '📥 Importer une liste', onclick: () => importerListe(cs) }));
+        actions.push(el('button', { class: 'btn btn-fantome', text: '\uE00B Importer une liste', onclick: () => importerListe(cs) }));
       }
       actions.push(el('button', {
-        class: 'btn btn-fantome', text: '📤 Exporter (Excel)',
+        class: 'btn btn-fantome', text: '\uE00C Exporter (Excel)',
         onclick: () => S().excel('unites-pedagogiques-' + S().slug(cs.nom).slice(0, 30), [{
           nom: 'Unités pédagogiques',
           lignes: [['Circonscription', 'Zone pédagogique', 'Unité pédagogique', 'Code', 'Responsable', 'Téléphone', 'Nombre d’écoles', 'Écoles']]
@@ -510,23 +510,23 @@
       ])));
 
       const tuiles = [
-        { m: 'reseau', i: '🏫', t: 'Écoles', d: pl(ecoles.length, 'école') + ' · ' + pl(zones.length, 'zone'), r: 'gestion-ecoles?cs=' + cs.id },
-        { m: 'unites-pedagogiques', i: '🏘️', t: 'Unités pédagogiques', d: pl(ups.length, 'unité'), r: 'unites-pedagogiques/' + cs.id },
-        { m: 'stats-cs', i: '📈', t: 'Effectifs et personnel', d: 'Classes, personnel FE / ACDPE / ACDPCTD, élèves par cours', r: 'stats-cs/' + cs.id },
-        { m: 'repertoire', i: '📇', t: 'Répertoire et contacts', d: pl(contacts.length, 'contact') + ' + directeurs des écoles', r: 'repertoire/' + cs.id },
-        { m: 'calendrier-scolaire', i: '🗓️', t: 'Calendrier scolaire', d: pl(evenements.length, 'événement') + ' à venir', r: 'calendrier-scolaire/' + cs.id },
-        { m: 'reseau', i: '📥', t: 'Importer des écoles', d: 'Créer d’un coup les écoles de la circonscription', r: 'import-ecoles?cs=' + cs.id, gerer: true },
-        { m: 'comptes', i: '🔑', t: 'Comptes d’accès', d: 'Écoles, enseignants, parents, élèves', r: 'comptes' },
-        { m: 'classes-roles', i: '🧑‍🏫', t: 'Classes et rôles de gestion', d: 'Titulaires et gestion collégiale', r: 'classes-roles' },
-        { m: 'carte-eleve', i: '🪪', t: 'Carte d’identité de l’élève', d: 'Cartes des élèves, par école ou par classe', r: 'carte-eleve' },
-        { m: 'carte-ecole', i: '🏫', t: 'Carte d’identité d’une école', d: 'Fiche complète de chaque école', r: 'carte-ecole' },
-        { m: 'fiche-cep', i: '🎓', t: 'Fiches d’inscription au CEP', d: 'Candidats de CM2 par école', r: 'fiche-cep' },
-        { m: 'telechargements', i: '⬇️', t: 'Téléchargements', d: 'Fiches de recensement, fiches et certificats', r: 'telechargements' },
-        { m: 'recensement', i: '🧮', t: 'Recensement', d: 'Fiches des écoles de la circonscription', r: 'recensement' },
-        { m: 'import-export', i: '🗃️', t: 'Jeux de données', d: 'Écoles et statistiques prêtes à installer', r: 'import-export/jeux?cs=' + cs.id, gerer: true },
-        { m: 'import-export', i: '👥', t: 'Personnel (FE, ACDPE, ACDPCTD)', d: 'Importer les fichiers du ministère', r: 'import-export/personnel?cs=' + cs.id, gerer: true },
-        { m: 'import-export', i: '📦', t: 'Import et export', d: 'Exporter ou importer des données', r: 'import-export?cs=' + cs.id },
-        { m: 'cachets', i: '🖋️', t: 'Cachet de la circonscription', d: 'Le cachet de la CS sur ses documents', r: 'cachet/territoire/' + cs.id, gerer: true }
+        { m: 'reseau', i: '\uE022', t: 'Écoles', d: pl(ecoles.length, 'école') + ' · ' + pl(zones.length, 'zone'), r: 'gestion-ecoles?cs=' + cs.id },
+        { m: 'unites-pedagogiques', i: '\uE025', t: 'Unités pédagogiques', d: pl(ups.length, 'unité'), r: 'unites-pedagogiques/' + cs.id },
+        { m: 'stats-cs', i: '\uE016', t: 'Effectifs et personnel', d: 'Classes, personnel FE / ACDPE / ACDPCTD, élèves par cours', r: 'stats-cs/' + cs.id },
+        { m: 'repertoire', i: '\uE012', t: 'Répertoire et contacts', d: pl(contacts.length, 'contact') + ' + directeurs des écoles', r: 'repertoire/' + cs.id },
+        { m: 'calendrier-scolaire', i: '\uE017', t: 'Calendrier scolaire', d: pl(evenements.length, 'événement') + ' à venir', r: 'calendrier-scolaire/' + cs.id },
+        { m: 'reseau', i: '\uE00B', t: 'Importer des écoles', d: 'Créer d’un coup les écoles de la circonscription', r: 'import-ecoles?cs=' + cs.id, gerer: true },
+        { m: 'comptes', i: '\uE032', t: 'Comptes d’accès', d: 'Écoles, enseignants, parents, élèves', r: 'comptes' },
+        { m: 'classes-roles', i: '\uE01E', t: 'Classes et rôles de gestion', d: 'Titulaires et gestion collégiale', r: 'classes-roles' },
+        { m: 'carte-eleve', i: '\uE02B', t: 'Carte d’identité de l’élève', d: 'Cartes des élèves, par école ou par classe', r: 'carte-eleve' },
+        { m: 'carte-ecole', i: '\uE022', t: 'Carte d’identité d’une école', d: 'Fiche complète de chaque école', r: 'carte-ecole' },
+        { m: 'fiche-cep', i: '\uE020', t: 'Fiches d’inscription au CEP', d: 'Candidats de CM2 par école', r: 'fiche-cep' },
+        { m: 'telechargements', i: '\uE009', t: 'Téléchargements', d: 'Fiches de recensement, fiches et certificats', r: 'telechargements' },
+        { m: 'recensement', i: '\uE040', t: 'Recensement', d: 'Fiches des écoles de la circonscription', r: 'recensement' },
+        { m: 'import-export', i: '\uE011', t: 'Jeux de données', d: 'Écoles et statistiques prêtes à installer', r: 'import-export/jeux?cs=' + cs.id, gerer: true },
+        { m: 'import-export', i: '\uE01C', t: 'Personnel (FE, ACDPE, ACDPCTD)', d: 'Importer les fichiers du ministère', r: 'import-export/personnel?cs=' + cs.id, gerer: true },
+        { m: 'import-export', i: '\uE06E', t: 'Import et export', d: 'Exporter ou importer des données', r: 'import-export?cs=' + cs.id },
+        { m: 'cachets', i: '\uE006', t: 'Cachet de la circonscription', d: 'Le cachet de la CS sur ses documents', r: 'cachet/territoire/' + cs.id, gerer: true }
       ].filter(t => EG.peutVoirModule(t.m) && (!t.gerer || peutGerer()));
       zoneCorps.appendChild(el('div', { class: 'grille grille-departements' }, tuiles.map(t => el('button', {
         class: 'carte carte-lien', onclick: () => Routeur.aller(t.r)

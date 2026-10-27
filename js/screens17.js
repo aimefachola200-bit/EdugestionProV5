@@ -67,7 +67,7 @@
     const gerer = peutGerer();
     racine.appendChild(E.entete('Calendrier scolaire',
       'Rentrée, vacances, jours fériés, examens, réunions et animations pédagogiques de la circonscription.',
-      [el('button', { class: 'btn btn-fantome', text: '📆 Jours ouvrables (assiduité)', onclick: () => Routeur.aller('calendrier') })]));
+      [el('button', { class: 'btn btn-fantome', text: '\uE017 Jours ouvrables (assiduité)', onclick: () => Routeur.aller('calendrier') })]));
     const zoneCs = el('div'), zoneActions = el('div', { class: 'barre-actions' }), zoneFiltres = el('div', { class: 'barre-filtres' }), zoneCorps = el('div');
     racine.appendChild(zoneCs); racine.appendChild(zoneActions); racine.appendChild(zoneFiltres); racine.appendChild(zoneCorps);
 
@@ -97,14 +97,14 @@
 
       if (gerer) {
         zoneActions.appendChild(el('button', { class: 'btn btn-primaire', text: '＋ Événement', onclick: () => formulaire(cs, null, {}) }));
-        zoneActions.appendChild(el('button', { class: 'btn btn-fantome', text: '🇧🇯 Ajouter les jours fériés', onclick: () => ajouterFeries(cs) }));
+        zoneActions.appendChild(el('button', { class: 'btn btn-fantome', text: '\uE06C Ajouter les jours fériés', onclick: () => ajouterFeries(cs) }));
       }
-      zoneActions.appendChild(el('button', { class: 'btn btn-fantome', text: '📤 Excel', onclick: () => exporterExcel(cs) }));
-      zoneActions.appendChild(el('button', { class: 'btn btn-fantome', text: '📱 Agenda (.ics)', onclick: () => exporterIcs(cs) }));
-      zoneActions.appendChild(el('button', { class: 'btn btn-fantome', text: '🖨️ Imprimer', onclick: () => sortie(cs, 'imprimer') }));
-      zoneActions.appendChild(el('button', { class: 'btn btn-fantome', text: '📄 Word', onclick: () => sortie(cs, 'word') }));
+      zoneActions.appendChild(el('button', { class: 'btn btn-fantome', text: '\uE00C Excel', onclick: () => exporterExcel(cs) }));
+      zoneActions.appendChild(el('button', { class: 'btn btn-fantome', text: '\uE045 Agenda (.ics)', onclick: () => exporterIcs(cs) }));
+      zoneActions.appendChild(el('button', { class: 'btn btn-fantome', text: '\uE008 Imprimer', onclick: () => sortie(cs, 'imprimer') }));
+      zoneActions.appendChild(el('button', { class: 'btn btn-fantome', text: '\uE00D Word', onclick: () => sortie(cs, 'word') }));
 
-      zoneFiltres.appendChild(E.barreOnglets([['mois', '🗓️ Mois'], ['agenda', '📋 Agenda de l’année']], etat.vue, v => { etat.vue = v; dessiner(); }));
+      zoneFiltres.appendChild(E.barreOnglets([['mois', '\uE017 Mois'], ['agenda', '\uE00F Agenda de l’année']], etat.vue, v => { etat.vue = v; dessiner(); }));
       const types = EG.SCHEMA.evenements_calendrier.champs.filter(c => c.n === 'type')[0].o;
       zoneFiltres.appendChild(U.selecteur('Type', types.map(t => ({ value: t, label: U.libelle(t) })), etat.type,
         v => { etat.type = v; dessiner(); }, { libelleVide: 'Tous les types' }));
@@ -133,9 +133,9 @@
     function vueMois(cs, evs) {
       const [a, m] = etat.mois.split('-').map(Number), m0 = m - 1;
       zoneCorps.appendChild(el('div', { class: 'cal-nav' }, [
-        el('button', { class: 'btn btn-fantome btn-petit', text: '◀', 'aria-label': 'Mois précédent', onclick: () => decaler(-1) }),
+        el('button', { class: 'btn btn-fantome btn-petit', text: '\uE038', 'aria-label': 'Mois précédent', onclick: () => decaler(-1) }),
         el('strong', { class: 'cal-mois', text: MOIS[m0].replace(/^./, c => c.toUpperCase()) + ' ' + a }),
-        el('button', { class: 'btn btn-fantome btn-petit', text: '▶', 'aria-label': 'Mois suivant', onclick: () => decaler(1) }),
+        el('button', { class: 'btn btn-fantome btn-petit', text: '\uE039', 'aria-label': 'Mois suivant', onclick: () => decaler(1) }),
         el('button', { class: 'btn btn-fantome btn-petit', text: 'Aujourd’hui', onclick: () => { etat.mois = t0.slice(0, 7); dessiner(); } })
       ]));
       const grille = el('div', { class: 'cal-grille' });

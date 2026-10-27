@@ -16,32 +16,32 @@
 
   /* [écran de MEMP-CP, icône, libellé, rôles (facultatif)] */
   const RUBRIQUES = [
-    ['accueil', '🏠', 'Tableau de bord MEMP-CP'],
-    ['espace', '🧑‍🏫', 'Espace CP de zone'],
-    ['synocp', '📋', 'Tableau synoptique du CP'],
-    ['recensement', '🗂️', 'Fiches de recensement annuel (EP, EM) — modèle GESCOL'],
-    ['fiches', '📝', 'Fiches de recensement, rentrée, fin d’année'],
-    ['saisie', '✍️', 'Saisie manuelle (sans Excel) : fiches, personnel, directeurs'],
-    ['personnel', '👩‍🏫', 'Personnel enseignant'],
-    ['carriere', '📈', 'Gestion de carrière (anciennetés, retraite)'],
-    ['effectifs', '👧', 'Effectifs : âges, sexe, cours, maternelles'],
-    ['infra', '🏗️', 'Infrastructures et mobilier'],
-    ['ecolesstruct', '🏫', 'Écoles : salles, structure, équipements'],
-    ['cep', '🎓', 'CEP : candidats et réussite'],
-    ['rapports', '📊', 'Rapports de fin d’année'],
-    ['synoptique', '🗂️', 'Synthèse des fiches (consolidation)'],
-    ['bilans', '📈', 'Bilans trimestriel et annuel'],
-    ['activites', '📅', 'Activités pédagogiques'],
-    ['themes', '🎯', 'Thèmes de l’année'],
-    ['planif', '🗓️', 'Planification annuelle EM et EP'],
-    ['emploi', '🕘', 'Emplois du temps officiels'],
-    ['calendrier', '📆', 'Calendrier scolaire officiel'],
-    ['reglement', '⚖️', 'Règlement intérieur'],
-    ['documents', '📄', 'Documents officiels'],
-    ['whatsapp', '💬', 'Messages aux directeurs (WhatsApp)'],
-    ['identite', '✍️', 'Signature, cachets rond et rectangulaire'],
-    ['verifier', '✅', 'Vérifier un document (QR)'],
-    ['transmission', '🔄', 'Transmission et sauvegarde']
+    ['accueil', '\uE000', 'Tableau de bord MEMP-CP'],
+    ['espace', '\uE01E', 'Espace CP de zone'],
+    ['synocp', '\uE00F', 'Tableau synoptique du CP'],
+    ['recensement', '\uE011', 'Fiches de recensement annuel (EP, EM) — modèle GESCOL'],
+    ['fiches', '\uE00E', 'Fiches de recensement, rentrée, fin d’année'],
+    ['saisie', '\uE029', 'Saisie manuelle (sans Excel) : fiches, personnel, directeurs'],
+    ['personnel', '\uE01E', 'Personnel enseignant'],
+    ['carriere', '\uE016', 'Gestion de carrière (anciennetés, retraite)'],
+    ['effectifs', '\uE01F', 'Effectifs : âges, sexe, cours, maternelles'],
+    ['infra', '\uE026', 'Infrastructures et mobilier'],
+    ['ecolesstruct', '\uE022', 'Écoles : salles, structure, équipements'],
+    ['cep', '\uE020', 'CEP : candidats et réussite'],
+    ['rapports', '\uE015', 'Rapports de fin d’année'],
+    ['synoptique', '\uE011', 'Synthèse des fiches (consolidation)'],
+    ['bilans', '\uE016', 'Bilans trimestriel et annuel'],
+    ['activites', '\uE017', 'Activités pédagogiques'],
+    ['themes', '\uE02E', 'Thèmes de l’année'],
+    ['planif', '\uE017', 'Planification annuelle EM et EP'],
+    ['emploi', '\uE018', 'Emplois du temps officiels'],
+    ['calendrier', '\uE017', 'Calendrier scolaire officiel'],
+    ['reglement', '\uE03F', 'Règlement intérieur'],
+    ['documents', '\uE00D', 'Documents officiels'],
+    ['whatsapp', '\uE035', 'Messages aux directeurs (WhatsApp)'],
+    ['identite', '\uE029', 'Signature, cachets rond et rectangulaire'],
+    ['verifier', '\uE004', 'Vérifier un document (QR)'],
+    ['transmission', '\uE058', 'Transmission et sauvegarde']
   ];
 
   const autorise = () => !!(EG.session && EG.session.user && ROLES.indexOf(EG.session.user.role) >= 0 && !EG.session.ecole_id);
@@ -77,7 +77,7 @@
     const details = el('details', { class: 'menu-categorie', open: true, dataset: { cat: 'memp-cp' } });
     details.style.setProperty('--coul-cat', '#C8102E');
     details.appendChild(el('summary', {}, [
-      el('span', { class: 'menu-icone', text: '🇧🇯', 'aria-hidden': 'true' }),
+      el('span', { class: 'menu-icone', text: '\uE06C', 'aria-hidden': 'true' }),
       el('span', { class: 'menu-texte', text: 'Espace CP · CCS · DDEMP (MEMP-CP)' }),
       el('span', { class: 'menu-compte', text: String(RUBRIQUES.length) })
     ]));

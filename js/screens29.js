@@ -30,9 +30,9 @@
   const grille = (enfants, classe) => el('div', { class: 'grille ' + (classe || '') }, enfants);
 
   const ONGLETS = [
-    ['scolarite-privee/bareme', '🏷️ Barème et tranches'], ['scolarite-privee/paiements', '💵 Paiements et reçus'],
-    ['scolarite-privee/impayes', '⏰ Impayés et relances'], ['scolarite-privee/classes', '🧮 Fonds reçus par classe'],
-    ['caisse-privee/cahier', '📒 Cahier de caisse'], ['caisse-privee/bilan', '📊 Bilan financier'], ['salaires-privee/paie', '👛 Salaires']
+    ['scolarite-privee/bareme', '\uE056 Barème et tranches'], ['scolarite-privee/paiements', '\uE04E Paiements et reçus'],
+    ['scolarite-privee/impayes', '\uE01A Impayés et relances'], ['scolarite-privee/classes', '\uE040 Fonds reçus par classe'],
+    ['caisse-privee/cahier', '\uE030 Cahier de caisse'], ['caisse-privee/bilan', '\uE015 Bilan financier'], ['salaires-privee/paie', '\uE04E Salaires']
   ];
   const TRANCHES = ['INSCRIPTION', 'TRANCHE_1', 'TRANCHE_2', 'TRANCHE_3', 'RESTE'];
   const RECETTES = ['SCOLARITE', 'INSCRIPTION', 'SUBVENTION', 'DON', 'AUTRE_RECETTE'];
@@ -192,8 +192,8 @@
       { titre: '3e tranche', valeur: x => x.f ? F(x.f.tranche_3) + dateT(x.f, 3) : '—' },
       { titre: 'Total par élève', valeur: x => x.f ? el('strong', { text: F(total(x.f)) }) : el('span', { class: 'badge attention', text: 'À définir' }) },
       { titre: '', classe: 'col-etroite', valeur: x => X.ecriture ? el('span', { class: 'actions-mini' }, [
-        el('button', { class: 'btn btn-fantome btn-petit', text: x.f ? '✏️' : '＋', 'aria-label': 'Définir le barème de ' + x.n, onclick: () => E.editer('frais_scolarite', x.f || pre(x.n), X.recharger) }),
-        x.f ? el('button', { class: 'btn btn-fantome btn-petit btn-alerte', text: '🗑', 'aria-label': 'Supprimer', onclick: () => U.confirmer('Supprimer le barème', 'Le barème de ' + x.n + ' sera supprimé.', () => DB.remove('frais_scolarite', x.f.id).then(() => { EG.majSynchro(); X.recharger(); }), 'Supprimer') }) : null
+        el('button', { class: 'btn btn-fantome btn-petit', text: x.f ? '\uE006' : '＋', 'aria-label': 'Définir le barème de ' + x.n, onclick: () => E.editer('frais_scolarite', x.f || pre(x.n), X.recharger) }),
+        x.f ? el('button', { class: 'btn btn-fantome btn-petit btn-alerte', text: '\uE005', 'aria-label': 'Supprimer', onclick: () => U.confirmer('Supprimer le barème', 'Le barème de ' + x.n + ' sera supprimé.', () => DB.remove('frais_scolarite', x.f.id).then(() => { EG.majSynchro(); X.recharger(); }), 'Supprimer') }) : null
       ]) : '' }
     ], lignes, { messageVide: 'Aucune classe ni élève : ajoutez des classes (module Socle) ou définissez le barème d’un cours.' })));
     zone.appendChild(el('p', { class: 'muet petit', text: 'Les montants sont librement fixés par l’école. Les dates limites servent à repérer les retards de paiement. Une remise (fratrie, orphelin, bourse) se saisit dans l’onglet « Paiements et reçus ».' }));
@@ -297,9 +297,9 @@
     const actions = el('div', { class: 'barre-actions' });
     if (X.ecriture) {
       actions.appendChild(el('button', { class: 'btn btn-primaire', text: '＋ Enregistrer un paiement', onclick: () => modalPaiement(X) }));
-      actions.appendChild(el('button', { class: 'btn btn-fantome', text: '🎁 Accorder une remise', onclick: () => modalRemise(X) }));
+      actions.appendChild(el('button', { class: 'btn btn-fantome', text: '\uE071 Accorder une remise', onclick: () => modalRemise(X) }));
     }
-    actions.appendChild(el('button', { class: 'btn btn-fantome', text: '📤 Excel', onclick: () => {
+    actions.appendChild(el('button', { class: 'btn btn-fantome', text: '\uE00C Excel', onclick: () => {
       const rows = visibles(); if (!rows.length) { U.toast('Rien à exporter', 'attention'); return; }
       S().excel('paiements-scolarite-' + S().slug(X.ecole.nom).slice(0, 30), [{ nom: 'Paiements', lignes: [['Date', 'N° reçu', 'Élève', 'Cours', 'Versement', 'Montant (FCFA)', 'Mode', 'Référence']]
         .concat(rows.map(p => [p.date_paiement, p.numero_recu, parId[p.inscription_id] ? parId[p.inscription_id].i._nom : '', parId[p.inscription_id] ? nomClasse(parId[p.inscription_id].i) : '', U.libelle(p.tranche), p.montant, U.libelle(p.mode), p.reference || ''])) }]);
@@ -317,8 +317,8 @@
         { titre: 'Cours', valeur: p => parId[p.inscription_id] ? nomClasse(parId[p.inscription_id].i) : '—' },
         { titre: 'Versement', valeur: p => U.libelle(p.tranche) }, { titre: 'Montant', valeur: p => F(p.montant) }, { titre: 'Mode', valeur: p => U.libelle(p.mode) },
         { titre: '', classe: 'col-etroite', valeur: p => el('span', { class: 'actions-mini' }, [
-          el('button', { class: 'btn btn-fantome btn-petit', text: '🖨️', 'aria-label': 'Imprimer le reçu', title: 'Imprimer le reçu', onclick: () => { const s = parId[p.inscription_id]; if (s) sceau(X, 'RECU_SCOLARITE', 'Reçu ' + p.numero_recu, recuHtml(X, p, s)); } }),
-          X.ecriture ? el('button', { class: 'btn btn-fantome btn-petit btn-alerte', text: '🗑', 'aria-label': 'Supprimer le paiement', onclick: () => U.confirmer('Supprimer le paiement', 'Le paiement ' + (p.numero_recu || '') + ' de ' + F(p.montant) + ' sera supprimé.', () => DB.remove('paiements_scolarite', p.id).then(() => DB.audit('SUPPRESSION_PAIEMENT', 'paiements_scolarite', p.id)).then(() => { EG.majSynchro(); X.recharger(); }), 'Supprimer') }) : null
+          el('button', { class: 'btn btn-fantome btn-petit', text: '\uE008', 'aria-label': 'Imprimer le reçu', title: 'Imprimer le reçu', onclick: () => { const s = parId[p.inscription_id]; if (s) sceau(X, 'RECU_SCOLARITE', 'Reçu ' + p.numero_recu, recuHtml(X, p, s)); } }),
+          X.ecriture ? el('button', { class: 'btn btn-fantome btn-petit btn-alerte', text: '\uE005', 'aria-label': 'Supprimer le paiement', onclick: () => U.confirmer('Supprimer le paiement', 'Le paiement ' + (p.numero_recu || '') + ' de ' + F(p.montant) + ' sera supprimé.', () => DB.remove('paiements_scolarite', p.id).then(() => DB.audit('SUPPRESSION_PAIEMENT', 'paiements_scolarite', p.id)).then(() => { EG.majSynchro(); X.recharger(); }), 'Supprimer') }) : null
         ]) }
       ], visibles(), { messageVide: 'Aucun paiement enregistré pour l’instant.' })));
     }
@@ -327,7 +327,7 @@
       zone.appendChild(U.carte('Remises et exonérations', U.tableau([
         { titre: 'Élève', valeur: r => parId[r.inscription_id] ? parId[r.inscription_id].i._nom : '—' }, { titre: 'Cours', valeur: r => parId[r.inscription_id] ? nomClasse(parId[r.inscription_id].i) : '—' },
         { titre: 'Montant', valeur: r => F(r.montant) }, { titre: 'Motif', valeur: r => r.motif || '—' },
-        { titre: '', classe: 'col-etroite', valeur: r => X.ecriture ? el('button', { class: 'btn btn-fantome btn-petit btn-alerte', text: '🗑', 'aria-label': 'Supprimer la remise', onclick: () => DB.remove('remises_scolarite', r.id).then(() => { EG.majSynchro(); X.recharger(); }) }) : '' }
+        { titre: '', classe: 'col-etroite', valeur: r => X.ecriture ? el('button', { class: 'btn btn-fantome btn-petit btn-alerte', text: '\uE005', 'aria-label': 'Supprimer la remise', onclick: () => DB.remove('remises_scolarite', r.id).then(() => { EG.majSynchro(); X.recharger(); }) }) : '' }
       ], D.remises)));
     }
   }
@@ -366,9 +366,9 @@
         U.stat(U.nombre(X.S.filter(s => s.sansBareme).length), 'Élèves sans barème défini', X.S.some(s => s.sansBareme) ? 'attention' : '')
       ], 'grille-stats'));
       const actions = el('div', { class: 'barre-actions' }, [
-        el('button', { class: 'btn btn-fantome', text: '📤 Excel', onclick: () => { if (!v.length) { U.toast('Rien à exporter', 'attention'); return; }
+        el('button', { class: 'btn btn-fantome', text: '\uE00C Excel', onclick: () => { if (!v.length) { U.toast('Rien à exporter', 'attention'); return; }
           S().excel('impayes-' + S().slug(X.ecole.nom).slice(0, 30), [{ nom: 'Impayés', lignes: [['Élève', 'Cours', 'Dû', 'Versé', 'Reste', 'En retard', 'Prochaine échéance']].concat(v.map(s => [s.i._nom, nomClasse(s.i), s.aPayer, s.verse, s.reste, s.retard, s.echeance || ''])) }]); } }),
-        el('button', { class: 'btn btn-fantome', text: '🖨️ Liste des impayés', onclick: () => { if (!v.length) { U.toast('Aucun impayé', 'attention'); return; }
+        el('button', { class: 'btn btn-fantome', text: '\uE008 Liste des impayés', onclick: () => { if (!v.length) { U.toast('Aucun impayé', 'attention'); return; }
           sceau(X, 'IMPAYES_SCOLARITE', 'Impayés de scolarité', entetePiece(X, 'ÉTAT DES IMPAYÉS DE SCOLARITÉ', 'au ' + U.dateFR(aujourdhui()))
             + X0.htmlTableau(['N°', 'Élève', 'Cours', 'Dû', 'Versé', 'Reste', 'En retard'], v.map((s, k) => [k + 1, s.i._nom, nomClasse(s.i), s.aPayer, s.verse, s.reste, s.retard]).concat([{ gras: true, cells: ['', 'Total', '', somme(v, s => s.aPayer), somme(v, s => s.verse), somme(v, s => s.reste), somme(v, s => s.retard)] }]))); } })
       ]);
@@ -379,8 +379,8 @@
         { titre: 'Reste', valeur: s => F(s.reste) }, { titre: 'En retard', valeur: s => s.retard ? el('span', { class: 'badge attention', text: F(s.retard) }) : '—' },
         { titre: 'Prochaine échéance', valeur: s => s.echeance ? U.dateCourte(s.echeance) : '—' },
         { titre: '', classe: 'col-etroite', valeur: s => el('span', { class: 'actions-mini' }, [
-          el('button', { class: 'btn btn-fantome btn-petit', text: '✉️', 'aria-label': 'Imprimer la convocation', title: 'Convocation aux parents', onclick: () => sceau(X, 'RELANCE_SCOLARITE', 'Convocation — ' + s.i._nom, relanceHtml(s)) }),
-          X.ecriture ? el('button', { class: 'btn btn-fantome btn-petit', text: '💵', 'aria-label': 'Enregistrer un paiement', title: 'Enregistrer un paiement', onclick: () => modalPaiement(X, s) }) : null]) }
+          el('button', { class: 'btn btn-fantome btn-petit', text: '\uE04F', 'aria-label': 'Imprimer la convocation', title: 'Convocation aux parents', onclick: () => sceau(X, 'RELANCE_SCOLARITE', 'Convocation — ' + s.i._nom, relanceHtml(s)) }),
+          X.ecriture ? el('button', { class: 'btn btn-fantome btn-petit', text: '\uE04E', 'aria-label': 'Enregistrer un paiement', title: 'Enregistrer un paiement', onclick: () => modalPaiement(X, s) }) : null]) }
       ], v, { messageVide: filtre.retard ? 'Aucun retard de paiement : tout ce qui est échu a été réglé.' : 'Tout est soldé.' })));
     }
     liste();
@@ -410,8 +410,8 @@
     const ligneTab = l => [l.c.libelle || l.c.code, l.effectif, l.parEleve, l.attendu, l.recu, l.reste, l.attendu ? Math.round(l.recu / l.attendu * 100) + ' %' : '—', l.t0, l.t1, l.t2, l.t3, l.tr,
       l.tit ? ((l.tit.nom || '').toUpperCase() + ' ' + (l.tit.prenoms || '')).trim() : '—', l.salaire || '—', l.mois === null ? '—' : l.mois];
     zone.appendChild(el('div', { class: 'barre-actions' }, [
-      el('button', { class: 'btn btn-fantome', text: '📤 Excel', onclick: () => { if (!lignes.length) { U.toast('Rien à exporter', 'attention'); return; } S().excel('fonds-par-classe-' + S().slug(ecole.nom).slice(0, 30), [{ nom: 'Fonds par classe', lignes: [enTete].concat(lignes.map(ligneTab)) }]); } }),
-      el('button', { class: 'btn btn-fantome', text: '🖨️ Imprimer l’état', onclick: () => { if (!lignes.length) { U.toast('Aucune classe', 'attention'); return; }
+      el('button', { class: 'btn btn-fantome', text: '\uE00C Excel', onclick: () => { if (!lignes.length) { U.toast('Rien à exporter', 'attention'); return; } S().excel('fonds-par-classe-' + S().slug(ecole.nom).slice(0, 30), [{ nom: 'Fonds par classe', lignes: [enTete].concat(lignes.map(ligneTab)) }]); } }),
+      el('button', { class: 'btn btn-fantome', text: '\uE008 Imprimer l’état', onclick: () => { if (!lignes.length) { U.toast('Aucune classe', 'attention'); return; }
         sceau(X, 'FONDS_CLASSES', 'Fonds reçus par classe', entetePiece(X, 'ÉTAT DES FONDS REÇUS PAR CLASSE', 'au ' + U.dateFR(aujourdhui()))
           + X0.htmlTableau(enTete.slice(0, 12), lignes.map(ligneTab).map(r => r.slice(0, 12)).concat([{ gras: true, cells: ['Total', tot.effectif, '', tot.attendu, tot.recu, tot.reste, tot.attendu ? Math.round(tot.recu / tot.attendu * 100) + ' %' : '—', somme(lignes, l => l.t0), somme(lignes, l => l.t1), somme(lignes, l => l.t2), somme(lignes, l => l.t3), somme(lignes, l => l.tr)] }]))
           + '<p class="muet">Fonds attendus = effectif de chaque cours × barème de l’école, remises déduites.</p>'); } })
@@ -473,8 +473,8 @@
       const titre = 'Cahier de gestion des fonds' + (filtre.mois ? ' — ' + libMois(filtre.mois) : '');
       const enTete = ['Date', 'Pièce', 'Libellé', 'Rubrique', 'Recettes', 'Dépenses', 'Solde'];
       const cellules = rows.map(l => [U.dateCourte(l.date), l.piece, l.libelle, U.libelle(l.categorie), l.sens === 'RECETTE' ? l.montant : '', l.sens === 'DEPENSE' ? l.montant : '', l.solde]);
-      actions.appendChild(el('button', { class: 'btn btn-fantome', text: '📤 Excel', onclick: () => { if (!rows.length) { U.toast('Rien à exporter', 'attention'); return; } S().excel('cahier-fonds-' + S().slug(ecole.nom).slice(0, 30), [{ nom: 'Cahier de caisse', lignes: [enTete].concat([['', '', 'Report', '', '', '', report]], cellules, [['', '', 'Total', '', rec, dep, report + rec - dep]]) }]); } }));
-      actions.appendChild(el('button', { class: 'btn btn-fantome', text: '🖨️ Imprimer (signé, avec QR)', onclick: () => { if (!rows.length) { U.toast('Aucune écriture', 'attention'); return; }
+      actions.appendChild(el('button', { class: 'btn btn-fantome', text: '\uE00C Excel', onclick: () => { if (!rows.length) { U.toast('Rien à exporter', 'attention'); return; } S().excel('cahier-fonds-' + S().slug(ecole.nom).slice(0, 30), [{ nom: 'Cahier de caisse', lignes: [enTete].concat([['', '', 'Report', '', '', '', report]], cellules, [['', '', 'Total', '', rec, dep, report + rec - dep]]) }]); } }));
+      actions.appendChild(el('button', { class: 'btn btn-fantome', text: '\uE008 Imprimer (signé, avec QR)', onclick: () => { if (!rows.length) { U.toast('Aucune écriture', 'attention'); return; }
         sceau(X, 'CAHIER_FONDS', titre, entetePiece(X, titre.toUpperCase()) + X0.htmlTableau(enTete, [['', '', 'Report des périodes précédentes', '', '', '', report]].concat(cellules, [{ gras: true, cells: ['', '', 'Total', '', rec, dep, report + rec - dep] }]))); } }));
       zoneStats.appendChild(actions);
       zoneListe.textContent = '';
@@ -484,8 +484,8 @@
         { titre: 'Rubrique', valeur: l => U.libelle(l.categorie) }, { titre: 'Recettes', classe: 'num', valeur: l => l.sens === 'RECETTE' ? F(l.montant) : '' },
         { titre: 'Dépenses', classe: 'num', valeur: l => l.sens === 'DEPENSE' ? F(l.montant) : '' }, { titre: 'Solde', classe: 'num', valeur: l => F(l.solde) },
         { titre: '', classe: 'col-etroite', valeur: l => (X.ecriture && !l.auto) ? el('span', { class: 'actions-mini' }, [
-          el('button', { class: 'btn btn-fantome btn-petit', text: '✏️', 'aria-label': 'Modifier', onclick: () => E.editer('cahier_fonds', l.rec, X.recharger) }),
-          el('button', { class: 'btn btn-fantome btn-petit btn-alerte', text: '🗑', 'aria-label': 'Supprimer', onclick: () => U.confirmer('Supprimer l’écriture', l.libelle + ' — ' + F(l.montant), () => DB.remove('cahier_fonds', l.id).then(() => { EG.majSynchro(); X.recharger(); }), 'Supprimer') })]) : '' }
+          el('button', { class: 'btn btn-fantome btn-petit', text: '\uE006', 'aria-label': 'Modifier', onclick: () => E.editer('cahier_fonds', l.rec, X.recharger) }),
+          el('button', { class: 'btn btn-fantome btn-petit btn-alerte', text: '\uE005', 'aria-label': 'Supprimer', onclick: () => U.confirmer('Supprimer l’écriture', l.libelle + ' — ' + F(l.montant), () => DB.remove('cahier_fonds', l.id).then(() => { EG.majSynchro(); X.recharger(); }), 'Supprimer') })]) : '' }
       ], rows, { messageVide: 'Aucune écriture : les paiements de scolarité et les salaires payés y figurent automatiquement, les autres recettes et dépenses se saisissent ici.' })));
       zoneListe.appendChild(el('p', { class: 'muet petit', text: 'Les lignes « auto » viennent des modules Scolarité (paiements) et Salaires (paie payée) : elles ne se saisissent pas deux fois. Un report de l’année précédente se saisit comme une recette « Autre recette ».' }));
     }
@@ -527,8 +527,8 @@
     const rub = Object.keys(parRubrique).sort().map(k => [U.libelle(k.split('|')[0]), U.libelle(k.split('|')[1]), parRubrique[k]]);
     const titre = 'Bilan financier — ' + (X.annee ? X.annee.code : '');
     zone.appendChild(el('div', { class: 'barre-actions' }, [
-      el('button', { class: 'btn btn-fantome', text: '📤 Excel', onclick: () => S().excel('bilan-financier-' + S().slug(ecole.nom).slice(0, 30), [{ nom: 'Par mois', lignes: [enTete].concat(lignes.map(ligneTab), [['Total', T.sc, T.ar, recettes, T.sal, T.ad, depenses, recettes - depenses, '']]) }, { nom: 'Par rubrique', lignes: [['Sens', 'Rubrique', 'Montant (FCFA)']].concat(rub) }]) }),
-      el('button', { class: 'btn btn-fantome', text: '🖨️ Imprimer (signé, avec QR)', onclick: () => sceau(X, 'BILAN_FINANCIER', titre, entetePiece(X, titre.toUpperCase())
+      el('button', { class: 'btn btn-fantome', text: '\uE00C Excel', onclick: () => S().excel('bilan-financier-' + S().slug(ecole.nom).slice(0, 30), [{ nom: 'Par mois', lignes: [enTete].concat(lignes.map(ligneTab), [['Total', T.sc, T.ar, recettes, T.sal, T.ad, depenses, recettes - depenses, '']]) }, { nom: 'Par rubrique', lignes: [['Sens', 'Rubrique', 'Montant (FCFA)']].concat(rub) }]) }),
+      el('button', { class: 'btn btn-fantome', text: '\uE008 Imprimer (signé, avec QR)', onclick: () => sceau(X, 'BILAN_FINANCIER', titre, entetePiece(X, titre.toUpperCase())
         + X0.htmlTableau(enTete, lignes.map(ligneTab).concat([{ gras: true, cells: ['Total', T.sc, T.ar, recettes, T.sal, T.ad, depenses, recettes - depenses, ''] }]))
         + '<h3>Par rubrique</h3>' + X0.htmlTableau(['Sens', 'Rubrique', 'Montant'], rub)) })
     ]));
@@ -610,8 +610,8 @@
       const titre = 'État de paie — ' + libMois(filtre.mois);
       const enTete = ['Agent', 'Salaire de base', 'Primes', 'Retenues', 'Net à payer', 'Statut'];
       const cel = v.map(s => [nomAgent(parPers[s.personnel_id]), s.salaire_brut, s.primes, s.retenues, s.net, U.libelle(s.statut)]);
-      actions.appendChild(el('button', { class: 'btn btn-fantome', text: '📤 Excel', onclick: () => { if (!v.length) { U.toast('Rien à exporter', 'attention'); return; } S().excel('paie-' + filtre.mois, [{ nom: 'Paie', lignes: [enTete].concat(cel) }]); } }));
-      actions.appendChild(el('button', { class: 'btn btn-fantome', text: '🖨️ État de paie', onclick: () => { if (!v.length) { U.toast('Aucune paie ce mois-ci', 'attention'); return; }
+      actions.appendChild(el('button', { class: 'btn btn-fantome', text: '\uE00C Excel', onclick: () => { if (!v.length) { U.toast('Rien à exporter', 'attention'); return; } S().excel('paie-' + filtre.mois, [{ nom: 'Paie', lignes: [enTete].concat(cel) }]); } }));
+      actions.appendChild(el('button', { class: 'btn btn-fantome', text: '\uE008 État de paie', onclick: () => { if (!v.length) { U.toast('Aucune paie ce mois-ci', 'attention'); return; }
         sceau(X, 'ETAT_PAIE', titre, entetePiece(X, titre.toUpperCase()) + X0.htmlTableau(enTete, cel.concat([{ gras: true, cells: ['Total', somme(v, s => s.salaire_brut), somme(v, s => s.primes), somme(v, s => s.retenues), somme(v, s => s.net), ''] }]))); } }));
       zoneStats.appendChild(actions);
       zoneListe.textContent = '';
@@ -620,10 +620,10 @@
         { titre: 'Retenues', valeur: s => F(s.retenues) }, { titre: 'Net à payer', valeur: s => el('strong', { text: F(s.net) }) },
         { titre: 'Statut', valeur: s => el('span', { class: 'badge ' + (s.statut === 'PAYE' ? 'ok' : 'attention'), text: U.libelle(s.statut) + (s.statut === 'PAYE' && s.date_paiement ? ' le ' + U.dateCourte(s.date_paiement) : '') }) },
         { titre: '', classe: 'col-etroite', valeur: s => el('span', { class: 'actions-mini' }, [
-          X.ecriture && s.statut !== 'PAYE' ? el('button', { class: 'btn btn-fantome btn-petit', text: '✔ Payer', onclick: () => payer(s) }) : null,
-          el('button', { class: 'btn btn-fantome btn-petit', text: '🖨️', 'aria-label': 'Bulletin de paie', title: 'Bulletin de paie', onclick: () => { const a = parPers[s.personnel_id]; if (a) sceau(X, 'BULLETIN_PAIE', 'Bulletin de paie — ' + nomAgent(a), bulletinHtml(X, s, a)); } }),
-          X.ecriture && s.statut !== 'PAYE' ? el('button', { class: 'btn btn-fantome btn-petit', text: '✏️', 'aria-label': 'Modifier', onclick: () => E.editer('salaires_ecole', s, X.recharger) }) : null,
-          X.ecriture && s.statut !== 'PAYE' ? el('button', { class: 'btn btn-fantome btn-petit btn-alerte', text: '🗑', 'aria-label': 'Supprimer', onclick: () => DB.remove('salaires_ecole', s.id).then(() => { EG.majSynchro(); X.recharger(); }) }) : null]) }
+          X.ecriture && s.statut !== 'PAYE' ? el('button', { class: 'btn btn-fantome btn-petit', text: '\uE003 Payer', onclick: () => payer(s) }) : null,
+          el('button', { class: 'btn btn-fantome btn-petit', text: '\uE008', 'aria-label': 'Bulletin de paie', title: 'Bulletin de paie', onclick: () => { const a = parPers[s.personnel_id]; if (a) sceau(X, 'BULLETIN_PAIE', 'Bulletin de paie — ' + nomAgent(a), bulletinHtml(X, s, a)); } }),
+          X.ecriture && s.statut !== 'PAYE' ? el('button', { class: 'btn btn-fantome btn-petit', text: '\uE006', 'aria-label': 'Modifier', onclick: () => E.editer('salaires_ecole', s, X.recharger) }) : null,
+          X.ecriture && s.statut !== 'PAYE' ? el('button', { class: 'btn btn-fantome btn-petit btn-alerte', text: '\uE005', 'aria-label': 'Supprimer', onclick: () => DB.remove('salaires_ecole', s.id).then(() => { EG.majSynchro(); X.recharger(); }) }) : null]) }
       ], v, { messageVide: 'Aucune paie pour ce mois : fixez les salaires mensuels puis générez la paie.' })));
       zoneListe.appendChild(el('p', { class: 'muet petit', text: 'Net à payer = salaire de base + primes − retenues. Un salaire payé est reporté automatiquement dans le cahier de caisse.' }));
     }

@@ -24,7 +24,7 @@
       img ? el('img', { src: img, alt: 'Signature', style: 'height:34px;max-width:120px;background:#fff;border:1px solid #DDE3DF;border-radius:4px' })
         : el('span', { class: 'badge attention', text: 'à recueillir' }),
       EG.peutEcrire() ? el('button', {
-        class: 'btn btn-fantome', type: 'button', text: img ? '✍️ Modifier' : '✍️ Signer',
+        class: 'btn btn-fantome', type: 'button', text: img ? '\uE029 Modifier' : '\uE029 Signer',
         onclick: () => EG.Docs.capturerSignature(rec, apres, { table, champ, titre, mention })
       }) : null
     ]);
@@ -53,7 +53,7 @@
               'Le ' + (t.type === 'DEPARTEMENT' ? 'Directeur départemental' : 'Chef de la circonscription scolaire') + ' signe ici. Sa signature figure sur les visas, états et rapports de la structure.', raf) }
           ], sujets),
           el('p', { class: 'muet petit', text: 'Les chefs de division et de service signent depuis la fiche de leur division (Divisions et services).' }),
-          el('button', { class: 'btn btn-fantome', text: '🏛️ Divisions et services', onclick: () => Routeur.aller('divisions') })
+          el('button', { class: 'btn btn-fantome', text: '\uE023 Divisions et services', onclick: () => Routeur.aller('divisions') })
         ])));
       });
     }

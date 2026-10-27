@@ -27,7 +27,7 @@
   /* Tables techniques : jamais exportées ni sauvegardées avec les jeux de données. */
   const SYSTEME = ['users', 'audit_events', 'educmaster_sync_queue', 'conflits_synchronisation', 'device_sync_status',
     'feature_flags', 'support_tickets', 'maintenances', 'rollover_jobs', 'signatures_documents', 'documents'];
-  const ONGLETS = [['export', '📤 Exporter'], ['import', '📥 Importer'], ['jeux', '🗃️ Jeux de données'], ['personnel', '👥 Personnel (FE, ACDPE, ACDPCTD)'], ['sauvegarde', '💾 Sauvegarde et restauration']];
+  const ONGLETS = [['export', '\uE00C Exporter'], ['import', '\uE00B Importer'], ['jeux', '\uE011 Jeux de données'], ['personnel', '\uE01C Personnel (FE, ACDPE, ACDPCTD)'], ['sauvegarde', '\uE007 Sauvegarde et restauration']];
   const PAR_TERRITOIRE = ['contacts', 'evenements_calendrier', 'courriers', 'signatures_categories'];
   const CLES = { eleve_id: 'eleves', inscription_id: 'inscriptions', personnel_id: 'personnels', classe_id: 'classes' };
 
@@ -182,8 +182,8 @@
     barre.appendChild(el('button', { class: 'btn btn-fantome btn-petit', text: 'Tout décocher', onclick: () => { Object.keys(cases).forEach(e => { cases[e].checked = false; coches[e] = false; }); majResume(); } }));
     zone.appendChild(barre); zone.appendChild(resume);
     zone.appendChild(el('div', { class: 'barre-actions' }, [
-      el('button', { class: 'btn btn-primaire', text: '📤 Exporter en Excel', onclick: () => exporter('xlsx') }),
-      el('button', { class: 'btn btn-fantome', text: '📄 Exporter en CSV (un seul jeu)', onclick: () => exporter('csv') })
+      el('button', { class: 'btn btn-primaire', text: '\uE00C Exporter en Excel', onclick: () => exporter('xlsx') }),
+      el('button', { class: 'btn btn-fantome', text: '\uE00D Exporter en CSV (un seul jeu)', onclick: () => exporter('csv') })
     ]));
     majResume();
 
@@ -275,11 +275,11 @@
     const cs = C.index[etat.cs];
     zone.appendChild(el('div', { class: 'grille grille-departements' }, [
       el('button', { class: 'carte carte-lien', onclick: () => Routeur.aller('import-ecoles?cs=' + cs.id) }, [
-        el('h3', { class: 'carte-titre', text: '🏫 Les écoles' }), el('p', { class: 'muet petit', text: 'Créer d’un coup toutes les écoles de ' + cs.nom })]),
+        el('h3', { class: 'carte-titre', text: '\uE022 Les écoles' }), el('p', { class: 'muet petit', text: 'Créer d’un coup toutes les écoles de ' + cs.nom })]),
       el('button', { class: 'carte carte-lien', onclick: () => Routeur.aller('unites-pedagogiques/' + cs.id) }, [
-        el('h3', { class: 'carte-titre', text: '🏘️ Les unités pédagogiques' }), el('p', { class: 'muet petit', text: 'Importer la liste depuis l’écran des unités' })]),
+        el('h3', { class: 'carte-titre', text: '\uE025 Les unités pédagogiques' }), el('p', { class: 'muet petit', text: 'Importer la liste depuis l’écran des unités' })]),
       el('button', { class: 'carte carte-lien', onclick: () => Routeur.aller('import-export/personnel?cs=' + cs.id) }, [
-        el('h3', { class: 'carte-titre', text: '👥 Le personnel du ministère' }), el('p', { class: 'muet petit', text: 'Fichiers FE, ACDPE et ACDPCTD tels que remis' })])
+        el('h3', { class: 'carte-titre', text: '\uE01C Le personnel du ministère' }), el('p', { class: 'muet petit', text: 'Fichiers FE, ACDPE et ACDPCTD tels que remis' })])
     ]));
 
     let courant = IMPORTABLES.filter(i => i.e === etat.type)[0] || IMPORTABLES[0];
@@ -322,7 +322,7 @@
       });
 
       zoneCorps.appendChild(el('div', { class: 'carte' }, [
-        el('div', { class: 'barre-actions' }, el('button', { class: 'btn btn-fantome btn-petit', text: '⬇️ Télécharger le modèle Excel', onclick: () => modele(courant.e, champs, def.label) })),
+        el('div', { class: 'barre-actions' }, el('button', { class: 'btn btn-fantome btn-petit', text: '\uE009 Télécharger le modèle Excel', onclick: () => modele(courant.e, champs, def.label) })),
         el('div', { class: 'formulaire' }, [
           el('div', { class: 'champ' }, [el('label', { text: 'Fichier Excel ou CSV' }), fichier]),
           el('div', { class: 'champ' }, [el('label', { text: 'Ou coller le tableau' }), texte])
@@ -558,7 +558,7 @@
 
   function ongletSauvegarde(zone) {
     zone.appendChild(el('div', { class: 'carte' }, [
-      el('h3', { class: 'carte-titre', text: '💾 Créer une sauvegarde' }),
+      el('h3', { class: 'carte-titre', text: '\uE007 Créer une sauvegarde' }),
       el('p', { class: 'muet', text: 'Un fichier unique avec toutes les données que votre compte a le droit de voir. Il peut servir à changer d’appareil ou à conserver une copie hors ligne.'
         + (estAdmin() ? '' : ' Les comptes d’accès n’y figurent jamais.') }),
       el('div', { class: 'barre-actions' }, el('button', {
@@ -575,7 +575,7 @@
     const fichier = el('input', { type: 'file', accept: '.json' });
     fichier.addEventListener('change', () => { if (fichier.files[0]) restaurerFichier(fichier.files[0]).then(n => { if (n) setTimeout(() => location.reload(), 900); }); });
     zone.appendChild(el('div', { class: 'carte' }, [
-      el('h3', { class: 'carte-titre', text: '♻️ Restaurer une sauvegarde' }),
+      el('h3', { class: 'carte-titre', text: '\uE058 Restaurer une sauvegarde' }),
       el('p', { class: 'muet', text: 'Seules les données de votre périmètre sont reprises : une sauvegarde d’une autre circonscription ne peut pas y déverser ses données.' }),
       fichier
     ]));

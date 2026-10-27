@@ -2,7 +2,7 @@
    Les territoires livrés ne vont que jusqu'à la commune : dès qu'on choisit une commune (ou un arrondissement)
    dans un formulaire, ses arrondissements (ou ses villages et quartiers de ville) sont ajoutés aux territoires de
    l'appareil à partir de data/referentiel_villages.json (js/choix.js), une seule fois, sans passer par la file de
-   synchronisation. Les ajouts faits à la main (« ➕ Ajouter… ») restent possibles. */
+   synchronisation. Les ajouts faits à la main (« \uE001 Ajouter… ») restent possibles. */
 (function (global) {
   'use strict';
   const EG = global.EG;

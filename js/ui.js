@@ -289,7 +289,7 @@
 
   function champRecherche(placeholder, onSaisie) {
     return el('div', { class: 'recherche' }, [
-      el('span', { class: 'recherche-icone', text: '🔍', 'aria-hidden': 'true' }),
+      el('span', { class: 'recherche-icone', text: '\uE02A', 'aria-hidden': 'true' }),
       el('input', { type: 'search', placeholder: placeholder, 'aria-label': placeholder, oninput: e => onSaisie(e.target.value) })
     ]);
   }
@@ -415,7 +415,7 @@
             ctrl.appendChild(op);
           });
           if (c.ajoutRapide && typeof EG.peutEcrire === 'function' && EG.peutEcrire()) {
-            ctrl.appendChild(el('option', { value: '__ajouter__', text: '➕ Ajouter ' + c.ajoutRapide.libelle + '…' }));
+            ctrl.appendChild(el('option', { value: '__ajouter__', text: '\uE001 Ajouter ' + c.ajoutRapide.libelle + '…' }));
           }
           if (!lignes.some(r => String(valActuelle) === String(r.id))) ctrl.value = '';
         };

@@ -186,7 +186,7 @@
     dispo.sort((a, b) => tri(a.cs, b.cs)).forEach(({ en, cs }) => {
       const nbEcoles = ctx.ecoles.filter(e => e.territoire_id === cs.id).length;
       const carte = el('div', { class: 'carte' }, [
-        el('h3', { class: 'carte-titre', text: '🗃️ ' + en.titre }),
+        el('h3', { class: 'carte-titre', text: '\uE011 ' + en.titre }),
         el('p', { class: 'muet petit', text: nbEcoles ? nbEcoles + ' école(s) déjà enregistrée(s) dans cette circonscription.' : 'Aucune école enregistrée dans cette circonscription pour le moment.' })
       ]);
       const actions = el('div', { class: 'barre-actions' });

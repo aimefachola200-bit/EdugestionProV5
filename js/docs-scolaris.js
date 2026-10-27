@@ -43,7 +43,7 @@
 
   /** Bouton « Éditer (signé, QR) » pour un écran de statistiques ou de courbes. */
   function boutonEditer(typeCode, titreDoc, noeud, options) {
-    return EG.UI.el('button', { class: 'btn btn-fantome', type: 'button', text: '🖨️ Éditer (signé, avec QR)', onclick: () => {
+    return EG.UI.el('button', { class: 'btn btn-fantome', type: 'button', text: '\uE008 Éditer (signé, avec QR)', onclick: () => {
       const n = typeof noeud === 'function' ? noeud() : noeud;
       EG.genererDocument(typeCode, titreDoc, titre(titreDoc, (EG.session.ecole_nom ? EG.session.ecole_nom + ' — ' : '') + 'Année scolaire ' + EG.session.annee_code) + capture(n),
         Object.assign({ paysage: true }, options || {}));

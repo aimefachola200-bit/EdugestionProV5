@@ -113,11 +113,11 @@
       Routeur.aller(route + '?' + Object.keys(q).map(k => encodeURIComponent(k) + '=' + encodeURIComponent(q[k])).join('&'));
     });
     const boutons = [
-      el('button', { class: 'btn btn-fantome btn-petit', text: '📤 Exporter', title: 'Emporter les données de cette rubrique dans Excel',
+      el('button', { class: 'btn btn-fantome btn-petit', text: '\uE00C Exporter', title: 'Emporter les données de cette rubrique dans Excel',
         onclick: () => ouvrir('import-export/export', { jeu: l.exp.join(',') }) })
     ];
     if (peutImporter) {
-      boutons.push(el('button', { class: 'btn btn-fantome btn-petit', text: '📥 Importer', title: 'Reprendre des données depuis un tableau Excel ou CSV',
+      boutons.push(el('button', { class: 'btn btn-fantome btn-petit', text: '\uE00B Importer', title: 'Reprendre des données depuis un tableau Excel ou CSV',
         onclick: () => {
           if (l.imp && l.imp.route) {
             const r = l.imp.route;

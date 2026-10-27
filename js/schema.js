@@ -30,97 +30,99 @@
   // modules » par grands pôles (comme l'application de gestion des CS),
   // au lieu d'une longue liste plate.
   const CATEGORIES_MODULES = [
-    { code: 'ADMIN', nom: 'Socle & administration', icone: '🏛️', coul: '#2166AC' },
-    { code: 'PEDAGOGIE', nom: 'Vie scolaire & pédagogie', icone: '🎒', coul: '#008751' },
-    { code: 'PATRIMOINE', nom: 'Patrimoine & ressources', icone: '🏫', coul: '#B86400' },
-    { code: 'FINANCES', nom: 'Finances', icone: '💰', coul: '#A6790C' },
-    { code: 'PILOTAGE', nom: 'Pilotage & suivi', icone: '📊', coul: '#7B4FA8' },
-    { code: 'SYSTEME', nom: 'Système & exploitation', icone: '🔄', coul: '#55616B' }
+    { code: 'ADMIN', nom: 'Socle & administration', icone: '\uE023', coul: '#2166AC' },
+    { code: 'PEDAGOGIE', nom: 'Vie scolaire & pédagogie', icone: '\uE021', coul: '#008751' },
+    { code: 'PATRIMOINE', nom: 'Patrimoine & ressources', icone: '\uE022', coul: '#B86400' },
+    { code: 'FINANCES', nom: 'Finances', icone: '\uE04E', coul: '#A6790C' },
+    { code: 'PILOTAGE', nom: 'Pilotage & suivi', icone: '\uE015', coul: '#7B4FA8' },
+    { code: 'SYSTEME', nom: 'Système & exploitation', icone: '\uE058', coul: '#55616B' }
   ];
 
   // Modules métier (26 de la spécification + modules d'administration) — navigation « Plus »
   const MODULES = [
-    { code: 'socle', cat: 'ADMIN', nom: 'Socle & référentiels', icone: '🏛️', entites: ['annees_scolaires', 'territoires', 'ecoles', 'classes', 'matieres', 'niveau_matieres', 'referentiels', 'rollover_jobs'],
-      ecran: 'cloture', annexes: [['annuaire-ecoles', 'Annuaire des écoles', '🏫']] },
-    { code: 'espace-cs', cat: 'ADMIN', nom: 'Espace de la circonscription', icone: '🏢', entites: [], ecran: 'espace-cs' },
-    { code: 'personnel-cs', cat: 'ADMIN', nom: 'Personnel de la circonscription', icone: '👥', entites: [], ecran: 'personnel-cs',
-      annexes: [['personnel-cs/enseignants', 'Personnel enseignant', '👥'], ['personnel-cs/administratif', 'Personnel administratif', '🗂️'],
-        ['personnel-cs/ame', 'Enseignants ACDPCTD', '🧑‍🏫'], ['personnel-cs/soutien', 'Personnel de soutien', '🧹']] },
-    { code: 'statuts-personnel', cat: 'ADMIN', nom: 'Personnel par statut (FE, ACDPE, privé, ACDPCTD)', icone: '🧾', entites: ['signatures_categories'], ecran: 'statuts-cs',
-      annexes: [['statuts-cs/fe', 'Personnel FE : directeurs et adjoints', '🧑‍🏫'], ['statuts-cs/acdpe', 'Personnel ACDPE : directeurs et adjoints', '🧑‍🏫'],
-        ['statuts-cs/prive', 'Écoles privées : directeurs et adjoints', '🏫'], ['statuts-cs/acdpctd', 'Enseignants ACDPCTD', '🧑‍🏫'], ['statuts-cs/recap', 'Récapitulatif par école', '📊']] },
-    { code: 'uascep', cat: 'ADMIN', nom: 'Bureaux UASCEP (école, UP, zone, CS, DDEMP)', icone: '🏵️', entites: [], ecran: 'uascep' },
-    { code: 'carrieres', cat: 'ADMIN', nom: 'Gestion des carrières', icone: '📈', entites: ['carrieres_personnel', 'affectations_personnel', 'diplomes_personnel', 'formations_personnel'], ecran: 'carrieres' },
-    { code: 'scolarite-privee', cat: 'FINANCES', nom: 'Scolarité (école privée)', icone: '🎓', entites: ['frais_scolarite', 'paiements_scolarite', 'remises_scolarite'], ecran: 'scolarite-privee',
-      annexes: [['scolarite-privee/bareme', 'Barème et tranches', '🏷️'], ['scolarite-privee/paiements', 'Paiements et reçus', '💵'],
-        ['scolarite-privee/impayes', 'Impayés et relances', '⏰'], ['scolarite-privee/classes', 'Fonds reçus par classe', '🧮']] },
-    { code: 'caisse-privee', cat: 'FINANCES', nom: 'Cahier de gestion des fonds (école privée)', icone: '📒', entites: ['cahier_fonds'], ecran: 'caisse-privee',
-      annexes: [['caisse-privee/cahier', 'Cahier de caisse', '📒'], ['caisse-privee/bilan', 'Bilan financier', '📊']] },
-    { code: 'salaires-privee', cat: 'FINANCES', nom: 'Salaires des enseignants (école privée)', icone: '👛', entites: ['salaires_ecole'], ecran: 'salaires-privee' },
-    { code: 'divisions', cat: 'PILOTAGE', nom: 'Divisions et services (statistiques, courbes, plans d’action)', icone: '🏛️', entites: ['divisions_structure', 'lignes_action'], ecran: 'divisions' },
-    { code: 'signatures', cat: 'PEDAGOGIE', nom: 'Signatures des acteurs', icone: '✍️', entites: [], ecran: 'signatures' },
-    { code: 'courriers', cat: 'ADMIN', nom: 'Archive des courriers', icone: '📬', entites: ['courriers'], ecran: 'courriers' },
-    { code: 'ecoles-cm2', cat: 'PILOTAGE', nom: 'Écoles à CM2 et CEP', icone: '🎯', entites: [], ecran: 'ecoles-cm2' },
-    { code: 'ecarts-cs', cat: 'PILOTAGE', nom: 'Analyses et écarts', icone: '📈', entites: [], ecran: 'ecarts-cs' },
-    { code: 'rapport-rentree', cat: 'PILOTAGE', nom: 'Rapports de rentrée', icone: '📄', entites: [], ecran: 'rapport-rentree' },
-    { code: 'stats-cs', cat: 'PILOTAGE', nom: 'Effectifs et personnel par école', icone: '📈', entites: ['statistiques_ecoles'], ecran: 'stats-cs' },
-    { code: 'carte-ecole', cat: 'ADMIN', nom: 'Carte d’identité de l’école', icone: '🪪', entites: [], ecran: 'carte-ecole' },
-    { code: 'unites-pedagogiques', cat: 'ADMIN', nom: 'Unités pédagogiques', icone: '🏘️', entites: [], ecran: 'unites-pedagogiques' },
-    { code: 'repertoire', cat: 'ADMIN', nom: 'Répertoire et contacts', icone: '📇', entites: ['contacts'], ecran: 'repertoire' },
-    { code: 'reseau', cat: 'ADMIN', nom: 'Écoles par circonscription', icone: '🗺️', entites: ['territoires', 'ecoles'], ecran: 'gestion-ecoles',
-      annexes: [['import-ecoles', 'Importer les écoles d’une circonscription', '📥'], ['annuaire-ecoles', 'Annuaire des écoles', '🏫']] },
-    { code: 'comptes', cat: 'ADMIN', nom: 'Comptes d’accès', icone: '🔑', entites: ['users'], ecran: 'comptes',
-      annexes: [['comptes/ecoles', 'Comptes des écoles', '🏫'], ['comptes/enseignants', 'Comptes des enseignants', '🧑‍🏫'],
-        ['comptes/parents', 'Comptes des parents', '👨‍👩‍👧'], ['comptes/eleves', 'Comptes des élèves', '🎒']] },
-    { code: 'classes-roles', cat: 'ADMIN', nom: 'Classes & rôles de gestion', icone: '🧑‍🏫', entites: ['classes', 'membres_instances'], ecran: 'classes-roles',
-      annexes: [['classes-roles/classes', 'Classes et titulaires', '🚪'], ['classes-roles/roles', 'Rôles de gestion collégiale', '🤝']] },
-    { code: 'documents-officiels', cat: 'PEDAGOGIE', nom: 'Documents officiels (SCOLARIS / GESCOL)', icone: '📚', entites: [], ecran: 'documents-officiels' },
-    { code: 'telechargements', cat: 'ADMIN', nom: 'Téléchargements', icone: '⬇️', entites: [], ecran: 'telechargements',
-      annexes: [['telechargements/recensement', 'Fiches de recensement', '🧮'], ['telechargements/fiches', 'Fiches à remplir', '📝'],
-        ['telechargements/certificats', 'Certificats et attestations', '📜']] },
-    { code: 'securite', cat: 'ADMIN', nom: 'Utilisateurs & sécurité', icone: '🔐', entites: ['users', 'user_assignments', 'audit_events'] },
-    { code: 'eleves', cat: 'PEDAGOGIE', nom: 'Élèves', icone: '🎒', entites: ['eleves', 'eleve_handicaps', 'liens_eleves'], ecran: 'eleves' },
-    { code: 'inscriptions', cat: 'PEDAGOGIE', nom: 'Inscriptions', icone: '📋', entites: ['inscriptions_eleves', 'profils_annuels_eleves', 'statuts_scolarite', 'transferts_eleves', 'preinscriptions'] },
-    { code: 'calendrier-scolaire', cat: 'PEDAGOGIE', nom: 'Calendrier scolaire', icone: '🗓️', entites: ['evenements_calendrier'], ecran: 'calendrier-scolaire',
-      annexes: [['calendrier', 'Jours ouvrables (assiduité)', '📆']] },
-    { code: 'carte-eleve', cat: 'PEDAGOGIE', nom: 'Carte d’identité de l’élève', icone: '🪪', entites: [], ecran: 'carte-eleve' },
-    { code: 'fiche-cep', cat: 'PEDAGOGIE', nom: 'Fiche d’inscription au CEP', icone: '🪪', entites: [], ecran: 'fiche-cep' },
-    { code: 'presences', cat: 'PEDAGOGIE', nom: 'Présences', icone: '✅', entites: ['presences', 'presences_personnel', 'calendriers_scolaires'], ecran: 'presences',
-      annexes: [['registre-appel', 'Registre d’appel du mois', '🗒️'], ['calendrier', 'Calendrier scolaire', '📆'],
-        ['releve-mensuel', 'Relevé mensuel de fréquentation', '📈'],
-        ['bilan-presences', 'Bilan de présence par cours', '📊'], ['presences-personnel', 'Présence du personnel', '🧑‍💼']] },
-    { code: 'evaluations', cat: 'PEDAGOGIE', nom: 'Évaluations & notes', icone: '📝', entites: ['evaluations', 'notes', 'decisions_annuelles'], ecran: 'evaluations',
-      annexes: [['synthese-officielle', 'Synthèse officielle de l’évaluation', '📜'],
-        ['synthese-evaluations', 'Panneau de pilotage des évaluations', '📈']] },
-    { code: 'cep', cat: 'PEDAGOGIE', nom: 'CEP & examens blancs', icone: '🎓', entites: ['examens_blancs', 'notes_examens_blancs', 'centres_examen', 'compositions_centre', 'fiches_cep', 'resultats_cep'],
-      ecran: 'cep', annexes: [['cep-blanc-centre', 'Examen blanc en centre de circonscription', '🏢']] },
-    { code: 'personnel', cat: 'ADMIN', nom: 'Personnel', icone: '👩‍🏫', entites: ['personnels', 'carrieres_personnel', 'affectations_personnel', 'diplomes_personnel', 'formations_personnel', 'evaluations_personnel', 'participations_up', 'certificats_agents'],
-      ecran: 'personnel', annexes: [['certificats', 'Certificats administratifs', '📜']] },
-    { code: 'cachets', cat: 'ADMIN', nom: 'Cachets & signatures', icone: '🖋️', entites: [], ecran: 'cachet' },
-    { code: 'retraite', cat: 'ADMIN', nom: 'Retraite', icone: '⏳', entites: ['regles_retraite', 'notifications_retraite'], ecran: 'retraite' },
-    { code: 'infrastructure', cat: 'PATRIMOINE', nom: 'Infrastructures', icone: '🏫', entites: ['infrastructures', 'accessibilite_infrastructure', 'inspections_infrastructure'], ecran: 'patrimoine' },
-    { code: 'mobilier', cat: 'PATRIMOINE', nom: 'Mobilier', icone: '🪑', entites: ['inventaires_mobilier', 'mouvements_mobilier'], ecran: 'patrimoine' },
-    { code: 'didactique', cat: 'PATRIMOINE', nom: 'Matériel didactique', icone: '📚', entites: ['inventaires_equipements', 'ressources_pedagogiques'], ecran: 'patrimoine' },
-    { code: 'services', cat: 'PATRIMOINE', nom: 'Services & structure', icone: '🚰', entites: ['services_ecole', 'structure_pedagogique'], ecran: 'patrimoine' },
-    { code: 'cantine', cat: 'PEDAGOGIE', nom: 'Cantine', icone: '🍚', entites: ['cantines', 'participations_cantine'], ecran: 'cantine',
-      annexes: [['cantine-paiements', 'Contributions et listes de paiement', '💵']] },
-    { code: 'budget', cat: 'FINANCES', nom: 'Budget', icone: '💰', entites: ['budgets_ecoles', 'mouvements_budget', 'pieces_financieres'], ecran: 'budget' },
-    { code: 'gouvernance', cat: 'PILOTAGE', nom: 'Gestion participative', icone: '🤝', entites: ['gestion_participative', 'reunions_gestion', 'communication_resultats'], ecran: 'gouvernance' },
-    { code: 'recensement', cat: 'PILOTAGE', nom: 'Recensement', icone: '🧮', entites: ['campagnes_recensement', 'recensements_ecoles', 'recensement_valeurs', 'bilans_recensement'], ecran: 'recensement' },
-    { code: 'parents', cat: 'PEDAGOGIE', nom: 'Portail parents', icone: '👨‍👩‍👧', entites: ['profils_parents', 'liens_parent_enfant', 'communications_ecole', 'messages'], ecran: 'parents' },
-    { code: 'risques', cat: 'PILOTAGE', nom: 'Risques & décrochage', icone: '⚠️', entites: ['modeles_risque', 'scores_risque', 'alertes_scolaires', 'accompagnements_eleves', 'actions_accompagnement'], ecran: 'risques' },
-    { code: 'alertes', cat: 'PILOTAGE', nom: 'Centre d\'alertes', icone: '🔔', entites: ['types_alertes', 'alertes', 'actions_alertes'], ecran: 'alertes' },
-    { code: 'visites', cat: 'PILOTAGE', nom: 'Visites & recommandations', icone: '🧭', entites: ['visites', 'observations_visites', 'recommandations', 'plans_amelioration', 'actions_plan_amelioration'], ecran: 'visites' },
-    { code: 'documents', cat: 'ADMIN', nom: 'Documents & archives', icone: '📄', entites: ['types_documents', 'documents', 'signatures_documents'], ecran: 'documents' },
-    { code: 'analytics', cat: 'PILOTAGE', nom: 'Statistiques', icone: '📊', entites: ['statistiques_agregees', 'populations_scolarisables', 'definitions_indicateurs', 'projections'], ecran: 'analytics',
-      annexes: [['affichage', 'Tableau d’affichage de classe', '🖼️']] },
-    { code: 'rapports', cat: 'PILOTAGE', nom: 'Rapports', icone: '🗂️', entites: ['modeles_rapports', 'generations_rapports'], ecran: 'rapports' },
-    { code: 'educmaster', cat: 'SYSTEME', nom: 'EDUCMaster & synchro', icone: '🔄', entites: ['educmaster_sync_queue', 'conflits_synchronisation', 'rapprochements_eleves', 'fusions_eleves', 'device_sync_status'], ecran: 'educmaster' },
-    { code: 'import-export', cat: 'SYSTEME', nom: 'Import et export', icone: '📦', entites: [], ecran: 'import-export',
-      annexes: [['import-export/export', 'Exporter des données', '📤'], ['import-export/import', 'Importer des données', '📥'],
-        ['import-export/jeux', 'Jeux de données des circonscriptions', '🗃️'], ['import-export/personnel', 'Fichiers du personnel (FE, ACDPE, ACDPCTD)', '👥'],
-        ['import-export/sauvegarde', 'Sauvegarde et restauration', '💾']] },
-    { code: 'support', cat: 'SYSTEME', nom: 'Support & exploitation', icone: '🛠️', entites: ['support_tickets', 'maintenances', 'feature_flags'] }
+    { code: 'socle', cat: 'ADMIN', nom: 'Socle & référentiels', icone: '\uE023', entites: ['annees_scolaires', 'territoires', 'ecoles', 'classes', 'matieres', 'niveau_matieres', 'referentiels', 'rollover_jobs'],
+      ecran: 'cloture', annexes: [['annuaire-ecoles', 'Annuaire des écoles', '\uE022']] },
+    { code: 'espace-cs', cat: 'ADMIN', nom: 'Espace de la circonscription', icone: '\uE024', entites: [], ecran: 'espace-cs' },
+    { code: 'personnel-cs', cat: 'ADMIN', nom: 'Personnel de la circonscription', icone: '\uE01C', entites: [], ecran: 'personnel-cs',
+      annexes: [['personnel-cs/enseignants', 'Personnel enseignant', '\uE01C'], ['personnel-cs/administratif', 'Personnel administratif', '\uE011'],
+        ['personnel-cs/ame', 'Enseignants ACDPCTD', '\uE01E'], ['personnel-cs/soutien', 'Personnel de soutien', '\uE04A']] },
+    { code: 'statuts-personnel', cat: 'ADMIN', nom: 'Personnel par statut (FE, ACDPE, privé, ACDPCTD)', icone: '\uE04B', entites: ['signatures_categories'], ecran: 'statuts-cs',
+      annexes: [['statuts-cs/fe', 'Personnel FE : directeurs et adjoints', '\uE01E'], ['statuts-cs/acdpe', 'Personnel ACDPE : directeurs et adjoints', '\uE01E'],
+        ['statuts-cs/prive', 'Écoles privées : directeurs et adjoints', '\uE022'], ['statuts-cs/acdpctd', 'Enseignants ACDPCTD', '\uE01E'], ['statuts-cs/recap', 'Récapitulatif par école', '\uE015']] },
+    { code: 'uascep', cat: 'ADMIN', nom: 'Bureaux UASCEP (école, UP, zone, CS, DDEMP)', icone: '\uE047', entites: [], ecran: 'uascep' },
+    { code: 'pvs-sport', cat: 'PILOTAGE', nom: 'Sport scolaire (licences, compétitions, palmarès)', icone: '\uE04D', entites: [], ecran: 'pvs-sport' },
+    { code: 'pvs-pilotage', cat: 'PILOTAGE', nom: 'Tableau de bord du pilotage (école → DDEMP)', icone: '\uE015', entites: [], ecran: 'pvs-pilotage' },
+    { code: 'carrieres', cat: 'ADMIN', nom: 'Gestion des carrières', icone: '\uE016', entites: ['carrieres_personnel', 'affectations_personnel', 'diplomes_personnel', 'formations_personnel'], ecran: 'carrieres' },
+    { code: 'scolarite-privee', cat: 'FINANCES', nom: 'Scolarité (école privée)', icone: '\uE020', entites: ['frais_scolarite', 'paiements_scolarite', 'remises_scolarite'], ecran: 'scolarite-privee',
+      annexes: [['scolarite-privee/bareme', 'Barème et tranches', '\uE056'], ['scolarite-privee/paiements', 'Paiements et reçus', '\uE04E'],
+        ['scolarite-privee/impayes', 'Impayés et relances', '\uE01A'], ['scolarite-privee/classes', 'Fonds reçus par classe', '\uE040']] },
+    { code: 'caisse-privee', cat: 'FINANCES', nom: 'Cahier de gestion des fonds (école privée)', icone: '\uE030', entites: ['cahier_fonds'], ecran: 'caisse-privee',
+      annexes: [['caisse-privee/cahier', 'Cahier de caisse', '\uE030'], ['caisse-privee/bilan', 'Bilan financier', '\uE015']] },
+    { code: 'salaires-privee', cat: 'FINANCES', nom: 'Salaires des enseignants (école privée)', icone: '\uE04E', entites: ['salaires_ecole'], ecran: 'salaires-privee' },
+    { code: 'divisions', cat: 'PILOTAGE', nom: 'Divisions et services (statistiques, courbes, plans d’action)', icone: '\uE023', entites: ['divisions_structure', 'lignes_action'], ecran: 'divisions' },
+    { code: 'signatures', cat: 'PEDAGOGIE', nom: 'Signatures des acteurs', icone: '\uE029', entites: [], ecran: 'signatures' },
+    { code: 'courriers', cat: 'ADMIN', nom: 'Archive des courriers', icone: '\uE04F', entites: ['courriers'], ecran: 'courriers' },
+    { code: 'ecoles-cm2', cat: 'PILOTAGE', nom: 'Écoles à CM2 et CEP', icone: '\uE02E', entites: [], ecran: 'ecoles-cm2' },
+    { code: 'ecarts-cs', cat: 'PILOTAGE', nom: 'Analyses et écarts', icone: '\uE016', entites: [], ecran: 'ecarts-cs' },
+    { code: 'rapport-rentree', cat: 'PILOTAGE', nom: 'Rapports de rentrée', icone: '\uE00D', entites: [], ecran: 'rapport-rentree' },
+    { code: 'stats-cs', cat: 'PILOTAGE', nom: 'Effectifs et personnel par école', icone: '\uE016', entites: ['statistiques_ecoles'], ecran: 'stats-cs' },
+    { code: 'carte-ecole', cat: 'ADMIN', nom: 'Carte d’identité de l’école', icone: '\uE02B', entites: [], ecran: 'carte-ecole' },
+    { code: 'unites-pedagogiques', cat: 'ADMIN', nom: 'Unités pédagogiques', icone: '\uE025', entites: [], ecran: 'unites-pedagogiques' },
+    { code: 'repertoire', cat: 'ADMIN', nom: 'Répertoire et contacts', icone: '\uE012', entites: ['contacts'], ecran: 'repertoire' },
+    { code: 'reseau', cat: 'ADMIN', nom: 'Écoles par circonscription', icone: '\uE048', entites: ['territoires', 'ecoles'], ecran: 'gestion-ecoles',
+      annexes: [['import-ecoles', 'Importer les écoles d’une circonscription', '\uE00B'], ['annuaire-ecoles', 'Annuaire des écoles', '\uE022']] },
+    { code: 'comptes', cat: 'ADMIN', nom: 'Comptes d’accès', icone: '\uE032', entites: ['users'], ecran: 'comptes',
+      annexes: [['comptes/ecoles', 'Comptes des écoles', '\uE022'], ['comptes/enseignants', 'Comptes des enseignants', '\uE01E'],
+        ['comptes/parents', 'Comptes des parents', '\uE01C'], ['comptes/eleves', 'Comptes des élèves', '\uE021']] },
+    { code: 'classes-roles', cat: 'ADMIN', nom: 'Classes & rôles de gestion', icone: '\uE01E', entites: ['classes', 'membres_instances'], ecran: 'classes-roles',
+      annexes: [['classes-roles/classes', 'Classes et titulaires', '\uE074'], ['classes-roles/roles', 'Rôles de gestion collégiale', '\uE044']] },
+    { code: 'documents-officiels', cat: 'PEDAGOGIE', nom: 'Documents officiels (SCOLARIS / GESCOL)', icone: '\uE031', entites: [], ecran: 'documents-officiels' },
+    { code: 'telechargements', cat: 'ADMIN', nom: 'Téléchargements', icone: '\uE009', entites: [], ecran: 'telechargements',
+      annexes: [['telechargements/recensement', 'Fiches de recensement', '\uE040'], ['telechargements/fiches', 'Fiches à remplir', '\uE00E'],
+        ['telechargements/certificats', 'Certificats et attestations', '\uE02F']] },
+    { code: 'securite', cat: 'ADMIN', nom: 'Utilisateurs & sécurité', icone: '\uE033', entites: ['users', 'user_assignments', 'audit_events'] },
+    { code: 'eleves', cat: 'PEDAGOGIE', nom: 'Élèves', icone: '\uE021', entites: ['eleves', 'eleve_handicaps', 'liens_eleves'], ecran: 'eleves' },
+    { code: 'inscriptions', cat: 'PEDAGOGIE', nom: 'Inscriptions', icone: '\uE00F', entites: ['inscriptions_eleves', 'profils_annuels_eleves', 'statuts_scolarite', 'transferts_eleves', 'preinscriptions'] },
+    { code: 'calendrier-scolaire', cat: 'PEDAGOGIE', nom: 'Calendrier scolaire', icone: '\uE017', entites: ['evenements_calendrier'], ecran: 'calendrier-scolaire',
+      annexes: [['calendrier', 'Jours ouvrables (assiduité)', '\uE017']] },
+    { code: 'carte-eleve', cat: 'PEDAGOGIE', nom: 'Carte d’identité de l’élève', icone: '\uE02B', entites: [], ecran: 'carte-eleve' },
+    { code: 'fiche-cep', cat: 'PEDAGOGIE', nom: 'Fiche d’inscription au CEP', icone: '\uE02B', entites: [], ecran: 'fiche-cep' },
+    { code: 'presences', cat: 'PEDAGOGIE', nom: 'Présences', icone: '\uE004', entites: ['presences', 'presences_personnel', 'calendriers_scolaires'], ecran: 'presences',
+      annexes: [['registre-appel', 'Registre d’appel du mois', '\uE010'], ['calendrier', 'Calendrier scolaire', '\uE017'],
+        ['releve-mensuel', 'Relevé mensuel de fréquentation', '\uE016'],
+        ['bilan-presences', 'Bilan de présence par cours', '\uE015'], ['presences-personnel', 'Présence du personnel', '\uE01D']] },
+    { code: 'evaluations', cat: 'PEDAGOGIE', nom: 'Évaluations & notes', icone: '\uE00E', entites: ['evaluations', 'notes', 'decisions_annuelles'], ecran: 'evaluations',
+      annexes: [['synthese-officielle', 'Synthèse officielle de l’évaluation', '\uE02F'],
+        ['synthese-evaluations', 'Panneau de pilotage des évaluations', '\uE016']] },
+    { code: 'cep', cat: 'PEDAGOGIE', nom: 'CEP & examens blancs', icone: '\uE020', entites: ['examens_blancs', 'notes_examens_blancs', 'centres_examen', 'compositions_centre', 'fiches_cep', 'resultats_cep'],
+      ecran: 'cep', annexes: [['cep-blanc-centre', 'Examen blanc en centre de circonscription', '\uE024']] },
+    { code: 'personnel', cat: 'ADMIN', nom: 'Personnel', icone: '\uE01E', entites: ['personnels', 'carrieres_personnel', 'affectations_personnel', 'diplomes_personnel', 'formations_personnel', 'evaluations_personnel', 'participations_up', 'certificats_agents'],
+      ecran: 'personnel', annexes: [['certificats', 'Certificats administratifs', '\uE02F']] },
+    { code: 'cachets', cat: 'ADMIN', nom: 'Cachets & signatures', icone: '\uE006', entites: [], ecran: 'cachet' },
+    { code: 'retraite', cat: 'ADMIN', nom: 'Retraite', icone: '\uE019', entites: ['regles_retraite', 'notifications_retraite'], ecran: 'retraite' },
+    { code: 'infrastructure', cat: 'PATRIMOINE', nom: 'Infrastructures', icone: '\uE022', entites: ['infrastructures', 'accessibilite_infrastructure', 'inspections_infrastructure'], ecran: 'patrimoine' },
+    { code: 'mobilier', cat: 'PATRIMOINE', nom: 'Mobilier', icone: '\uE028', entites: ['inventaires_mobilier', 'mouvements_mobilier'], ecran: 'patrimoine' },
+    { code: 'didactique', cat: 'PATRIMOINE', nom: 'Matériel didactique', icone: '\uE031', entites: ['inventaires_equipements', 'ressources_pedagogiques'], ecran: 'patrimoine' },
+    { code: 'services', cat: 'PATRIMOINE', nom: 'Services & structure', icone: '\uE06D', entites: ['services_ecole', 'structure_pedagogique'], ecran: 'patrimoine' },
+    { code: 'cantine', cat: 'PEDAGOGIE', nom: 'Cantine', icone: '\uE05B', entites: ['cantines', 'participations_cantine'], ecran: 'cantine',
+      annexes: [['cantine-paiements', 'Contributions et listes de paiement', '\uE04E']] },
+    { code: 'budget', cat: 'FINANCES', nom: 'Budget', icone: '\uE04E', entites: ['budgets_ecoles', 'mouvements_budget', 'pieces_financieres'], ecran: 'budget' },
+    { code: 'gouvernance', cat: 'PILOTAGE', nom: 'Gestion participative', icone: '\uE044', entites: ['gestion_participative', 'reunions_gestion', 'communication_resultats'], ecran: 'gouvernance' },
+    { code: 'recensement', cat: 'PILOTAGE', nom: 'Recensement', icone: '\uE040', entites: ['campagnes_recensement', 'recensements_ecoles', 'recensement_valeurs', 'bilans_recensement'], ecran: 'recensement' },
+    { code: 'parents', cat: 'PEDAGOGIE', nom: 'Portail parents', icone: '\uE01C', entites: ['profils_parents', 'liens_parent_enfant', 'communications_ecole', 'messages'], ecran: 'parents' },
+    { code: 'risques', cat: 'PILOTAGE', nom: 'Risques & décrochage', icone: '\uE041', entites: ['modeles_risque', 'scores_risque', 'alertes_scolaires', 'accompagnements_eleves', 'actions_accompagnement'], ecran: 'risques' },
+    { code: 'alertes', cat: 'PILOTAGE', nom: 'Centre d\'alertes', icone: '\uE055', entites: ['types_alertes', 'alertes', 'actions_alertes'], ecran: 'alertes' },
+    { code: 'visites', cat: 'PILOTAGE', nom: 'Visites & recommandations', icone: '\uE042', entites: ['visites', 'observations_visites', 'recommandations', 'plans_amelioration', 'actions_plan_amelioration'], ecran: 'visites' },
+    { code: 'documents', cat: 'ADMIN', nom: 'Documents & archives', icone: '\uE00D', entites: ['types_documents', 'documents', 'signatures_documents'], ecran: 'documents' },
+    { code: 'analytics', cat: 'PILOTAGE', nom: 'Statistiques', icone: '\uE015', entites: ['statistiques_agregees', 'populations_scolarisables', 'definitions_indicateurs', 'projections'], ecran: 'analytics',
+      annexes: [['affichage', 'Tableau d’affichage de classe', '\uE046']] },
+    { code: 'rapports', cat: 'PILOTAGE', nom: 'Rapports', icone: '\uE011', entites: ['modeles_rapports', 'generations_rapports'], ecran: 'rapports' },
+    { code: 'educmaster', cat: 'SYSTEME', nom: 'EDUCMaster & synchro', icone: '\uE058', entites: ['educmaster_sync_queue', 'conflits_synchronisation', 'rapprochements_eleves', 'fusions_eleves', 'device_sync_status'], ecran: 'educmaster' },
+    { code: 'import-export', cat: 'SYSTEME', nom: 'Import et export', icone: '\uE06E', entites: [], ecran: 'import-export',
+      annexes: [['import-export/export', 'Exporter des données', '\uE00C'], ['import-export/import', 'Importer des données', '\uE00B'],
+        ['import-export/jeux', 'Jeux de données des circonscriptions', '\uE011'], ['import-export/personnel', 'Fichiers du personnel (FE, ACDPE, ACDPCTD)', '\uE01C'],
+        ['import-export/sauvegarde', 'Sauvegarde et restauration', '\uE007']] },
+    { code: 'support', cat: 'SYSTEME', nom: 'Support & exploitation', icone: '\uE052', entites: ['support_tickets', 'maintenances', 'feature_flags'] }
   ];
 
   const f = (n, l, t, extra) => Object.assign({ n, l, t: t || 'text' }, extra || {});
@@ -143,7 +145,7 @@
   const SCHEMA = {
     /* ---------------- SOCLE ---------------- */
     annees_scolaires: {
-      label: 'Années scolaires', singulier: 'Année scolaire', icone: '📅',
+      label: 'Années scolaires', singulier: 'Année scolaire', icone: '\uE017',
       titre: r => r.code,
       champs: [
         f('code', 'Code', 'text', { req: 1, list: 1, ph: '2026-2027' }),
@@ -153,7 +155,7 @@
       ]
     },
     territoires: {
-      label: 'Territoires', singulier: 'Territoire', icone: '🗺️',
+      label: 'Territoires', singulier: 'Territoire', icone: '\uE048',
       titre: r => r.nom,
       champs: [
         f('type', 'Type', 'select', { req: 1, list: 1, o: ['NATIONAL', 'DEPARTEMENT', 'COMMUNE', 'ARRONDISSEMENT', 'VILLAGE_QUARTIER', 'CIRCONSCRIPTION', 'ZONE_PEDAGOGIQUE', 'UNITE_PEDAGOGIQUE'] }),
@@ -183,7 +185,7 @@
       ]
     },
     ecoles: {
-      label: 'Écoles', singulier: 'École', icone: '🏫',
+      label: 'Écoles', singulier: 'École', icone: '\uE022',
       titre: r => r.nom,
       champs: [
         f('code_ecole', 'Code école', 'text', { req: 1, list: 1 }),
@@ -315,7 +317,7 @@
       ]
     },
     classes: {
-      label: 'Classes', singulier: 'Classe', icone: '🚪',
+      label: 'Classes', singulier: 'Classe', icone: '\uE074',
       titre: r => r.libelle || r.code,
       champs: [
         f('ecole_id', 'École', 'ref', { ref: 'ecoles', req: 1, scope: 1 }),
@@ -329,7 +331,7 @@
       ]
     },
     matieres: {
-      label: 'Matières', singulier: 'Matière', icone: '📖',
+      label: 'Matières', singulier: 'Matière', icone: '\uE030',
       titre: r => r.nom,
       champs: [
         f('code', 'Code', 'text', { req: 1, list: 1 }),
@@ -340,7 +342,7 @@
       ]
     },
     niveau_matieres: {
-      label: 'Matières par niveau', singulier: 'Matière du niveau', icone: '🧩',
+      label: 'Matières par niveau', singulier: 'Matière du niveau', icone: '\uE054',
       champs: [
         f('annee_scolaire_id', 'Année', 'ref', { ref: 'annees_scolaires', annee: 1 }),
         f('niveau', 'Niveau', 'select', { req: 1, list: 1, o: NIVEAUX }),
@@ -350,7 +352,7 @@
       ]
     },
     rapprochements_eleves: {
-      label: 'Rapprochements d’élèves', singulier: 'Rapprochement', icone: '🔎',
+      label: 'Rapprochements d’élèves', singulier: 'Rapprochement', icone: '\uE02A',
       champs: [
         f('eleve_local_id', 'Dossier examiné', 'ref', { ref: 'eleves', req: 1, list: 1 }),
         f('candidat_id', 'Dossier candidat', 'ref', { ref: 'eleves', list: 1 }),
@@ -360,7 +362,7 @@
       ]
     },
     fusions_eleves: {
-      label: 'Fusions de dossiers', singulier: 'Fusion', icone: '🧬', lectureSeule: true,
+      label: 'Fusions de dossiers', singulier: 'Fusion', icone: '\uE07D', lectureSeule: true,
       champs: [
         f('eleve_source_id', 'Dossier absorbé', 'ref', { ref: 'eleves', list: 1 }),
         f('eleve_cible_id', 'Dossier conservé', 'ref', { ref: 'eleves', list: 1 }),
@@ -371,7 +373,7 @@
       ]
     },
     rollover_jobs: {
-      label: 'Clôtures d’année', singulier: 'Clôture', icone: '🔁', lectureSeule: true,
+      label: 'Clôtures d’année', singulier: 'Clôture', icone: '\uE058', lectureSeule: true,
       champs: [
         f('from_year_id', 'Année clôturée', 'ref', { ref: 'annees_scolaires', list: 1 }),
         f('to_year_id', 'Année ouverte', 'ref', { ref: 'annees_scolaires', list: 1 }),
@@ -383,7 +385,7 @@
       ]
     },
     referentiels: {
-      label: 'Référentiels', singulier: 'Référentiel', icone: '📕',
+      label: 'Référentiels', singulier: 'Référentiel', icone: '\uE030',
       titre: r => r.nom,
       champs: [
         f('code', 'Code', 'text', { req: 1, list: 1 }),
@@ -399,7 +401,7 @@
 
     /* ---------------- SÉCURITÉ ---------------- */
     users: {
-      label: 'Utilisateurs', singulier: 'Utilisateur', icone: '👤',
+      label: 'Utilisateurs', singulier: 'Utilisateur', icone: '\uE01D',
       titre: r => (r.nom || '') + ' ' + (r.prenoms || ''),
       champs: [
         f('identifiant', 'Identifiant', 'text', { req: 1, list: 1 }),
@@ -418,7 +420,7 @@
       ]
     },
     user_assignments: {
-      label: 'Affectations de rôle', singulier: 'Affectation', icone: '🔑',
+      label: 'Affectations de rôle', singulier: 'Affectation', icone: '\uE032',
       champs: [
         f('user_id', 'Utilisateur', 'ref', { ref: 'users', req: 1, list: 1 }),
         f('role', 'Rôle', 'select', { req: 1, list: 1, o: ROLES }),
@@ -430,7 +432,7 @@
       ]
     },
     audit_events: {
-      label: 'Journal d\'audit', singulier: 'Événement', icone: '🧾', lectureSeule: true,
+      label: 'Journal d\'audit', singulier: 'Événement', icone: '\uE04B', lectureSeule: true,
       champs: [
         f('occurred_at', 'Horodatage', 'datetime', { list: 1 }),
         f('user_label', 'Utilisateur', 'text', { list: 1 }),
@@ -443,7 +445,7 @@
 
     /* ---------------- ÉLÈVES ---------------- */
     eleves: {
-      label: 'Élèves', singulier: 'Élève', icone: '🎒',
+      label: 'Élèves', singulier: 'Élève', icone: '\uE021',
       titre: r => (r.nom || '').toUpperCase() + ' ' + (r.prenoms || ''),
       champs: [
         f('nom', 'Nom', 'text', { req: 1, list: 1 }),
@@ -469,7 +471,7 @@
       ]
     },
     eleve_handicaps: {
-      label: 'Situations de handicap', singulier: 'Situation de handicap', icone: '♿',
+      label: 'Situations de handicap', singulier: 'Situation de handicap', icone: '\uE06F',
       champs: [
         f('eleve_id', 'Élève', 'ref', { ref: 'eleves', req: 1, list: 1 }),
         f('type', 'Type', 'select', { req: 1, list: 1, o: ['MOTEUR', 'VISUEL', 'AUDITIF', 'INTELLECTUEL', 'AUTRE'] }),
@@ -479,7 +481,7 @@
       ]
     },
     liens_eleves: {
-      label: 'Liens entre élèves', singulier: 'Lien', icone: '🔗',
+      label: 'Liens entre élèves', singulier: 'Lien', icone: '\uE053',
       champs: [
         f('eleve_id', 'Élève', 'ref', { ref: 'eleves', req: 1, list: 1 }),
         f('autre_eleve_id', 'Autre élève', 'ref', { ref: 'eleves', req: 1, list: 1 }),
@@ -490,7 +492,7 @@
 
     /* ---------------- INSCRIPTIONS ---------------- */
     inscriptions_eleves: {
-      label: 'Inscriptions', singulier: 'Inscription', icone: '📋',
+      label: 'Inscriptions', singulier: 'Inscription', icone: '\uE00F',
       champs: [
         f('eleve_id', 'Élève', 'ref', { ref: 'eleves', req: 1, list: 1 }),
         f('ecole_id', 'École', 'ref', { ref: 'ecoles', req: 1, scope: 1 }),
@@ -507,7 +509,7 @@
       ]
     },
     profils_annuels_eleves: {
-      label: 'Profils annuels', singulier: 'Profil annuel', icone: '🧷',
+      label: 'Profils annuels', singulier: 'Profil annuel', icone: '\uE060',
       champs: [
         f('inscription_id', 'Inscription', 'ref', { ref: 'inscriptions_eleves', req: 1, list: 1 }),
         f('orphelin', 'Orphelin', 'bool', { list: 1 }),
@@ -517,7 +519,7 @@
       ]
     },
     transferts_eleves: {
-      label: 'Transferts', singulier: 'Transfert', icone: '↔️',
+      label: 'Transferts', singulier: 'Transfert', icone: '\uE057',
       champs: [
         f('eleve_id', 'Élève', 'ref', { ref: 'eleves', req: 1, list: 1 }),
         f('ecole_origine_id', 'École d\'origine', 'ref', { ref: 'ecoles', req: 1, list: 1 }),
@@ -528,7 +530,7 @@
       ]
     },
     statuts_scolarite: {
-      label: 'Statuts de scolarité', singulier: 'Statut de scolarité', icone: '📍',
+      label: 'Statuts de scolarité', singulier: 'Statut de scolarité', icone: '\uE02C',
       champs: [
         f('inscription_id', 'Inscription', 'ref', { ref: 'inscriptions_eleves', req: 1, list: 1 }),
         f('statut', 'Statut', 'select', { req: 1, list: 1, o: ['SCOLARISE', 'RISQUE_DECROCHAGE', 'DECROCHAGE_CONFIRME', 'ABANDON', 'TRANSFERE', 'SORTIE_PRIMAIRE_CEP', 'SITUATION_INCONNUE'] }),
@@ -538,7 +540,7 @@
       ]
     },
     preinscriptions: {
-      label: 'Préinscriptions', singulier: 'Préinscription', icone: '📨',
+      label: 'Préinscriptions', singulier: 'Préinscription', icone: '\uE04F',
       champs: [
         f('eleve_id', 'Élève', 'ref', { ref: 'eleves', req: 1, list: 1 }),
         f('annee_scolaire_id', 'Année visée', 'ref', { ref: 'annees_scolaires', list: 1 }),
@@ -552,7 +554,7 @@
 
     /* ---------------- PRÉSENCES ---------------- */
     presences: {
-      label: 'Présences', singulier: 'Présence', icone: '✅',
+      label: 'Présences', singulier: 'Présence', icone: '\uE004',
       champs: [
         f('inscription_id', 'Inscription', 'ref', { ref: 'inscriptions_eleves', req: 1, list: 1 }),
         f('date_presence', 'Date', 'date', { req: 1, list: 1 }),
@@ -564,7 +566,7 @@
       ]
     },
     calendriers_scolaires: {
-      label: 'Calendrier scolaire', singulier: 'Jour du calendrier', icone: '🗓️',
+      label: 'Calendrier scolaire', singulier: 'Jour du calendrier', icone: '\uE017',
       champs: [
         f('annee_scolaire_id', 'Année', 'ref', { ref: 'annees_scolaires', annee: 1 }),
         f('cycle', 'Cycle', 'select', { o: CYCLES, list: 1 }),
@@ -577,7 +579,7 @@
 
     /* ---------------- ÉVALUATIONS ---------------- */
     evaluations: {
-      label: 'Évaluations', singulier: 'Évaluation', icone: '📝',
+      label: 'Évaluations', singulier: 'Évaluation', icone: '\uE00E',
       titre: r => (r.libelle || ('Évaluation ' + r.numero)),
       champs: [
         f('annee_scolaire_id', 'Année', 'ref', { ref: 'annees_scolaires', req: 1, annee: 1 }),
@@ -592,7 +594,7 @@
       ]
     },
     notes: {
-      label: 'Notes', singulier: 'Note', icone: '🔢',
+      label: 'Notes', singulier: 'Note', icone: '\uE040',
       champs: [
         f('evaluation_id', 'Évaluation', 'ref', { ref: 'evaluations', req: 1, list: 1 }),
         f('inscription_id', 'Inscription', 'ref', { ref: 'inscriptions_eleves', req: 1, list: 1 }),
@@ -602,7 +604,7 @@
       ]
     },
     decisions_annuelles: {
-      label: 'Décisions annuelles', singulier: 'Décision', icone: '⚖️',
+      label: 'Décisions annuelles', singulier: 'Décision', icone: '\uE03F',
       champs: [
         f('inscription_id', 'Inscription', 'ref', { ref: 'inscriptions_eleves', req: 1, list: 1 }),
         f('decision_pedagogique', 'Décision pédagogique', 'select', { list: 1, o: ['PASSAGE', 'REDOUBLEMENT', 'SORTIE_PRIMAIRE'] }),
@@ -616,7 +618,7 @@
 
     /* ---------------- CEP ---------------- */
     presences_personnel: {
-      label: 'Présences du personnel', singulier: 'Présence d’un agent', icone: '🕗',
+      label: 'Présences du personnel', singulier: 'Présence d’un agent', icone: '\uE018',
       champs: [
         f('personnel_id', 'Agent', 'ref', { ref: 'personnels', req: 1, list: 1 }),
         f('ecole_id', 'École', 'ref', { ref: 'ecoles', scope: 1 }),
@@ -629,7 +631,7 @@
       ]
     },
     centres_examen: {
-      label: 'Centres d’examen blanc', singulier: 'Centre', icone: '🏟️',
+      label: 'Centres d’examen blanc', singulier: 'Centre', icone: '\uE027',
       titre: r => r.nom,
       champs: [
         f('nom', 'Centre de composition', 'text', { req: 1, list: 1 }),
@@ -643,7 +645,7 @@
       ]
     },
     compositions_centre: {
-      label: 'Compositions en centre', singulier: 'Composition', icone: '🖊️',
+      label: 'Compositions en centre', singulier: 'Composition', icone: '\uE006',
       champs: [
         f('centre_id', 'Centre', 'ref', { ref: 'centres_examen', req: 1, list: 1 }),
         f('inscription_id', 'Candidat', 'ref', { ref: 'inscriptions_eleves', req: 1, list: 1 }),
@@ -658,7 +660,7 @@
       ]
     },
     examens_blancs: {
-      label: 'Examens blancs', singulier: 'Examen blanc', icone: '🧪',
+      label: 'Examens blancs', singulier: 'Examen blanc', icone: '\uE05F',
       titre: r => 'Examen blanc n°' + (r.numero || 1),
       champs: [
         f('annee_scolaire_id', 'Année', 'ref', { ref: 'annees_scolaires', annee: 1 }),
@@ -670,7 +672,7 @@
       ]
     },
     notes_examens_blancs: {
-      label: 'Notes d\'examens blancs', singulier: 'Note d\'examen blanc', icone: '🧾',
+      label: 'Notes d\'examens blancs', singulier: 'Note d\'examen blanc', icone: '\uE04B',
       champs: [
         f('examen_id', 'Examen', 'ref', { ref: 'examens_blancs', req: 1, list: 1 }),
         f('inscription_id', 'Inscription', 'ref', { ref: 'inscriptions_eleves', req: 1, list: 1 }),
@@ -680,7 +682,7 @@
       ]
     },
     fiches_cep: {
-      label: 'Fiches d’inscription au CEP', singulier: 'Fiche d’inscription', icone: '🗳️',
+      label: 'Fiches d’inscription au CEP', singulier: 'Fiche d’inscription', icone: '\uE070',
       champs: [
         f('inscription_id', 'Candidat', 'ref', { ref: 'inscriptions_eleves', req: 1, list: 1 }),
         f('session', 'Session', 'text', { list: 1, ph: 'JUIN 2027' }),
@@ -702,7 +704,7 @@
       ]
     },
     resultats_cep: {
-      label: 'Résultats CEP', singulier: 'Résultat CEP', icone: '🎓',
+      label: 'Résultats CEP', singulier: 'Résultat CEP', icone: '\uE020',
       champs: [
         f('inscription_id', 'Inscription', 'ref', { ref: 'inscriptions_eleves', req: 1, list: 1 }),
         f('numero_table', 'Numéro de table', 'text', { list: 1 }),
@@ -717,7 +719,7 @@
 
     /* ---------------- PERSONNEL ---------------- */
     personnels: {
-      label: 'Personnel', singulier: 'Agent', icone: '👩‍🏫',
+      label: 'Personnel', singulier: 'Agent', icone: '\uE01E',
       titre: r => (r.nom || '').toUpperCase() + ' ' + (r.prenoms || ''),
       champs: [
         f('matricule', 'Matricule', 'text', { list: 1 }),
@@ -759,7 +761,7 @@
       ]
     },
     carrieres_personnel: {
-      label: 'Carrière', singulier: 'Événement de carrière', icone: '📈',
+      label: 'Carrière', singulier: 'Événement de carrière', icone: '\uE016',
       champs: [
         f('personnel_id', 'Agent', 'ref', { ref: 'personnels', req: 1, list: 1 }),
         f('type_acte', 'Nature de l’acte', 'select', { list: 1, o: ['RECRUTEMENT', 'TITULARISATION', 'AVANCEMENT_ECHELON', 'PROMOTION_GRADE', 'RECLASSEMENT',
@@ -775,7 +777,7 @@
       ]
     },
     affectations_personnel: {
-      label: 'Affectations', singulier: 'Affectation', icone: '📌',
+      label: 'Affectations', singulier: 'Affectation', icone: '\uE02D',
       champs: [
         f('personnel_id', 'Agent', 'ref', { ref: 'personnels', req: 1, list: 1 }),
         f('ecole_id', 'École', 'ref', { ref: 'ecoles', list: 1, scope: 1 }),
@@ -787,7 +789,7 @@
       ]
     },
     certificats_agents: {
-      label: 'Certificats délivrés', singulier: 'Certificat', icone: '📑',
+      label: 'Certificats délivrés', singulier: 'Certificat', icone: '\uE00D',
       champs: [
         f('personnel_id', 'Agent', 'ref', { ref: 'personnels', req: 1, list: 1 }),
         f('ecole_id', 'École', 'ref', { ref: 'ecoles', scope: 1 }),
@@ -798,7 +800,7 @@
       ]
     },
     diplomes_personnel: {
-      label: 'Diplômes', singulier: 'Diplôme', icone: '📜',
+      label: 'Diplômes', singulier: 'Diplôme', icone: '\uE02F',
       champs: [
         f('personnel_id', 'Agent', 'ref', { ref: 'personnels', req: 1, list: 1 }),
         f('type', 'Type', 'select', { o: ['ACADEMIQUE', 'PROFESSIONNEL'], list: 1 }),
@@ -808,7 +810,7 @@
       ]
     },
     formations_personnel: {
-      label: 'Formations', singulier: 'Formation', icone: '🎯',
+      label: 'Formations', singulier: 'Formation', icone: '\uE02E',
       champs: [
         f('personnel_id', 'Agent', 'ref', { ref: 'personnels', req: 1, list: 1 }),
         f('type', 'Type', 'select', { o: ['INITIALE', 'CONTINUE', 'RECYCLAGE', 'UNITE_PEDAGOGIQUE'], list: 1 }),
@@ -819,7 +821,7 @@
       ]
     },
     evaluations_personnel: {
-      label: 'Évaluations du personnel', singulier: 'Évaluation d\'agent', icone: '⭐',
+      label: 'Évaluations du personnel', singulier: 'Évaluation d\'agent', icone: '\uE05D',
       champs: [
         f('personnel_id', 'Agent', 'ref', { ref: 'personnels', req: 1, list: 1 }),
         f('annee_scolaire_id', 'Année', 'ref', { ref: 'annees_scolaires', annee: 1 }),
@@ -838,7 +840,7 @@
       ]
     },
     participations_up: {
-      label: 'Unités pédagogiques', singulier: 'Participation UP', icone: '🧑‍🤝‍🧑',
+      label: 'Unités pédagogiques', singulier: 'Participation UP', icone: '\uE01C',
       champs: [
         f('personnel_id', 'Agent', 'ref', { ref: 'personnels', req: 1, list: 1 }),
         f('annee_scolaire_id', 'Année', 'ref', { ref: 'annees_scolaires', annee: 1 }),
@@ -849,7 +851,7 @@
 
     /* ---------------- RETRAITE ---------------- */
     regles_retraite: {
-      label: 'Règles de retraite', singulier: 'Règle de retraite', icone: '📏',
+      label: 'Règles de retraite', singulier: 'Règle de retraite', icone: '\uE061',
       titre: r => r.categorie + ' — ' + r.age_retraite + ' ans',
       champs: [
         f('categorie', 'Catégorie', 'select', { req: 1, list: 1, o: ['A1', 'A2', 'A3', 'B1', 'C1'] }),
@@ -862,7 +864,7 @@
       ]
     },
     notifications_retraite: {
-      label: 'Notifications de retraite', singulier: 'Notification', icone: '📱',
+      label: 'Notifications de retraite', singulier: 'Notification', icone: '\uE045',
       champs: [
         f('personnel_id', 'Agent', 'ref', { ref: 'personnels', req: 1, list: 1 }),
         f('annee_scolaire_id', 'Année', 'ref', { ref: 'annees_scolaires', annee: 1 }),
@@ -876,7 +878,7 @@
 
     /* ---------------- PATRIMOINE ---------------- */
     infrastructures: {
-      label: 'Infrastructures', singulier: 'Local', icone: '🏫',
+      label: 'Infrastructures', singulier: 'Local', icone: '\uE022',
       titre: r => r.designation || r.code_local || r.type_local,
       champs: [
         f('ecole_id', 'École', 'ref', { ref: 'ecoles', req: 1, scope: 1 }),
@@ -897,7 +899,7 @@
       ]
     },
     accessibilite_infrastructure: {
-      label: 'Accessibilité', singulier: 'Fiche d\'accessibilité', icone: '♿',
+      label: 'Accessibilité', singulier: 'Fiche d\'accessibilité', icone: '\uE06F',
       champs: [
         f('infrastructure_id', 'Local', 'ref', { ref: 'infrastructures', req: 1, list: 1 }),
         f('rampe', 'Rampe d\'accès', 'bool', { list: 1 }),
@@ -910,7 +912,7 @@
       ]
     },
     inspections_infrastructure: {
-      label: 'Inspections de locaux', singulier: 'Inspection', icone: '🔍',
+      label: 'Inspections de locaux', singulier: 'Inspection', icone: '\uE02A',
       champs: [
         f('infrastructure_id', 'Local', 'ref', { ref: 'infrastructures', req: 1, list: 1 }),
         f('annee_scolaire_id', 'Année', 'ref', { ref: 'annees_scolaires', annee: 1 }),
@@ -920,7 +922,7 @@
       ]
     },
     inventaires_mobilier: {
-      label: 'Inventaire du mobilier', singulier: 'Ligne d\'inventaire', icone: '🪑',
+      label: 'Inventaire du mobilier', singulier: 'Ligne d\'inventaire', icone: '\uE028',
       champs: [
         f('ecole_id', 'École', 'ref', { ref: 'ecoles', req: 1, scope: 1 }),
         f('annee_scolaire_id', 'Année', 'ref', { ref: 'annees_scolaires', annee: 1 }),
@@ -935,7 +937,7 @@
       ]
     },
     mouvements_mobilier: {
-      label: 'Mouvements de mobilier', singulier: 'Mouvement', icone: '🚚',
+      label: 'Mouvements de mobilier', singulier: 'Mouvement', icone: '\uE062',
       champs: [
         f('ecole_id', 'École', 'ref', { ref: 'ecoles', req: 1, scope: 1 }),
         f('type_mobilier', 'Type', 'text', { req: 1, list: 1 }),
@@ -948,7 +950,7 @@
       ]
     },
     inventaires_equipements: {
-      label: 'Équipements', singulier: 'Équipement', icone: '🧰',
+      label: 'Équipements', singulier: 'Équipement', icone: '\uE052',
       champs: [
         f('ecole_id', 'École', 'ref', { ref: 'ecoles', req: 1, scope: 1 }),
         f('annee_scolaire_id', 'Année', 'ref', { ref: 'annees_scolaires', annee: 1 }),
@@ -961,7 +963,7 @@
       ]
     },
     ressources_pedagogiques: {
-      label: 'Ressources pédagogiques', singulier: 'Ressource', icone: '📚',
+      label: 'Ressources pédagogiques', singulier: 'Ressource', icone: '\uE031',
       champs: [
         f('ecole_id', 'École', 'ref', { ref: 'ecoles', req: 1, scope: 1 }),
         f('annee_scolaire_id', 'Année', 'ref', { ref: 'annees_scolaires', annee: 1 }),
@@ -973,7 +975,7 @@
       ]
     },
     services_ecole: {
-      label: 'Services de l\'école', singulier: 'Fiche de services', icone: '🚰',
+      label: 'Services de l\'école', singulier: 'Fiche de services', icone: '\uE06D',
       champs: [
         f('ecole_id', 'École', 'ref', { ref: 'ecoles', req: 1, scope: 1, list: 1 }),
         f('annee_scolaire_id', 'Année', 'ref', { ref: 'annees_scolaires', annee: 1 }),
@@ -992,7 +994,7 @@
       ]
     },
     structure_pedagogique: {
-      label: 'Structure pédagogique', singulier: 'Ligne de structure', icone: '🧱',
+      label: 'Structure pédagogique', singulier: 'Ligne de structure', icone: '\uE063',
       champs: [
         f('ecole_id', 'École', 'ref', { ref: 'ecoles', req: 1, scope: 1 }),
         f('annee_scolaire_id', 'Année', 'ref', { ref: 'annees_scolaires', annee: 1 }),
@@ -1005,7 +1007,7 @@
 
     /* ---------------- CANTINE / BUDGET / GOUVERNANCE ---------------- */
     cantines: {
-      label: 'Cantines', singulier: 'Cantine', icone: '🍚',
+      label: 'Cantines', singulier: 'Cantine', icone: '\uE05B',
       champs: [
         f('ecole_id', 'École', 'ref', { ref: 'ecoles', req: 1, scope: 1, list: 1 }),
         f('annee_scolaire_id', 'Année', 'ref', { ref: 'annees_scolaires', annee: 1 }),
@@ -1018,7 +1020,7 @@
       ]
     },
     participations_cantine: {
-      label: 'Repas servis', singulier: 'Participation', icone: '🍽️',
+      label: 'Repas servis', singulier: 'Participation', icone: '\uE05B',
       champs: [
         f('inscription_id', 'Inscription', 'ref', { ref: 'inscriptions_eleves', req: 1, list: 1 }),
         f('date_repas', 'Date', 'date', { req: 1, list: 1 }),
@@ -1029,7 +1031,7 @@
       ]
     },
     budgets_ecoles: {
-      label: 'Budgets', singulier: 'Budget', icone: '💰',
+      label: 'Budgets', singulier: 'Budget', icone: '\uE04E',
       champs: [
         f('ecole_id', 'École', 'ref', { ref: 'ecoles', req: 1, scope: 1, list: 1 }),
         f('annee_scolaire_id', 'Année', 'ref', { ref: 'annees_scolaires', annee: 1, list: 1 }),
@@ -1042,7 +1044,7 @@
       ]
     },
     mouvements_budget: {
-      label: 'Mouvements budgétaires', singulier: 'Mouvement', icone: '📒',
+      label: 'Mouvements budgétaires', singulier: 'Mouvement', icone: '\uE030',
       champs: [
         f('budget_id', 'Budget', 'ref', { ref: 'budgets_ecoles', req: 1, list: 1 }),
         f('type', 'Type', 'select', { req: 1, list: 1, o: ['SUBVENTION_ETAT', 'COTISATION_PARENT', 'AUTRE_RESSOURCE', 'DEPENSE', 'AJUSTEMENT'] }),
@@ -1055,7 +1057,7 @@
       ]
     },
     pieces_financieres: {
-      label: 'Pièces financières', singulier: 'Pièce', icone: '🧾',
+      label: 'Pièces financières', singulier: 'Pièce', icone: '\uE04B',
       champs: [
         f('ecole_id', 'École', 'ref', { ref: 'ecoles', scope: 1 }),
         f('annee_scolaire_id', 'Année', 'ref', { ref: 'annees_scolaires', annee: 1 }),
@@ -1066,7 +1068,7 @@
       ]
     },
     gestion_participative: {
-      label: 'Gestion participative', singulier: 'Fiche de gouvernance', icone: '🤝',
+      label: 'Gestion participative', singulier: 'Fiche de gouvernance', icone: '\uE044',
       champs: [
         f('ecole_id', 'École', 'ref', { ref: 'ecoles', req: 1, scope: 1, list: 1 }),
         f('annee_scolaire_id', 'Année', 'ref', { ref: 'annees_scolaires', annee: 1 }),
@@ -1082,7 +1084,7 @@
       ]
     },
     reunions_gestion: {
-      label: 'Réunions', singulier: 'Réunion', icone: '🗣️',
+      label: 'Réunions', singulier: 'Réunion', icone: '\uE035',
       champs: [
         f('ecole_id', 'École', 'ref', { ref: 'ecoles', req: 1, scope: 1 }),
         f('annee_scolaire_id', 'Année', 'ref', { ref: 'annees_scolaires', annee: 1 }),
@@ -1096,7 +1098,7 @@
       ]
     },
     contacts: {
-      label: 'Répertoire et contacts', singulier: 'Contact', icone: '📇',
+      label: 'Répertoire et contacts', singulier: 'Contact', icone: '\uE012',
       titre: r => ((r.nom || '') + ' ' + (r.prenoms || '')).trim(),
       champs: [
         f('nom', 'Nom', 'text', { req: 1, list: 1 }),
@@ -1118,7 +1120,7 @@
       ]
     },
     evenements_calendrier: {
-      label: 'Événements du calendrier scolaire', singulier: 'Événement', icone: '🗓️',
+      label: 'Événements du calendrier scolaire', singulier: 'Événement', icone: '\uE017',
       titre: r => r.titre,
       champs: [
         f('titre', 'Titre', 'text', { req: 1, list: 1 }),
@@ -1133,7 +1135,7 @@
       ]
     },
     membres_instances: {
-      label: 'Membres des instances de gestion', singulier: 'Membre d’instance', icone: '👥',
+      label: 'Membres des instances de gestion', singulier: 'Membre d’instance', icone: '\uE01C',
       titre: r => (r.nom_complet || '') + (r.role ? ' — ' + r.role : ''),
       champs: [
         f('ecole_id', 'École', 'ref', { ref: 'ecoles', req: 1, scope: 1 }),
@@ -1149,7 +1151,7 @@
       ]
     },
     communication_resultats: {
-      label: 'Communication des résultats', singulier: 'Fiche de communication', icone: '📣',
+      label: 'Communication des résultats', singulier: 'Fiche de communication', icone: '\uE050',
       champs: [
         f('ecole_id', 'École', 'ref', { ref: 'ecoles', req: 1, scope: 1, list: 1 }),
         f('annee_scolaire_id', 'Année', 'ref', { ref: 'annees_scolaires', annee: 1 }),
@@ -1163,7 +1165,7 @@
 
     /* ---------------- RECENSEMENT & STATS ---------------- */
     campagnes_recensement: {
-      label: 'Campagnes de recensement', singulier: 'Campagne', icone: '🧮',
+      label: 'Campagnes de recensement', singulier: 'Campagne', icone: '\uE040',
       titre: r => (r.type || '') + ' ' + (r.version_formulaire || ''),
       champs: [
         f('annee_scolaire_id', 'Année', 'ref', { ref: 'annees_scolaires', annee: 1, list: 1 }),
@@ -1178,7 +1180,7 @@
         /* Archive des courriers d'une circonscription ou d'une direction : registre des courriers reçus et
        envoyés, avec numéro d'ordre, objet, correspondant, suivi et pièce jointe (image ou PDF). */
     courriers: {
-      label: 'Archive des courriers', singulier: 'Courrier', icone: '📬',
+      label: 'Archive des courriers', singulier: 'Courrier', icone: '\uE04F',
       titre: r => (r.reference ? r.reference + ' — ' : '') + (r.objet || ''),
       champs: [
         f('territoire_id', 'Circonscription scolaire (CS)', 'ref', { ref: 'territoires', req: 1, list: 1 }),
@@ -1199,7 +1201,7 @@
 
     /* ---------------- PERSONNEL PAR STATUT : SIGNATURE DE CATÉGORIE ---------------- */
     divisions_structure: {
-      label: 'Divisions et services (chefs, attributions)', singulier: 'Division', icone: '🏛️',
+      label: 'Divisions et services (chefs, attributions)', singulier: 'Division', icone: '\uE023',
       titre: r => (r.sigle || r.division_code || '') + ' — ' + (r.chef_nom || ''),
       champs: [
         f('territoire_id', 'Circonscription ou département', 'ref', { ref: 'territoires', req: 1, list: 1 }),
@@ -1213,7 +1215,7 @@
       ]
     },
     lignes_action: {
-      label: 'Lignes d’action des divisions', singulier: 'Ligne d’action', icone: '🎯',
+      label: 'Lignes d’action des divisions', singulier: 'Ligne d’action', icone: '\uE02E',
       titre: r => r.libelle,
       champs: [
         f('territoire_id', 'Circonscription ou département', 'ref', { ref: 'territoires', req: 1, list: 1 }),
@@ -1230,7 +1232,7 @@
       ]
     },
     signatures_categories: {
-      label: 'Signatures des catégories', singulier: 'Signature de catégorie', icone: '✍️',
+      label: 'Signatures des catégories', singulier: 'Signature de catégorie', icone: '\uE029',
       titre: r => (r.categorie || '') + ' — ' + (r.signataire_nom || ''),
       champs: [
         f('territoire_id', 'Circonscription scolaire (CS)', 'ref', { ref: 'territoires', req: 1, list: 1 }),
@@ -1243,7 +1245,7 @@
 
     /* ---------------- ÉCOLES PRIVÉES : SCOLARITÉ, CAISSE, SALAIRES ---------------- */
     frais_scolarite: {
-      label: 'Frais de scolarité (barème)', singulier: 'Barème de scolarité', icone: '🏷️',
+      label: 'Frais de scolarité (barème)', singulier: 'Barème de scolarité', icone: '\uE056',
       titre: r => 'Scolarité ' + (r.niveau || ''),
       champs: [
         f('ecole_id', 'École', 'ref', { ref: 'ecoles', req: 1, scope: 1 }),
@@ -1259,7 +1261,7 @@
       ]
     },
     remises_scolarite: {
-      label: 'Remises et exonérations', singulier: 'Remise de scolarité', icone: '🎁',
+      label: 'Remises et exonérations', singulier: 'Remise de scolarité', icone: '\uE071',
       titre: r => 'Remise de ' + (r.montant || 0) + ' FCFA',
       champs: [
         f('ecole_id', 'École', 'ref', { ref: 'ecoles', req: 1, scope: 1 }),
@@ -1270,7 +1272,7 @@
       ]
     },
     paiements_scolarite: {
-      label: 'Paiements de scolarité', singulier: 'Paiement de scolarité', icone: '💵',
+      label: 'Paiements de scolarité', singulier: 'Paiement de scolarité', icone: '\uE04E',
       titre: r => (r.numero_recu || 'Reçu') + ' — ' + (r.montant || 0) + ' FCFA',
       champs: [
         f('ecole_id', 'École', 'ref', { ref: 'ecoles', req: 1, scope: 1 }),
@@ -1286,7 +1288,7 @@
       ]
     },
     cahier_fonds: {
-      label: 'Cahier de gestion des fonds', singulier: 'Écriture de caisse', icone: '📒',
+      label: 'Cahier de gestion des fonds', singulier: 'Écriture de caisse', icone: '\uE030',
       titre: r => (r.libelle || '') + ' — ' + (r.montant || 0) + ' FCFA',
       champs: [
         f('ecole_id', 'École', 'ref', { ref: 'ecoles', req: 1, scope: 1 }),
@@ -1303,7 +1305,7 @@
       ]
     },
     salaires_ecole: {
-      label: 'Salaires des enseignants', singulier: 'Salaire', icone: '👛',
+      label: 'Salaires des enseignants', singulier: 'Salaire', icone: '\uE04E',
       titre: r => (r.mois || '') + ' — ' + (r.net || 0) + ' FCFA',
       champs: [
         f('ecole_id', 'École', 'ref', { ref: 'ecoles', req: 1, scope: 1 }),
@@ -1324,7 +1326,7 @@
        dans ses tableaux statistiques (classes autorisées, personnel FE/ACDPE/ACDPCTD, élèves par
        cours et par sexe). Une ligne par école et par année. */
     statistiques_ecoles: {
-      label: 'Statistiques par école', singulier: 'Statistique d’école', icone: '📈',
+      label: 'Statistiques par école', singulier: 'Statistique d’école', icone: '\uE016',
       titre: r => 'Année ' + (r.annee_code || ''),
       champs: [
         f('ecole_id', 'École', 'ref', { ref: 'ecoles', req: 1, scope: 1, list: 1 }),
@@ -1340,7 +1342,7 @@
       ]
     },
     recensements_ecoles: {
-      label: 'Recensements par école', singulier: 'Recensement', icone: '📥',
+      label: 'Recensements par école', singulier: 'Recensement', icone: '\uE00B',
       champs: [
         f('campagne_id', 'Campagne', 'ref', { ref: 'campagnes_recensement', req: 1, list: 1 }),
         f('ecole_id', 'École', 'ref', { ref: 'ecoles', req: 1, scope: 1, list: 1 }),
@@ -1349,7 +1351,7 @@
       ]
     },
     recensement_valeurs: {
-      label: 'Valeurs de recensement', singulier: 'Valeur', icone: '🔢',
+      label: 'Valeurs de recensement', singulier: 'Valeur', icone: '\uE040',
       champs: [
         f('recensement_id', 'Recensement', 'ref', { ref: 'recensements_ecoles', req: 1 }),
         f('rubrique', 'Rubrique', 'text', { req: 1, list: 1 }),
@@ -1360,7 +1362,7 @@
       ]
     },
     bilans_recensement: {
-      label: 'Bilans de recensement', singulier: 'Bilan', icone: '📊',
+      label: 'Bilans de recensement', singulier: 'Bilan', icone: '\uE015',
       champs: [
         f('campagne_id', 'Campagne', 'ref', { ref: 'campagnes_recensement', req: 1, list: 1 }),
         f('niveau', 'Niveau', 'select', { req: 1, list: 1, o: ['CIRCONSCRIPTION', 'DDEMP', 'NATIONAL'] }),
@@ -1373,7 +1375,7 @@
       ]
     },
     statistiques_agregees: {
-      label: 'Statistiques agrégées', singulier: 'Statistique', icone: '📈', lectureSeule: true,
+      label: 'Statistiques agrégées', singulier: 'Statistique', icone: '\uE016', lectureSeule: true,
       champs: [
         f('annee_scolaire_id', 'Année', 'ref', { ref: 'annees_scolaires', list: 1 }),
         f('territoire_type', 'Niveau territorial', 'text', { list: 1 }),
@@ -1385,7 +1387,7 @@
       ]
     },
     populations_scolarisables: {
-      label: 'Populations scolarisables', singulier: 'Population', icone: '👶',
+      label: 'Populations scolarisables', singulier: 'Population', icone: '\uE01F',
       champs: [
         f('annee', 'Année', 'number', { req: 1, list: 1 }),
         f('territoire_id', 'Territoire', 'ref', { ref: 'territoires', list: 1 }),
@@ -1397,7 +1399,7 @@
       ]
     },
     definitions_indicateurs: {
-      label: 'Définitions d\'indicateurs', singulier: 'Indicateur', icone: '📐',
+      label: 'Définitions d\'indicateurs', singulier: 'Indicateur', icone: '\uE061',
       titre: r => r.nom,
       champs: [
         f('code', 'Code', 'text', { req: 1, list: 1 }),
@@ -1408,7 +1410,7 @@
       ]
     },
     projections: {
-      label: 'Projections', singulier: 'Projection', icone: '🔮',
+      label: 'Projections', singulier: 'Projection', icone: '\uE07A',
       champs: [
         f('modele', 'Modèle', 'text', { req: 1, list: 1 }),
         f('version', 'Version', 'text'),
@@ -1423,7 +1425,7 @@
 
     /* ---------------- PARENTS ---------------- */
     profils_parents: {
-      label: 'Parents', singulier: 'Parent', icone: '👨‍👩‍👧',
+      label: 'Parents', singulier: 'Parent', icone: '\uE01C',
       titre: r => (r.nom || '').toUpperCase() + ' ' + (r.prenoms || ''),
       champs: [
         f('nom', 'Nom', 'text', { req: 1, list: 1 }),
@@ -1436,7 +1438,7 @@
       ]
     },
     liens_parent_enfant: {
-      label: 'Liens parent-enfant', singulier: 'Lien', icone: '🔗',
+      label: 'Liens parent-enfant', singulier: 'Lien', icone: '\uE053',
       champs: [
         f('parent_id', 'Parent', 'ref', { ref: 'profils_parents', req: 1, list: 1 }),
         f('eleve_id', 'Élève', 'ref', { ref: 'eleves', req: 1, list: 1 }),
@@ -1446,7 +1448,7 @@
       ]
     },
     communications_ecole: {
-      label: 'Communications de l\'école', singulier: 'Communication', icone: '📢',
+      label: 'Communications de l\'école', singulier: 'Communication', icone: '\uE050',
       titre: r => r.titre,
       champs: [
         f('ecole_id', 'École', 'ref', { ref: 'ecoles', req: 1, scope: 1 }),
@@ -1459,7 +1461,7 @@
       ]
     },
     messages: {
-      label: 'Messages école-famille', singulier: 'Message', icone: '💬',
+      label: 'Messages école-famille', singulier: 'Message', icone: '\uE035',
       champs: [
         f('ecole_id', 'École', 'ref', { ref: 'ecoles', scope: 1 }),
         f('eleve_id', 'Élève concerné', 'ref', { ref: 'eleves', list: 1 }),
@@ -1472,7 +1474,7 @@
 
     /* ---------------- RISQUES & ALERTES ---------------- */
     modeles_risque: {
-      label: 'Modèles de risque', singulier: 'Modèle', icone: '🧠',
+      label: 'Modèles de risque', singulier: 'Modèle', icone: '\uE064',
       titre: r => r.code + ' ' + (r.version || ''),
       champs: [
         f('code', 'Code', 'text', { req: 1, list: 1 }),
@@ -1483,7 +1485,7 @@
       ]
     },
     scores_risque: {
-      label: 'Scores de risque', singulier: 'Score', icone: '📉', lectureSeule: true,
+      label: 'Scores de risque', singulier: 'Score', icone: '\uE016', lectureSeule: true,
       champs: [
         f('inscription_id', 'Inscription', 'ref', { ref: 'inscriptions_eleves', list: 1 }),
         f('score', 'Score /100', 'number', { list: 1 }),
@@ -1493,7 +1495,7 @@
       ]
     },
     alertes_scolaires: {
-      label: 'Alertes de décrochage', singulier: 'Alerte de décrochage', icone: '🚸',
+      label: 'Alertes de décrochage', singulier: 'Alerte de décrochage', icone: '\uE065',
       champs: [
         f('inscription_id', 'Inscription', 'ref', { ref: 'inscriptions_eleves', req: 1, list: 1 }),
         f('niveau', 'Niveau', 'select', { req: 1, list: 1, o: ['FAIBLE', 'MOYEN', 'ELEVE', 'CRITIQUE'] }),
@@ -1502,7 +1504,7 @@
       ]
     },
     accompagnements_eleves: {
-      label: 'Accompagnements', singulier: 'Accompagnement', icone: '🤗',
+      label: 'Accompagnements', singulier: 'Accompagnement', icone: '\uE066',
       champs: [
         f('inscription_id', 'Inscription', 'ref', { ref: 'inscriptions_eleves', req: 1, list: 1 }),
         f('responsable_label', 'Responsable', 'text', { list: 1 }),
@@ -1514,7 +1516,7 @@
       ]
     },
     actions_accompagnement: {
-      label: 'Actions d\'accompagnement', singulier: 'Action', icone: '✍️',
+      label: 'Actions d\'accompagnement', singulier: 'Action', icone: '\uE029',
       champs: [
         f('accompagnement_id', 'Accompagnement', 'ref', { ref: 'accompagnements_eleves', req: 1, list: 1 }),
         f('type_action', 'Type', 'select', { req: 1, list: 1, o: ['VISITE_FAMILLE', 'APPEL', 'ENTRETIEN', 'SOUTIEN_SCOLAIRE', 'AIDE_MATERIELLE', 'AUTRE'] }),
@@ -1525,7 +1527,7 @@
       ]
     },
     types_alertes: {
-      label: 'Types d\'alertes', singulier: 'Type d\'alerte', icone: '🏷️',
+      label: 'Types d\'alertes', singulier: 'Type d\'alerte', icone: '\uE056',
       titre: r => r.libelle,
       champs: [
         f('code', 'Code', 'text', { req: 1, list: 1 }),
@@ -1536,7 +1538,7 @@
       ]
     },
     alertes: {
-      label: 'Alertes', singulier: 'Alerte', icone: '🔔',
+      label: 'Alertes', singulier: 'Alerte', icone: '\uE055',
       titre: r => r.titre,
       champs: [
         f('type_code', 'Type', 'text', { req: 1, list: 1 }),
@@ -1549,7 +1551,7 @@
       ]
     },
     actions_alertes: {
-      label: 'Actions sur alertes', singulier: 'Action', icone: '🧰',
+      label: 'Actions sur alertes', singulier: 'Action', icone: '\uE052',
       champs: [
         f('alerte_id', 'Alerte', 'ref', { ref: 'alertes', req: 1, list: 1 }),
         f('type_action', 'Type', 'text', { list: 1 }),
@@ -1562,7 +1564,7 @@
 
     /* ---------------- VISITES ---------------- */
     visites: {
-      label: 'Visites', singulier: 'Visite', icone: '🧭',
+      label: 'Visites', singulier: 'Visite', icone: '\uE042',
       titre: r => (r.type_code || 'Visite') + ' — ' + (r.date_visite || ''),
       champs: [
         f('type_code', 'Type', 'select', { req: 1, list: 1, o: ['VISITE_CLASSE', 'VISITE_ECOLE', 'INSPECTION', 'SUIVI'] }),
@@ -1578,7 +1580,7 @@
       ]
     },
     observations_visites: {
-      label: 'Observations de visite', singulier: 'Observation', icone: '👁️',
+      label: 'Observations de visite', singulier: 'Observation', icone: '\uE043',
       champs: [
         f('visite_id', 'Visite', 'ref', { ref: 'visites', req: 1, list: 1 }),
         f('categorie', 'Catégorie', 'text', { list: 1 }),
@@ -1587,7 +1589,7 @@
       ]
     },
     recommandations: {
-      label: 'Recommandations', singulier: 'Recommandation', icone: '📌',
+      label: 'Recommandations', singulier: 'Recommandation', icone: '\uE02D',
       champs: [
         f('visite_id', 'Visite', 'ref', { ref: 'visites', req: 1, list: 1 }),
         f('texte', 'Recommandation', 'textarea', { req: 1, list: 1 }),
@@ -1597,7 +1599,7 @@
       ]
     },
     plans_amelioration: {
-      label: 'Plans d\'amélioration', singulier: 'Plan', icone: '🗺️',
+      label: 'Plans d\'amélioration', singulier: 'Plan', icone: '\uE048',
       titre: r => r.titre,
       champs: [
         f('ecole_id', 'École', 'ref', { ref: 'ecoles', req: 1, scope: 1, list: 1 }),
@@ -1610,7 +1612,7 @@
       ]
     },
     actions_plan_amelioration: {
-      label: 'Actions de plan', singulier: 'Action', icone: '✔️',
+      label: 'Actions de plan', singulier: 'Action', icone: '\uE003',
       champs: [
         f('plan_id', 'Plan', 'ref', { ref: 'plans_amelioration', req: 1, list: 1 }),
         f('titre', 'Titre', 'text', { req: 1, list: 1 }),
@@ -1624,7 +1626,7 @@
 
     /* ---------------- DOCUMENTS ---------------- */
     types_documents: {
-      label: 'Types de documents', singulier: 'Type de document', icone: '🏷️',
+      label: 'Types de documents', singulier: 'Type de document', icone: '\uE056',
       titre: r => r.nom,
       champs: [
         f('code', 'Code', 'text', { req: 1, list: 1 }),
@@ -1635,7 +1637,7 @@
       ]
     },
     documents: {
-      label: 'Documents', singulier: 'Document', icone: '📄',
+      label: 'Documents', singulier: 'Document', icone: '\uE00D',
       titre: r => r.titre,
       champs: [
         f('numero', 'Numéro', 'text', { list: 1 }),
@@ -1654,7 +1656,7 @@
 
     /* ---------------- RAPPORTS ---------------- */
     signatures_documents: {
-      label: 'Signatures de documents', singulier: 'Signature', icone: '✍️', lectureSeule: true,
+      label: 'Signatures de documents', singulier: 'Signature', icone: '\uE029', lectureSeule: true,
       champs: [
         f('document_id', 'Document', 'ref', { ref: 'documents', list: 1 }),
         f('signataire_label', 'Signataire', 'text', { list: 1 }),
@@ -1665,7 +1667,7 @@
       ]
     },
     modeles_rapports: {
-      label: 'Modèles de rapports', singulier: 'Modèle', icone: '🗂️',
+      label: 'Modèles de rapports', singulier: 'Modèle', icone: '\uE011',
       titre: r => r.nom,
       champs: [
         f('code', 'Code', 'text', { req: 1, list: 1 }),
@@ -1677,7 +1679,7 @@
       ]
     },
     generations_rapports: {
-      label: 'Rapports générés', singulier: 'Rapport généré', icone: '📤', lectureSeule: true,
+      label: 'Rapports générés', singulier: 'Rapport généré', icone: '\uE00C', lectureSeule: true,
       champs: [
         f('nom', 'Rapport', 'text', { list: 1 }),
         f('format', 'Format', 'text', { list: 1 }),
@@ -1688,7 +1690,7 @@
 
     /* ---------------- SYNCHRO ---------------- */
     educmaster_sync_queue: {
-      label: 'File EDUCMaster', singulier: 'Élément de file', icone: '🔄', lectureSeule: true,
+      label: 'File EDUCMaster', singulier: 'Élément de file', icone: '\uE058', lectureSeule: true,
       champs: [
         f('entity_type', 'Entité', 'text', { list: 1 }),
         f('entity_id', 'Identifiant', 'text', { list: 1 }),
@@ -1699,7 +1701,7 @@
       ]
     },
     conflits_synchronisation: {
-      label: 'Conflits de synchronisation', singulier: 'Conflit', icone: '⚔️',
+      label: 'Conflits de synchronisation', singulier: 'Conflit', icone: '\uE067',
       champs: [
         f('systeme', 'Système', 'text', { list: 1 }),
         f('entity_type', 'Entité', 'text', { list: 1 }),
@@ -1712,7 +1714,7 @@
       ]
     },
     device_sync_status: {
-      label: 'Appareils', singulier: 'Appareil', icone: '📱', lectureSeule: true,
+      label: 'Appareils', singulier: 'Appareil', icone: '\uE045', lectureSeule: true,
       champs: [
         f('device_id', 'Appareil', 'text', { list: 1 }),
         f('user_label', 'Utilisateur', 'text', { list: 1 }),
@@ -1724,7 +1726,7 @@
 
     /* ---------------- SUPPORT ---------------- */
     support_tickets: {
-      label: 'Tickets de support', singulier: 'Ticket', icone: '🛠️',
+      label: 'Tickets de support', singulier: 'Ticket', icone: '\uE052',
       titre: r => r.reference + ' — ' + (r.titre || ''),
       champs: [
         f('reference', 'Référence', 'text', { list: 1 }),
@@ -1736,7 +1738,7 @@
       ]
     },
     maintenances: {
-      label: 'Maintenances', singulier: 'Maintenance', icone: '🧯',
+      label: 'Maintenances', singulier: 'Maintenance', icone: '\uE07C',
       titre: r => r.titre,
       champs: [
         f('titre', 'Titre', 'text', { req: 1, list: 1 }),
@@ -1748,7 +1750,7 @@
       ]
     },
     feature_flags: {
-      label: 'Fonctionnalités', singulier: 'Fonctionnalité', icone: '🚦',
+      label: 'Fonctionnalités', singulier: 'Fonctionnalité', icone: '\uE069',
       titre: r => r.code,
       champs: [
         f('code', 'Code', 'text', { req: 1, list: 1 }),

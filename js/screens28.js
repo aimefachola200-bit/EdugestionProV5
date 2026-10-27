@@ -23,15 +23,15 @@
   const num = v => (typeof v === 'number' && !isNaN(v)) ? v : 0;
 
   const CATS = {
-    fe: { cat: 'FE', icone: '🧑‍🏫', titre: 'Personnel FE', long: 'Fonctionnaires de l’État (FE)',
+    fe: { cat: 'FE', icone: '\uE01E', titre: 'Personnel FE', long: 'Fonctionnaires de l’État (FE)',
       sous: 'Directeurs et adjoints fonctionnaires de l’État des écoles de la circonscription.' },
-    acdpe: { cat: 'ACDPE', icone: '🧑‍🏫', titre: 'Personnel ACDPE', long: 'Agents contractuels de droit public de l’État (ACDPE)',
+    acdpe: { cat: 'ACDPE', icone: '\uE01E', titre: 'Personnel ACDPE', long: 'Agents contractuels de droit public de l’État (ACDPE)',
       sous: 'Directeurs et adjoints contractuels de droit public de l’État des écoles de la circonscription.' },
-    prive: { cat: 'PRIVE', icone: '🏫', titre: 'Écoles privées', long: 'Personnel des écoles privées',
+    prive: { cat: 'PRIVE', icone: '\uE022', titre: 'Écoles privées', long: 'Personnel des écoles privées',
       sous: 'Directeurs et adjoints des écoles privées de la circonscription.' },
-    acdpctd: { cat: 'ACDPCTD', icone: '🧑‍🏫', titre: 'Enseignants ACDPCTD', long: 'Enseignants ACDPCTD (agents mis à disposition par les collectivités territoriales, anciennement AME)',
+    acdpctd: { cat: 'ACDPCTD', icone: '\uE01E', titre: 'Enseignants ACDPCTD', long: 'Enseignants ACDPCTD (agents mis à disposition par les collectivités territoriales, anciennement AME)',
       sous: 'Directeurs et adjoints ACDPCTD (anciennement AME) des écoles de la circonscription.' },
-    recap: { cat: 'ENSEMBLE', icone: '📊', titre: 'Récapitulatif par école', long: 'Récapitulatif du personnel par école et par statut',
+    recap: { cat: 'ENSEMBLE', icone: '\uE015', titre: 'Récapitulatif par école', long: 'Récapitulatif du personnel par école et par statut',
       sous: 'Directeurs et adjoints de chaque école selon leur statut, avec les totaux de la circonscription.' }
   };
   const LIB_CAT = { FE: 'FE', ACDPE: 'ACDPE', PRIVE: 'Écoles privées', ACDPCTD: 'ACDPCTD', ENSEMBLE: 'Récapitulatif', A_PRECISER: 'Statut à préciser' };
@@ -171,8 +171,8 @@
               ]),
               el('div', { class: 'bloc-qr', html: qr + '<span class="petit muet">QR de la catégorie</span>' }),
               X0.peutGerer() ? el('div', { class: 'actions-mini' }, [
-                el('button', { class: 'btn btn-fantome', text: sig && sig.signature_image ? '✍️ Modifier la signature' : '✍️ Tracer la signature', onclick: () => tracerSignature(cs, T.cat, signature) }),
-                el('button', { class: 'btn btn-fantome', text: '✏️ Signataire', onclick: () => (sig ? Promise.resolve(sig) : DB.put('signatures_categories', { territoire_id: cs.id, categorie: T.cat, signataire_nom: cs.responsable || '', signataire_qualite: 'Le Chef de la circonscription scolaire' }))
+                el('button', { class: 'btn btn-fantome', text: sig && sig.signature_image ? '\uE029 Modifier la signature' : '\uE029 Tracer la signature', onclick: () => tracerSignature(cs, T.cat, signature) }),
+                el('button', { class: 'btn btn-fantome', text: '\uE006 Signataire', onclick: () => (sig ? Promise.resolve(sig) : DB.put('signatures_categories', { territoire_id: cs.id, categorie: T.cat, signataire_nom: cs.responsable || '', signataire_qualite: 'Le Chef de la circonscription scolaire' }))
                   .then(rec => E.editer('signatures_categories', rec, signature)) })
               ]) : null
             ]), el('p', { class: 'muet petit', text: 'Cette signature et ce code QR sont propres à la catégorie : ils figurent au bas de chaque état imprimé ou emporté dans Word, dont le numéro et l’empreinte se vérifient en scannant le code.' })));
@@ -195,7 +195,7 @@
           if (X0.peutGerer()) {
             [['DIRECTEUR', '＋ Directeur'], ['ENSEIGNANT', '＋ Adjoint']].forEach(([f, lib]) => actions.appendChild(el('button', { class: 'btn btn-primaire', text: lib, onclick: () => E.editer('personnels',
               { fonction: f, ecole_id: filtre.ecole || null, qualite: QUALITE_DEFAUT[T.cat] || null, actif: true }, () => X.recharger()) })));
-            actions.appendChild(el('button', { class: 'btn btn-fantome', text: '📥 Importer le fichier du ministère', onclick: () => Routeur.aller('import-export/personnel?cs=' + cs.id) }));
+            actions.appendChild(el('button', { class: 'btn btn-fantome', text: '\uE00B Importer le fichier du ministère', onclick: () => Routeur.aller('import-export/personnel?cs=' + cs.id) }));
           }
           const titre = T.long + ' — directeurs et adjoints — ' + cs.nom;
           const lignesExport = () => [{ groupe: 'Directeurs (' + D.length + ')' }].concat(D.map((x, k) => ligneDe(x, k)))
@@ -204,13 +204,13 @@
             + '<h3>Directeurs (' + D.length + ')</h3>' + X0.htmlTableau(enTete, D.map((x, k) => ligneDe(x, k)))
             + '<h3>Adjoints (' + A.length + ')</h3>' + X0.htmlTableau(enTete, A.map((x, k) => ligneDe(x, k)));
           const scelle = () => { const h = corpsHtml(); return sceller({ cs, cat: T.cat, titre, corps: h }).then(bloc => h + bloc); };
-          actions.appendChild(el('button', { class: 'btn btn-fantome', text: '📤 Excel', onclick: () => {
+          actions.appendChild(el('button', { class: 'btn btn-fantome', text: '\uE00C Excel', onclick: () => {
             if (!D.length && !A.length) { U.toast('Rien à exporter', 'attention'); return; }
             S().excel('personnel-' + code + '-' + S().slug(cs.nom).slice(0, 30), [
               { nom: 'Directeurs', lignes: [enTete].concat(D.map((x, k) => ligneDe(x, k))) }, { nom: 'Adjoints', lignes: [enTete].concat(A.map((x, k) => ligneDe(x, k))) }]);
           } }));
-          actions.appendChild(el('button', { class: 'btn btn-fantome', text: '🖨️ Imprimer (signé, avec QR)', onclick: () => S().imprimer(titre, scelle, { ecole: X0.pseudoEcole(C, cs), paysage: true }) }));
-          actions.appendChild(el('button', { class: 'btn btn-fantome', text: '📄 Word', onclick: () => S().word('personnel-' + code + '-' + S().slug(cs.nom).slice(0, 30), titre, scelle, { ecole: X0.pseudoEcole(C, cs) }) }));
+          actions.appendChild(el('button', { class: 'btn btn-fantome', text: '\uE008 Imprimer (signé, avec QR)', onclick: () => S().imprimer(titre, scelle, { ecole: X0.pseudoEcole(C, cs), paysage: true }) }));
+          actions.appendChild(el('button', { class: 'btn btn-fantome', text: '\uE00D Word', onclick: () => S().word('personnel-' + code + '-' + S().slug(cs.nom).slice(0, 30), titre, scelle, { ecole: X0.pseudoEcole(C, cs) }) }));
 
           zoneListes.textContent = '';
           [['Directeurs', D], ['Adjoints', A]].forEach(([nom, liste]) => {
@@ -256,14 +256,14 @@
           el('div', { class: 'petit' }, [el('strong', { text: (sig && sig.signataire_nom) || cs.responsable || 'Signataire à renseigner' }), el('br'), el('span', { class: 'muet', text: (sig && sig.signataire_qualite) || 'Le Chef de la circonscription scolaire' })])
         ]),
         el('div', { class: 'bloc-qr', html: qrCategorie(cs, 'ENSEMBLE', sig, 'T' + totaux[totaux.length - 1], 96) + '<span class="petit muet">QR du récapitulatif</span>' }),
-        X0.peutGerer() ? el('button', { class: 'btn btn-fantome', text: sig && sig.signature_image ? '✍️ Modifier la signature' : '✍️ Tracer la signature', onclick: () => tracerSignature(cs, 'ENSEMBLE', () => { zone.textContent = ''; recapitulatif(zone, X, tous, ie); }) }) : null
+        X0.peutGerer() ? el('button', { class: 'btn btn-fantome', text: sig && sig.signature_image ? '\uE029 Modifier la signature' : '\uE029 Tracer la signature', onclick: () => tracerSignature(cs, 'ENSEMBLE', () => { zone.textContent = ''; recapitulatif(zone, X, tous, ie); }) }) : null
       ])));
     });
     const scelle = () => { const h = '<h2 style="text-align:center">' + ech(titre) + '</h2>' + X0.htmlTableau(enTete, toutes); return sceller({ cs, cat: 'ENSEMBLE', titre, corps: h }).then(b => h + b); };
     const actions = el('div', { class: 'barre-actions' }, [
-      el('button', { class: 'btn btn-fantome', text: '📤 Excel', onclick: () => S().excel('personnel-recapitulatif-' + S().slug(cs.nom).slice(0, 30), [{ nom: 'Récapitulatif', lignes: [enTete].concat(lignes, [totaux]) }]) }),
-      el('button', { class: 'btn btn-fantome', text: '🖨️ Imprimer (signé, avec QR)', onclick: () => S().imprimer(titre, scelle, { ecole: X0.pseudoEcole(C, cs), paysage: true }) }),
-      el('button', { class: 'btn btn-fantome', text: '📄 Word', onclick: () => S().word('personnel-recapitulatif-' + S().slug(cs.nom).slice(0, 30), titre, scelle, { ecole: X0.pseudoEcole(C, cs) }) })
+      el('button', { class: 'btn btn-fantome', text: '\uE00C Excel', onclick: () => S().excel('personnel-recapitulatif-' + S().slug(cs.nom).slice(0, 30), [{ nom: 'Récapitulatif', lignes: [enTete].concat(lignes, [totaux]) }]) }),
+      el('button', { class: 'btn btn-fantome', text: '\uE008 Imprimer (signé, avec QR)', onclick: () => S().imprimer(titre, scelle, { ecole: X0.pseudoEcole(C, cs), paysage: true }) }),
+      el('button', { class: 'btn btn-fantome', text: '\uE00D Word', onclick: () => S().word('personnel-recapitulatif-' + S().slug(cs.nom).slice(0, 30), titre, scelle, { ecole: X0.pseudoEcole(C, cs) }) })
     ]);
     zoneTab.appendChild(el('div', { class: 'grille grille-stats' }, [
       U.stat(U.nombre(tous.filter(x => x.rang === 'DIRECTEUR').length), 'Directeurs'), U.stat(U.nombre(tous.filter(x => x.rang === 'ADJOINT').length), 'Adjoints'),

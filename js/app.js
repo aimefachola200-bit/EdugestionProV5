@@ -16,7 +16,7 @@
       ecrire: true, modules: ['eleves', 'inscriptions', 'presences', 'evaluations', 'cep', 'personnel',
         'visites', 'risques', 'alertes', 'analytics', 'rapports', 'documents', 'recensement',
         'reseau', 'telechargements', 'espace-cs', 'unites-pedagogiques', 'repertoire', 'calendrier-scolaire',
-        'carte-ecole', 'carte-eleve', 'fiche-cep', 'stats-cs', 'divisions', 'signatures', 'documents-officiels', 'uascep']
+        'carte-ecole', 'carte-eleve', 'fiche-cep', 'stats-cs', 'divisions', 'signatures', 'documents-officiels', 'uascep', 'pvs-sport', 'pvs-pilotage']
     },
     DIRECTEUR: {
       ecrire: true, modules: '*', sauf: ['securite', 'support', 'reseau', 'espace-cs', 'unites-pedagogiques', 'personnel-cs', 'statuts-personnel', 'courriers', 'ecoles-cm2', 'ecarts-cs', 'rapport-rentree', 'divisions']
@@ -49,22 +49,22 @@
   /* ---------------- Navigation ---------------- */
   const NAV = {
     ENSEIGNANT: [
-      ['accueil', '🏠', 'Accueil'], ['presences', '✅', 'Présences'],
-      ['evaluations', '📝', 'Notes'], ['cantine', '🍚', 'Cantine'], ['modules', '🧩', 'Modules']
+      ['accueil', '\uE000', 'Accueil'], ['presences', '\uE004', 'Présences'],
+      ['evaluations', '\uE00E', 'Notes'], ['cantine', '\uE05B', 'Cantine'], ['modules', '\uE054', 'Modules']
     ],
     DIRECTEUR: [
-      ['accueil', '🏠', 'Accueil'], ['eleves', '🎒', 'Élèves'],
-      ['patrimoine', '🏫', 'École'], ['alertes', '🔔', 'Alertes'], ['modules', '🧩', 'Modules']
+      ['accueil', '\uE000', 'Accueil'], ['eleves', '\uE021', 'Élèves'],
+      ['patrimoine', '\uE022', 'École'], ['alertes', '\uE055', 'Alertes'], ['modules', '\uE054', 'Modules']
     ],
     PARENT: [
-      ['accueil', '🏠', 'Accueil'], ['parents', '👧', 'Mes enfants']
+      ['accueil', '\uE000', 'Accueil'], ['parents', '\uE01F', 'Mes enfants']
     ],
     ELEVE: [
-      ['accueil', '🏠', 'Accueil'], ['parents', '🎒', 'Mon dossier']
+      ['accueil', '\uE000', 'Accueil'], ['parents', '\uE021', 'Mon dossier']
     ],
     DEFAUT: [
-      ['accueil', '🏠', 'Accueil'], ['gestion-ecoles', '🏫', 'Écoles'], ['analytics', '📊', 'Statistiques'],
-      ['alertes', '🔔', 'Alertes'], ['recensement', '🧮', 'Recensement'], ['modules', '🧩', 'Modules']
+      ['accueil', '\uE000', 'Accueil'], ['gestion-ecoles', '\uE022', 'Écoles'], ['analytics', '\uE015', 'Statistiques'],
+      ['alertes', '\uE055', 'Alertes'], ['recensement', '\uE040', 'Recensement'], ['modules', '\uE054', 'Modules']
     ]
   };
 
@@ -106,7 +106,7 @@
       el('div', { class: 'champ' }, [el('label', { for: 'mdp', text: 'Mot de passe' }), motdepasse]),
       erreur,
       el('button', { class: 'btn btn-primaire pleine', type: 'submit', text: 'Se connecter' }),
-      el('a', { class: 'oubli-lien', href: '#', text: '🔑 Mot de passe oublié ?', onclick: e => { e.preventDefault(); EG.MotDePasse.dialogueOubli(identifiant.value.trim()); } }),
+      el('a', { class: 'oubli-lien', href: '#', text: '\uE032 Mot de passe oublié ?', onclick: e => { e.preventDefault(); EG.MotDePasse.dialogueOubli(identifiant.value.trim()); } }),
       el('p', { class: 'muet petit', style: 'margin-top:12px' }, [el('strong', { text: 'Premier démarrage : ' }), document.createTextNode('identifiant '), el('code', { text: 'admin' }),
         document.createTextNode(', mot de passe '), el('code', { text: 'admin123' }), document.createTextNode(' (à changer aussitôt). Créez ensuite les comptes des vraies personnes dans Modules › Utilisateurs & sécurité.')])
     ]);
@@ -198,7 +198,7 @@
      Deux panneaux : à gauche le tableau des menus, à droite le grand tableau
      (le contenu). Chacun défile pour son compte — la page, elle, ne bouge pas —
      de sorte que faire défiler l'un ne déplace jamais l'autre. Sur téléphone, le
-     menu devient un tiroir ouvert par le bouton ☰. */
+     menu devient un tiroir ouvert par le bouton \uE03E. */
   function construireCoquille() {
     document.body.className = 'connecte';
     const racine = document.getElementById('app');
@@ -212,7 +212,7 @@
     const barre = el('header', { class: 'barre-haut' }, [
       el('button', {
         class: 'icone-btn bouton-menu', id: 'bouton-menu', 'aria-label': 'Ouvrir le menu', 'aria-controls': 'menu-lateral',
-        'aria-expanded': 'false', text: '☰', onclick: basculerMenu
+        'aria-expanded': 'false', text: '\uE03E', onclick: basculerMenu
       }),
       EG.MotDePasse.boutonRetour(),
       el('button', {
@@ -255,10 +255,10 @@
     const peutImporter = ['ADMIN_MEMP', 'ADMIN_TECHNIQUE', 'DDEMP', 'CS'].indexOf(EG.session.user.role) >= 0 && EG.peutEcrire();
     (m.annexes || []).forEach(([route, lib, icone]) => {
       if (route === 'import-ecoles' && !peutImporter) return; /* réservé à ceux qui peuvent créer des écoles */
-      liens.push({ route, lib, icone: icone || '🔗' });
+      liens.push({ route, lib, icone: icone || '\uE053' });
     });
     (m.ecran ? m.entites : m.entites.slice(1)).forEach(e => liens.push({
-      route: 'entite/' + e, lib: EG.SCHEMA[e].label, icone: EG.SCHEMA[e].icone || '📄'
+      route: 'entite/' + e, lib: EG.SCHEMA[e].label, icone: EG.SCHEMA[e].icone || '\uE00D'
     }));
     return liens;
   }
@@ -269,41 +269,44 @@
   function rubriquesTerritoire() {
     const an = (/(\d{4})\D+(\d{4})/.exec(EG.session.annee_code || '') || [])[2] || '';
     return [
-      { nom: 'Menu principal', icone: '📋', coul: '#008751', items: [
-        ['accueil', '📊', 'Tableau de bord', null], ['carte-ecole', '🧑‍💼', 'Ma fiche école', 'carte-ecole'],
-        ['gestion-ecoles', '🏫', 'Écoles', 'reseau'], ['personnel-cs/enseignants', '👥', 'Personnel enseignant', 'personnel-cs'],
-        ['personnel-cs/administratif', '🗂️', 'Personnel administratif', 'personnel-cs'],
-        ['statuts-cs/fe', '🧑‍🏫', 'Personnel FE (directeurs, adjoints)', 'statuts-personnel'], ['statuts-cs/acdpe', '🧑‍🏫', 'Personnel ACDPE (directeurs, adjoints)', 'statuts-personnel'],
-        ['statuts-cs/prive', '🏫', 'Écoles privées (directeurs, adjoints)', 'statuts-personnel'], ['statuts-cs/acdpctd', '🧑‍🏫', 'Enseignants ACDPCTD', 'statuts-personnel'],
-        ['personnel-cs/soutien', '🧹', 'Personnel de soutien', 'personnel-cs'], ['carrieres', '📈', 'Gestion des carrières', 'carrieres'],
-        ['visites', '🔎', 'Visites et inspections', 'visites'], ['retraite', '🎓', 'Retraite', 'retraite'],
-        ['stats-cs', '👨‍🎓', 'Effectifs élèves', 'stats-cs'], ['entite/infrastructures', '🏗️', 'Infrastructures', 'infrastructure'],
-        ['entite/inventaires_mobilier', '🪑', 'Mobilier & matériel', 'mobilier'], ['classes-roles/classes', '🧮', 'Attribution des classes', 'classes-roles'],
-        ['classes-roles/roles', '🤝', 'Gestion collégiale', 'classes-roles'], ['uascep', '🏵️', 'Bureaux UASCEP', 'uascep'], ['repertoire', '📕', 'Répertoires et contacts', 'repertoire']
+      { nom: 'Menu principal', icone: '\uE00F', coul: '#008751', items: [
+        ['accueil', '\uE015', 'Tableau de bord', null], ['carte-ecole', '\uE01D', 'Ma fiche école', 'carte-ecole'],
+        ['gestion-ecoles', '\uE022', 'Écoles', 'reseau'], ['personnel-cs/enseignants', '\uE01C', 'Personnel enseignant', 'personnel-cs'],
+        ['personnel-cs/administratif', '\uE011', 'Personnel administratif', 'personnel-cs'],
+        ['statuts-cs/fe', '\uE01E', 'Personnel FE (directeurs, adjoints)', 'statuts-personnel'], ['statuts-cs/acdpe', '\uE01E', 'Personnel ACDPE (directeurs, adjoints)', 'statuts-personnel'],
+        ['statuts-cs/prive', '\uE022', 'Écoles privées (directeurs, adjoints)', 'statuts-personnel'], ['statuts-cs/acdpctd', '\uE01E', 'Enseignants ACDPCTD', 'statuts-personnel'],
+        ['personnel-cs/soutien', '\uE04A', 'Personnel de soutien', 'personnel-cs'], ['carrieres', '\uE016', 'Gestion des carrières', 'carrieres'],
+        ['visites', '\uE02A', 'Visites et inspections', 'visites'], ['retraite', '\uE020', 'Retraite', 'retraite'],
+        ['stats-cs', '\uE020', 'Effectifs élèves', 'stats-cs'], ['entite/infrastructures', '\uE026', 'Infrastructures', 'infrastructure'],
+        ['entite/inventaires_mobilier', '\uE028', 'Mobilier & matériel', 'mobilier'], ['classes-roles/classes', '\uE040', 'Attribution des classes', 'classes-roles'],
+        ['classes-roles/roles', '\uE044', 'Gestion collégiale', 'classes-roles'], ['uascep', '\uE047', 'Bureaux UASCEP', 'uascep'], ['repertoire', '\uE030', 'Répertoires et contacts', 'repertoire']
       ] },
-      { nom: 'Gestion pédagogique', icone: '🎒', coul: '#2166AC', items: [
-        ['evaluations', '📝', 'Évaluations', 'evaluations'], ['eleves', '🧒', 'Listes des apprenants', 'eleves'],
-        ['presences', '🗓️', 'Présence des apprenants', 'presences'], ['presences-personnel', '🕗', 'Présence du personnel', 'presences'],
-        ['bulletins', '🗒️', 'Notes et bulletins', 'evaluations'], ['fiche-cep', '📋', 'Inscription CEP', 'fiche-cep'],
-        ['ecoles-cm2', '🎯', 'Écoles à CM2 et CEP ' + an, 'ecoles-cm2'], ['cep-blanc-centre', '🏟️', 'Examen blanc', 'cep'],
-        ['carte-eleve', '🪪', 'Cartes d’identité', 'carte-eleve']
+      { nom: 'Vie scolaire, sport et pilotage', icone: '\uE04D', coul: '#B45309', items: [
+        ['pvs-sport', '\uE04D', 'Sport scolaire', 'pvs-sport'], ['pvs-pilotage', '\uE015', 'Tableau de bord du pilotage', 'pvs-pilotage']
       ] },
-      { nom: 'Administration', icone: '🏛️', coul: '#7B4FA8', items: [
-        ['documents-officiels', '📚', 'Documents officiels', 'documents-officiels'], ['telechargements', '🗂️', 'Fiches officielles', 'telechargements'], ['certificats', '📜', 'Certificats', 'personnel'],
-        ['rapport-rentree', '📄', 'Rapports de rentrée', 'rapport-rentree'], ['courriers', '📬', 'Archive courriers', 'courriers'],
-        ['divisions', '🏛️', 'Divisions et services (statistiques, courbes)', 'divisions'], ['signatures', '✍️', 'Signatures des acteurs', 'signatures'],
-        ['ecarts-cs', '📈', 'Analyses et écarts', 'ecarts-cs'], ['cachet', '🔏', 'Cachets et signatures', 'cachets'],
-        ['entite/annees_scolaires', '🗓️', 'Années scolaires', 'socle'], ['calendrier-scolaire?type=FERIE&vue=agenda', '📆', 'Jours fériés', 'calendrier-scolaire'],
-        ['import-export/import', '📥', 'Import Excel', 'import-export'], ['import-export/sauvegarde', '💾', 'Sauvegarde', 'import-export']
+      { nom: 'Gestion pédagogique', icone: '\uE021', coul: '#2166AC', items: [
+        ['evaluations', '\uE00E', 'Évaluations', 'evaluations'], ['eleves', '\uE01F', 'Listes des apprenants', 'eleves'],
+        ['presences', '\uE017', 'Présence des apprenants', 'presences'], ['presences-personnel', '\uE018', 'Présence du personnel', 'presences'],
+        ['bulletins', '\uE010', 'Notes et bulletins', 'evaluations'], ['fiche-cep', '\uE00F', 'Inscription CEP', 'fiche-cep'],
+        ['ecoles-cm2', '\uE02E', 'Écoles à CM2 et CEP ' + an, 'ecoles-cm2'], ['cep-blanc-centre', '\uE027', 'Examen blanc', 'cep'],
+        ['carte-eleve', '\uE02B', 'Cartes d’identité', 'carte-eleve']
       ] },
-      { nom: 'Autres outils', icone: '🧰', coul: '#55616B', replie: true, items: [
-        ['espace-cs', '🏢', 'Espace de la circonscription', 'espace-cs'], ['unites-pedagogiques', '🏘️', 'Unités pédagogiques', 'unites-pedagogiques'],
-        ['calendrier-scolaire', '🗓️', 'Calendrier scolaire', 'calendrier-scolaire'], ['comptes', '🔑', 'Comptes d’accès', 'comptes'],
-        ['statuts-cs/recap', '📊', 'Personnel : récapitulatif par école', 'statuts-personnel'],
-        ['scolarite-privee', '🎓', 'Écoles privées : scolarité', 'scolarite-privee'], ['caisse-privee', '📒', 'Écoles privées : cahier des fonds', 'caisse-privee'],
-        ['salaires-privee', '👛', 'Écoles privées : salaires', 'salaires-privee'],
-        ['import-export/jeux', '🗃️', 'Jeux de données', 'import-export'], ['import-export/personnel', '👥', 'Fichiers du personnel (FE, ACDPE, ACDPCTD)', 'import-export'],
-        ['modules', '🧩', 'Tous les modules', null]
+      { nom: 'Administration', icone: '\uE023', coul: '#7B4FA8', items: [
+        ['documents-officiels', '\uE031', 'Documents officiels', 'documents-officiels'], ['telechargements', '\uE011', 'Fiches officielles', 'telechargements'], ['certificats', '\uE02F', 'Certificats', 'personnel'],
+        ['rapport-rentree', '\uE00D', 'Rapports de rentrée', 'rapport-rentree'], ['courriers', '\uE04F', 'Archive courriers', 'courriers'],
+        ['divisions', '\uE023', 'Divisions et services (statistiques, courbes)', 'divisions'], ['signatures', '\uE029', 'Signatures des acteurs', 'signatures'],
+        ['ecarts-cs', '\uE016', 'Analyses et écarts', 'ecarts-cs'], ['cachet', '\uE033', 'Cachets et signatures', 'cachets'],
+        ['entite/annees_scolaires', '\uE017', 'Années scolaires', 'socle'], ['calendrier-scolaire?type=FERIE&vue=agenda', '\uE017', 'Jours fériés', 'calendrier-scolaire'],
+        ['import-export/import', '\uE00B', 'Import Excel', 'import-export'], ['import-export/sauvegarde', '\uE007', 'Sauvegarde', 'import-export']
+      ] },
+      { nom: 'Autres outils', icone: '\uE052', coul: '#55616B', replie: true, items: [
+        ['espace-cs', '\uE024', 'Espace de la circonscription', 'espace-cs'], ['unites-pedagogiques', '\uE025', 'Unités pédagogiques', 'unites-pedagogiques'],
+        ['calendrier-scolaire', '\uE017', 'Calendrier scolaire', 'calendrier-scolaire'], ['comptes', '\uE032', 'Comptes d’accès', 'comptes'],
+        ['statuts-cs/recap', '\uE015', 'Personnel : récapitulatif par école', 'statuts-personnel'],
+        ['scolarite-privee', '\uE020', 'Écoles privées : scolarité', 'scolarite-privee'], ['caisse-privee', '\uE030', 'Écoles privées : cahier des fonds', 'caisse-privee'],
+        ['salaires-privee', '\uE04E', 'Écoles privées : salaires', 'salaires-privee'],
+        ['import-export/jeux', '\uE011', 'Jeux de données', 'import-export'], ['import-export/personnel', '\uE01C', 'Fichiers du personnel (FE, ACDPE, ACDPCTD)', 'import-export'],
+        ['modules', '\uE054', 'Tous les modules', null]
       ] }
     ];
   }
@@ -360,9 +363,9 @@
       if (blocMempCp) aside.insertBefore(blocMempCp, aside.querySelectorAll('.menu-categorie')[1] || aside.querySelector('.menu-vide'));
       return aside;
     }
-    aside.appendChild(lien('accueil', '🏠', 'Accueil', 'menu-accueil'));
+    aside.appendChild(lien('accueil', '\uE000', 'Accueil', 'menu-accueil'));
     /* La liste complète des modules reste à portée de clic sur ordinateur comme sur téléphone. */
-    if (!['PARENT', 'ELEVE'].includes(user.role)) aside.appendChild(lien('modules', '🧩', 'Tous les modules', 'menu-accueil'));
+    if (!['PARENT', 'ELEVE'].includes(user.role)) aside.appendChild(lien('modules', '\uE054', 'Tous les modules', 'menu-accueil'));
     if (blocMempCp) aside.appendChild(blocMempCp);
 
     (EG.CATEGORIES_MODULES || []).forEach(cat => {
@@ -484,7 +487,7 @@
           onclick: () => { document.querySelector('.modal-fond').remove(); EG.proposerInstallation(); }
         }),
         el('button', { class: 'btn btn-fantome', text: 'Changer mon mot de passe', onclick: () => { document.querySelector('.modal-fond').remove(); EG.MotDePasse.changerMotDePasse(); } }),
-        el('button', { class: 'btn btn-fantome', text: u.secours_question ? '🔑 Changer ma question de secours' : '🔑 Définir ma question de secours', onclick: () => { document.querySelector('.modal-fond').remove(); EG.MotDePasse.questionSecours(); } }),
+        el('button', { class: 'btn btn-fantome', text: u.secours_question ? '\uE032 Changer ma question de secours' : '\uE032 Définir ma question de secours', onclick: () => { document.querySelector('.modal-fond').remove(); EG.MotDePasse.questionSecours(); } }),
         el('button', { class: 'btn btn-fantome', text: 'Synchronisation', onclick: () => { document.querySelector('.modal-fond').remove(); Routeur.aller('sync'); } }),
         el('button', { class: 'btn btn-fantome', text: 'Tous les modules', onclick: () => { document.querySelector('.modal-fond').remove(); Routeur.aller('modules'); } })
       ])
@@ -498,8 +501,8 @@
     const n = document.getElementById('indicateur-synchro');
     if (!n) return;
     DB.outboxCount().then(c => {
-      if (!navigator.onLine) { n.className = 'synchro hors-ligne'; n.textContent = '⚡ Hors ligne' + (c ? ' · ' + c : ''); }
-      else if (c) { n.className = 'synchro attente'; n.textContent = '☁ ' + c + ' en attente'; }
+      if (!navigator.onLine) { n.className = 'synchro hors-ligne'; n.textContent = '\uE05A Hors ligne' + (c ? ' · ' + c : ''); }
+      else if (c) { n.className = 'synchro attente'; n.textContent = '\uE05E ' + c + ' en attente'; }
       else { n.className = 'synchro ok'; n.textContent = '✓ À jour'; }
     });
   };
@@ -610,7 +613,7 @@
     e.preventDefault();
     promptInstall = e;
     if (dejaInstallee()) return;
-    poserBandeau('📲 Installer ÉduGestion Pro Master sur cet appareil', () => {
+    poserBandeau('\uE045 Installer ÉduGestion Pro Master sur cet appareil', () => {
       promptInstall.prompt();
       promptInstall.userChoice.then(() => { retirerBandeau(); promptInstall = null; });
     });
@@ -626,7 +629,7 @@
   function proposerInstallation() {
     if (bandeau || promptInstall || dejaInstallee()) return;
     try { if (sessionStorage.getItem('install_masque')) return; } catch (e) { /* sans effet */ }
-    poserBandeau('📲 Installer ÉduGestion Pro Master — comment faire', expliquerInstallation);
+    poserBandeau('\uE045 Installer ÉduGestion Pro Master — comment faire', expliquerInstallation);
   }
   EG.proposerInstallation = expliquerInstallation;
 

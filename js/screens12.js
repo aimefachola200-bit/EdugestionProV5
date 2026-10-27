@@ -20,8 +20,8 @@
      les siens (enseignants, parents, élèves de son école). */
   const ROLES_COMPTES = ['ADMIN_MEMP', 'ADMIN_TECHNIQUE', 'DDEMP', 'CS', 'DIRECTEUR'];
   const ONGLETS = [
-    ['ecoles', '🏫 Écoles'], ['enseignants', '🧑‍🏫 Enseignants'],
-    ['parents', '👨‍👩‍👧 Parents'], ['eleves', '🎒 Élèves']
+    ['ecoles', '\uE022 Écoles'], ['enseignants', '\uE01E Enseignants'],
+    ['parents', '\uE01C Parents'], ['eleves', '\uE021 Élèves']
   ];
   const TAILLE_PAGE = 100;
 

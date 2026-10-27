@@ -96,13 +96,13 @@
         function actions() {
           barreActions.textContent = '';
           const n = choisis().length, v = visibles();
-          barreActions.appendChild(el('button', { class: 'btn btn-primaire', text: '🪪 Éditer ' + (n ? 'les ' + n + ' carte(s) cochée(s)' : 'les ' + v.length + ' carte(s) affichée(s)'), disabled: !(n || v.length),
+          barreActions.appendChild(el('button', { class: 'btn btn-primaire', text: '\uE02B Éditer ' + (n ? 'les ' + n + ' carte(s) cochée(s)' : 'les ' + v.length + ' carte(s) affichée(s)'), disabled: !(n || v.length),
             onclick: () => editer(n ? choisis() : v, 'Cartes scolaires — ' + ecole.nom, classeId) }));
           barreActions.appendChild(el('button', { class: 'btn btn-fantome', text: 'Tout cocher', onclick: () => { v.forEach(i => { coches[i.id] = true; }); liste(); } }));
           barreActions.appendChild(el('button', { class: 'btn btn-fantome', text: 'Tout décocher', onclick: () => { Object.keys(coches).forEach(k => { delete coches[k]; }); liste(); } }));
-          barreActions.appendChild(el('button', { class: 'btn btn-fantome', text: '📝 Cartes vierges (planche de 8)', onclick: () => vierges() }));
-          barreActions.appendChild(el('button', { class: 'btn btn-fantome', text: '🏫 Carte d’identité de l’école', onclick: () => Routeur.aller('carte-ecole/' + ecole.id) }));
-          if (EG.peutVoirModule('cachets')) barreActions.appendChild(el('button', { class: 'btn btn-fantome', text: '🖋️ Cachet de l’école', onclick: () => Routeur.aller('cachet/ecole/' + ecole.id) }));
+          barreActions.appendChild(el('button', { class: 'btn btn-fantome', text: '\uE00E Cartes vierges (planche de 8)', onclick: () => vierges() }));
+          barreActions.appendChild(el('button', { class: 'btn btn-fantome', text: '\uE022 Carte d’identité de l’école', onclick: () => Routeur.aller('carte-ecole/' + ecole.id) }));
+          if (EG.peutVoirModule('cachets')) barreActions.appendChild(el('button', { class: 'btn btn-fantome', text: '\uE006 Cachet de l’école', onclick: () => Routeur.aller('cachet/ecole/' + ecole.id) }));
         }
 
         function vierges() {
@@ -128,7 +128,7 @@
             { titre: 'Sexe', valeur: i => (i._eleve && i._eleve.sexe) || '—' },
             { titre: 'Classe', valeur: i => i._classe ? (i._classe.libelle || i._classe.code) : (i.niveau || '—') },
             { titre: 'N° de carte', valeur: i => numeroCarte(i) },
-            { titre: '', classe: 'col-etroite', valeur: i => el('button', { class: 'btn btn-fantome btn-petit', text: '🪪 Carte',
+            { titre: '', classe: 'col-etroite', valeur: i => el('button', { class: 'btn btn-fantome btn-petit', text: '\uE02B Carte',
               onclick: ev => { ev.stopPropagation(); editer([i], 'Carte scolaire — ' + i._nom, i.classe_id); } }) }
           ], v, { messageVide: 'Aucun élève ne correspond.' }));
         }

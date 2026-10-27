@@ -9,7 +9,7 @@
   'use strict';
   const EG = global.EG, U = EG.UI, el = U.el;
   const BASE = 'memp-cp/';
-  const ICONES = { PDF: '📄', Excel: '📊' };
+  const ICONES = { PDF: '\uE00D', Excel: '\uE015' };
 
   function telecharger(d) {
     const nom = d.fichier.split('/').pop();
@@ -40,12 +40,12 @@
           zone.appendChild(el('h2', { class: 'titre-section', text: g, style: 'font-size:1.05rem;margin:18px 0 8px' }));
           zone.appendChild(el('div', { style: 'display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,300px),1fr));gap:10px' },
             groupes[g].map(d => el('div', { class: 'carte', style: 'padding:12px;display:flex;flex-direction:column;gap:6px' }, [
-              el('strong', { text: (ICONES[d.format] || '📄') + ' ' + d.titre }),
+              el('strong', { text: (ICONES[d.format] || '\uE00D') + ' ' + d.titre }),
               el('span', { class: 'muet petit', text: [d.cycle, d.format, d.pages ? d.pages + ' page(s)' : ''].filter(Boolean).join(' · ') }),
               d.description ? el('span', { class: 'petit', text: d.description }) : null,
               el('div', { class: 'barre-actions', style: 'margin-top:auto' }, [
-                d.format === 'Excel' ? null : el('a', { class: 'btn btn-fantome', href: BASE + d.fichier, target: '_blank', rel: 'noopener', text: '👁 Ouvrir' }),
-                el('button', { class: 'btn btn-primaire', type: 'button', text: '⬇ Télécharger', onclick: () => telecharger(d) })
+                d.format === 'Excel' ? null : el('a', { class: 'btn btn-fantome', href: BASE + d.fichier, target: '_blank', rel: 'noopener', text: '\uE043 Ouvrir' }),
+                el('button', { class: 'btn btn-primaire', type: 'button', text: '\uE009 Télécharger', onclick: () => telecharger(d) })
               ])
             ].filter(Boolean)))));
         });

@@ -161,8 +161,8 @@
       if (!ecoles.length) {
         zoneCorps.appendChild(U.vide('Cette circonscription n’a pas encore d’école. Installez son jeu de données ou importez ses écoles.'));
         zoneCorps.appendChild(el('div', { class: 'barre-actions' }, [
-          el('button', { class: 'btn btn-primaire', text: '🗃️ Jeux de données', onclick: () => Routeur.aller('import-export/jeux') }),
-          el('button', { class: 'btn btn-fantome', text: '📥 Importer les écoles', onclick: () => Routeur.aller('import-ecoles?cs=' + etat.cs) })
+          el('button', { class: 'btn btn-primaire', text: '\uE011 Jeux de données', onclick: () => Routeur.aller('import-export/jeux') }),
+          el('button', { class: 'btn btn-fantome', text: '\uE00B Importer les écoles', onclick: () => Routeur.aller('import-ecoles?cs=' + etat.cs) })
         ]));
         return;
       }
@@ -180,7 +180,7 @@
       if (!etat.annee) {
         zoneCorps.appendChild(U.vide('Aucune statistique enregistrée pour cette circonscription.'));
         if (peutSaisir()) zoneCorps.appendChild(el('div', { class: 'barre-actions' }, [
-          el('button', { class: 'btn btn-primaire', text: '🗃️ Installer le jeu de données', onclick: () => Routeur.aller('import-export/jeux') }),
+          el('button', { class: 'btn btn-primaire', text: '\uE011 Installer le jeu de données', onclick: () => Routeur.aller('import-export/jeux') }),
           el('button', { class: 'btn btn-fantome', text: 'Saisir l’année ' + (EG.session.annee_code || ''), onclick: () => { etat.annee = EG.session.annee_code || ''; corps(); } })
         ]));
         if (!etat.annee) return;
@@ -203,17 +203,17 @@
       ]));
 
       zoneCorps.appendChild(el('div', { class: 'barre-actions' }, [
-        el('button', { class: 'btn btn-fantome', text: '📤 Excel', onclick: () => exporter(cs, prim, mat) }),
-        el('button', { class: 'btn btn-fantome', text: '🖨️ Imprimer', onclick: () => sortie(cs, prim, mat, 'imprimer') }),
-        el('button', { class: 'btn btn-fantome', text: '📄 Word', onclick: () => sortie(cs, prim, mat, 'word') }),
-        el('button', { class: 'btn btn-fantome', text: '🗃️ Jeux de données', onclick: () => Routeur.aller('import-export/jeux') })
+        el('button', { class: 'btn btn-fantome', text: '\uE00C Excel', onclick: () => exporter(cs, prim, mat) }),
+        el('button', { class: 'btn btn-fantome', text: '\uE008 Imprimer', onclick: () => sortie(cs, prim, mat, 'imprimer') }),
+        el('button', { class: 'btn btn-fantome', text: '\uE00D Word', onclick: () => sortie(cs, prim, mat, 'word') }),
+        el('button', { class: 'btn btn-fantome', text: '\uE011 Jeux de données', onclick: () => Routeur.aller('import-export/jeux') })
       ]));
 
       if (prim.length) zoneCorps.appendChild(U.carte('Écoles primaires', tableau(prim, COURS_PRIM)));
       if (mat.length) zoneCorps.appendChild(U.carte('Écoles maternelles', tableau(mat, COURS_MAT)));
       if (!toutes.length) zoneCorps.appendChild(U.vide('Aucune école ne correspond à ces filtres.'));
       const sans = toutes.filter(l => !l.stat).length;
-      if (sans) zoneCorps.appendChild(el('p', { class: 'muet petit', text: sans + ' école(s) sans statistique pour ' + etat.annee + ' : cliquez sur ✏️ pour saisir leurs effectifs.' }));
+      if (sans) zoneCorps.appendChild(el('p', { class: 'muet petit', text: sans + ' école(s) sans statistique pour ' + etat.annee + ' : cliquez sur \uE006 pour saisir leurs effectifs.' }));
     }
 
     /* ---------- tableau à l'écran ---------- */
@@ -237,7 +237,7 @@
             cel(st && st.personnel_fe !== null && st.personnel_fe !== undefined ? t.pers : '')]
             .concat(cours.map(c => { const v = st && st.effectifs && st.effectifs[c]; return cel(v ? num(v[0]) + num(v[1]) : ''); }),
               [cel(st && st.effectifs ? t.g : ''), cel(st && st.effectifs ? t.f : ''), cel(st && st.effectifs ? t.t : ''),
-                el('td', {}, peutSaisir() ? el('button', { class: 'btn btn-petit btn-fantome', 'aria-label': 'Saisir ou corriger', text: '✏️', onclick: () => saisir(l) }) : null)]));
+                el('td', {}, peutSaisir() ? el('button', { class: 'btn btn-petit btn-fantome', 'aria-label': 'Saisir ou corriger', text: '\uE006', onclick: () => saisir(l) }) : null)]));
           tb.appendChild(a);
         });
         tb.appendChild(ligneSomme('Sous-total ' + g.nom, g.somme, 'rang-somme'));

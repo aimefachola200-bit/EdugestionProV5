@@ -33,7 +33,7 @@
     function onglets() {
       zoneOnglets.textContent = '';
       if (ecoleFixe) return;
-      zoneOnglets.appendChild(E.barreOnglets([['territoire', '🏢 Circonscription ou direction'], ['ecole', '🏫 École']], actif, code => {
+      zoneOnglets.appendChild(E.barreOnglets([['territoire', '\uE024 Circonscription ou direction'], ['ecole', '\uE022 École']], actif, code => {
         actif = code; onglets(); montrer();
       }));
     }

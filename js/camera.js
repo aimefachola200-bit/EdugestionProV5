@@ -1,7 +1,7 @@
 /* ÉduGestion Pro Master — appareil photo (caméra avant ou arrière) pour toutes les photos de l'application.
 
    Chaque champ de fichier qui accepte une image (photo de l'élève, de l'agent, de l'école, carte
-   d'identité, courrier scanné, pièce jointe…) reçoit automatiquement un bouton « 📷 Appareil photo ».
+   d'identité, courrier scanné, pièce jointe…) reçoit automatiquement un bouton « \uE03C Appareil photo ».
    La prise de vue remplit le champ exactement comme un fichier choisi : l'écran qui l'utilise
    (redimensionnement, aperçu, enregistrement) n'a rien à changer.
 
@@ -121,10 +121,10 @@
           el('button', { class: 'icone-btn', type: 'button', 'aria-label': 'Fermer', text: '✕', onclick: () => terminer(null) })]),
         el('div', { class: 'modal-corps' }, [video, info]),
         el('div', { class: 'modal-pied', style: 'display:flex;flex-wrap:wrap;gap:8px' }, [
-          el('button', { class: 'btn btn-fantome', type: 'button', text: '🤳 Caméra avant', title: 'Caméra de face (selfie)', onclick: () => choisirFace('user') }),
-          el('button', { class: 'btn btn-fantome', type: 'button', text: '📷 Caméra arrière', title: 'Caméra du dos du téléphone', onclick: () => choisirFace('environment') }),
-          el('button', { class: 'btn btn-fantome', type: 'button', text: '🔄 Basculer', title: 'Basculer caméra avant / arrière', onclick: basculer }),
-          el('button', { class: 'btn btn-primaire', type: 'button', text: '📸 Prendre la photo', onclick: declencher }),
+          el('button', { class: 'btn btn-fantome', type: 'button', text: '\uE03C Caméra avant', title: 'Caméra de face (selfie)', onclick: () => choisirFace('user') }),
+          el('button', { class: 'btn btn-fantome', type: 'button', text: '\uE03C Caméra arrière', title: 'Caméra du dos du téléphone', onclick: () => choisirFace('environment') }),
+          el('button', { class: 'btn btn-fantome', type: 'button', text: '\uE058 Basculer', title: 'Basculer caméra avant / arrière', onclick: basculer }),
+          el('button', { class: 'btn btn-primaire', type: 'button', text: '\uE03C Prendre la photo', onclick: declencher }),
           el('button', { class: 'btn btn-fantome', type: 'button', text: 'Annuler', onclick: () => terminer(null) })
         ])
       ]);
@@ -157,7 +157,7 @@
     champ.dataset.camera = '1';
     const portrait = /photo|portrait|identit|eleve|agent|personnel/i.test((champ.id || '') + ' ' + (champ.name || '') + ' ' + (champ.getAttribute('aria-label') || ''));
     const b = el('button', {
-      type: 'button', class: 'btn btn-fantome btn-camera', text: '📷 Appareil photo', title: 'Prendre la photo avec la caméra (avant ou arrière)',
+      type: 'button', class: 'btn btn-fantome btn-camera', text: '\uE03C Appareil photo', title: 'Prendre la photo avec la caméra (avant ou arrière)',
       style: 'margin:4px 0 4px 6px',
       onclick: e => {
         e.preventDefault(); e.stopPropagation();
