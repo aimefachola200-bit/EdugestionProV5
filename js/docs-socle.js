@@ -406,7 +406,7 @@
       + '<img class="entete-bandeau" src="' + ressource('embleme-memp.png') + '" alt="République du Bénin — Ministère des Enseignements Maternel et Primaire">'
       + '<div class="entete-admin-centre">'
       + lignes.map(l => '<span>' + l + '</span>').join('')
-      + (ecole && ecole.nom ? '<span class="entete-ecole">' + echapper(ecole.nom) + '</span>' : '')
+      + (ecole && ecole.nom ? '<span class="entete-ecole">' + (global.LogoEcole ? global.LogoEcole.entete(ecole, { taille: 46 }) : echapper(ecole.nom)) + '</span>' : '')
       + '</div></div>';
   }
 

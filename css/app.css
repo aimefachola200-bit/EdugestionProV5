@@ -801,3 +801,10 @@ table .th-fixe.col-fixe, table .th-fixe.colle { z-index: 5 !important; }
 }
 main#contenu, #contenu { --marge-haut-contenu: 16px; }
 @media (min-width: 760px) { main#contenu, #contenu { --marge-haut-contenu: 24px; } }
+/* Logo de l'école dans la barre et sur la carte de l'école (js/logo-ecole.js) */
+.marque-logo-ecole { display: inline-flex; width: 26px; height: 26px; border-radius: 50%; overflow: hidden; background: #fff; flex: none; }
+.marque-logo-ecole svg, .marque-logo-ecole img { width: 26px; height: 26px; display: block; }
+.logo-ecole-carte { margin: 4px 0 10px; }
+.entete-ecole .le-ent { justify-content: center; }
+.devise-ecole { font-style: italic; color: #475467; margin: 2px 0 4px; }
+.carte-ecole-tete .logo-ecole-carte { margin: 0; line-height: 0; }

@@ -1,0 +1,151 @@
+# Guide d’utilisation — ÉduGestion Pro Master — gestion scolaire
+
+_Version 6.32.0_
+
+Rôles : Administration (MEMP, technique) · DDEMP · Circonscription scolaire · Conseiller pédagogique · Directeur / directrice · Enseignant(e) · Parent
+
+## 1. Premiers pas
+
+Premier démarrage : identifiant admin, mot de passe admin123, à changer aussitôt. Créez ensuite les comptes des vraies personnes (« **Utilisateurs & sécurité** »).
+
+1. Choisissez l’année scolaire active et vérifiez les territoires (département, commune, circonscription, zones, UP).
+2. Créez ou importez les écoles, puis ouvrez la carte de chaque école : « **Logo et devise** ».
+3. Créez les classes et rattachez leur titulaire (personnel).
+4. Inscrivez les élèves (saisie ou import).
+5. Les raccourcis de l’accueil mènent aux tâches de chaque rôle.
+
+## 2. École, classes et personnel
+
+_Pour : Administration (MEMP, technique), DDEMP, Circonscription scolaire, Directeur / directrice_
+
+1. Menu « **Écoles** » : ajoutez une école (localisation en cascade département → commune → arrondissement → village).
+2. Carte de l’école : identification, localisation, « **Logo et devise** », « **Modifier** ».
+3. « **Personnel** » : statut, carrière, signatures ; « **Classes** » : niveau, effectif, titulaire.
+
+## 3. Élèves, présences, évaluations
+
+_Pour : Directeur / directrice, Enseignant(e), Conseiller pédagogique_
+
+1. « **Listes des apprenants** » : inscriptions, transferts, cartes d’identité.
+2. « **Présence des apprenants** » : appel quotidien ; alertes de décrochage.
+3. « **Évaluations** » et « **Notes et bulletins** » : saisie, calculs, bulletins signés avec code QR.
+4. « **Inscription CEP** » et « **Examen blanc** ».
+
+## 4. Documents officiels et vérification
+
+1. « **Documents** » : chaque pièce est numérotée, horodatée et scellée ; elle porte l’en-tête du MEMP, le logo et la devise de l’école, la signature et le code QR.
+2. La page de vérification (scan du QR) confirme le numéro et l’empreinte du document.
+
+## 5. Bureaux UASCEP et sport scolaire
+
+1. Ouvrez « **Bureaux UASCEP** » puis l’onglet « **Ajouter un membre** » : choisissez le niveau (école, UP, zone, CS, DDEMP) et l’entité ; le bureau se crée avec son premier membre.
+2. Pour chaque responsable, ajoutez sa signature (dessinée au doigt ou importée) et son cachet (généré ou importé).
+3. Onglet « **Documents** » : composition du bureau, PV d’élection et d’installation, attestations, liste des bureaux, tous signés avec code QR.
+4. Onglet « **Vie du bureau** » : activités, réunions (rapporteur), caisse et budget (trésorier), matériel, puis « **Rapport de fin de saison** » pré-rempli.
+5. Onglet « **Logo** » : le logo UASCEP du bureau (texte du bas modifiable).
+6. Le module « **Sport scolaire** » gère les licences, compétitions, feuilles de match, classements et palmarès ; les résultats alimentent le rapport de saison.
+
+## 6. Pédagogie : fiches, résumés, épreuves
+
+1. Ouvrez « **Pédagogie** », choisissez le cours (CI à CM2) puis l’onglet : Planification, Fiches de préparation, Résumés, Épreuves, Progressions, Programmes, Guides.
+2. Filtrez par matière, sous-matière, SA et séance, ou cherchez un mot du titre.
+3. Ouvrez une fiche : saisissez le nom du titulaire (filigrane), puis « **Imprimer / PDF** ». Le « **Classeur** » imprime toutes les fiches de la sélection, d’un jour, d’une semaine ou d’un mois.
+4. Résumés : version enseignant (avec réponses) ou version élève (sans réponses) ; « **Cahier de résumés** » pour tout un cours.
+5. Épreuves : sujets et corrigés par période (mensuelle, trimestrielle, passage, CEP blanc) ; « **Modifier** » pour adapter un énoncé, un barème ou l’en-tête (votre version reste sur l’appareil, « **Rétablir l’original** » revient au texte de départ).
+
+**Bon à savoir**
+
+- Les contenus sont conçus selon l’APC et restent à valider par le conseiller pédagogique.
+- Le conseiller, le directeur et l’administration peuvent ajouter des notes visibles des enseignants.
+
+## 7. Logo et devise de l’école
+
+Chaque école peut avoir son logo, créé automatiquement à partir de son nom, et sa devise. Ils figurent en tête de ses documents.
+
+1. Ouvrez la fiche de l’école, puis « **Logo et devise** » (ou « **Créer ou modifier le logo** »).
+2. Écrivez la devise (ou choisissez-en une dans la liste), puis la forme (rond ou écusson), le symbole (livre, plume, soleil, épi, palmier, colombe, globe…), les initiales et les couleurs.
+3. Ou importez votre propre logo (photo ou image).
+4. Touchez « **Enregistrer** ». « **Télécharger SVG / PNG** » donne le logo en fichier ; « **Réinitialiser** » revient au logo automatique.
+
+## 8. Imprimer et enregistrer en PDF
+
+1. Ouvrez le document (fiche, liste, attestation, épreuve…) puis touchez « **Imprimer / PDF** ».
+2. Choisissez l’imprimante, ou « **Enregistrer au format PDF** » pour obtenir un fichier.
+3. Pour les fiches de préparation longues, choisissez « **recto verso** » dans les réglages de l’imprimante : les marges et les numéros de page sont prévus pour cela.
+4. Cochez « **Graphiques d’arrière-plan** » (ou « **Couleurs** ») pour garder les bandeaux de couleur des fiches.
+
+**Bon à savoir**
+
+- Les fiches de préparation portent en filigrane oblique le nom du titulaire de la classe : saisissez-le une fois dans la fenêtre de la fiche (« **Titulaire** »).
+- Une épreuve courte s’imprime deux fois par feuille A4 (ligne de coupe) ; réglage « **1 par page** » dans l’onglet Épreuves.
+
+## 9. Code QR et vérification des documents
+
+Les pièces officielles (attestations, PV, relevés, documents UASCEP, certificats…) portent un numéro, une empreinte et un code QR.
+
+1. Pour vérifier une pièce, scannez son code QR avec l’appareil photo du téléphone : la page de vérification s’ouvre.
+2. Vous pouvez aussi saisir le numéro du document dans « **Vérifier un document** ».
+3. La page indique si le document est authentique, ou s’il a été modifié après sa signature.
+
+**Bon à savoir**
+
+- Une pièce dont le contenu a été changé après signature est signalée « **modifiée** » : rééditez-la et faites-la signer de nouveau.
+
+## 10. Sauvegarder, restaurer, transmettre
+
+Faites une sauvegarde au moins une fois par semaine, et toujours avant de changer d’appareil ou de mettre à jour.
+
+1. Ouvrez « **Sauvegarde et synchronisation** » (menu de l’administration ou du compte).
+2. Touchez « **Sauvegarder** » : un fichier (.json) est téléchargé. Gardez-le sur une clé USB, un ordinateur ou envoyez-le-vous par WhatsApp ou par courriel.
+3. Pour restaurer, choisissez « **Restaurer** » puis le fichier de sauvegarde ; confirmez. Les données de l’appareil sont remplacées par celles du fichier.
+4. Pour transmettre à l’échelon supérieur (école → zone → CS → DDEMP), utilisez l’export prévu (fiches, bilans, Excel) : le destinataire l’importe dans son application.
+
+**Bon à savoir**
+
+- Nommez vos sauvegardes avec la date (l’application le fait pour vous).
+- Une sauvegarde contient des données personnelles : ne la partagez qu’avec les personnes autorisées.
+
+## 11. Comptes, rôles et sécurité
+
+_Pour : Administration (MEMP, technique), DDEMP, Circonscription scolaire, Directeur / directrice_
+
+1. « **Utilisateurs & sécurité** » : un compte par personne, avec son rôle et son école ou territoire.
+2. L’enseignant est relié à sa classe par son nom : écrivez-le exactement comme celui du titulaire.
+3. Le parent ne voit que l’espace parents.
+
+## 12. Travailler sans connexion
+
+L’application fonctionne sans internet une fois ouverte une première fois sur l’appareil. Les données sont enregistrées dans l’appareil lui-même.
+
+1. Ouvrez l’application une première fois avec une connexion (navigateur, ou application Android / Windows installée).
+2. Installez-la : sur Android, menu du navigateur puis « **Ajouter à l’écran d’accueil** », ou installez le fichier APK (code QR de la fiche d’installation).
+3. Dans « **Pédagogie** », touchez « **Rendre tout disponible hors ligne** » pour garder toutes les fiches, résumés et épreuves sur l’appareil.
+4. Travaillez normalement : tout ce que vous saisissez reste dans l’appareil, même téléphone éteint.
+
+**Bon à savoir**
+
+- Les données d’un appareil ne passent pas toutes seules sur un autre : utilisez la sauvegarde (ou l’envoi des fiches) pour les transmettre.
+- Si vous videz les données du navigateur, vous effacez aussi les données de l’application : faites d’abord une sauvegarde.
+
+## 13. Questions fréquentes et dépannage
+
+**L’application affiche une ancienne version.**  
+Fermez-la complètement puis rouvrez-la avec une connexion ; dans le navigateur, rechargez la page. Sur un site en ligne, videz le cache du navigateur pour ce site si besoin (après une sauvegarde).
+
+**La page affiche « 404 ».**  
+Vérifiez l’adresse exacte (majuscules comprises) donnée dans la fiche d’installation, ou installez l’application avec le code QR.
+
+**Je ne retrouve pas mes données sur un autre téléphone.**  
+C’est normal : chaque appareil garde ses propres données. Faites une sauvegarde sur le premier appareil et restaurez-la sur le second.
+
+**Le PDF n’a pas les couleurs.**  
+Dans la fenêtre d’impression, cochez « **Graphiques d’arrière-plan** ».
+
+**Une liste déroulante couvre le clavier sur Android.**  
+Touchez le champ : une liste de choix avec recherche s’ouvre en plein écran ; tapez quelques lettres puis choisissez.
+
+**Qui contacter ?**  
+Le concepteur : Maître Aimé FACHOLA, +229 01 96 51 03 33 (appel ou WhatsApp).
+
+---
+Conception : Maître Aimé FACHOLA — +229 01 96 51 03 33

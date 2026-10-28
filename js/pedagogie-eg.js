@@ -4,7 +4,7 @@
    demande et gardés hors ligne. Lecture pour tous les comptes de l'école et de l'encadrement ; le directeur, le conseiller
    pédagogique, la circonscription, la DDEMP et l'administration ajoutent des notes (méta « pedagogieNotes »).
    L'enseignant arrive directement sur le cours de sa classe.
-   Conception : Maître Aimé FACHE */
+   Conception : Maître Aimé FACHOLA */
 (function (global) {
   'use strict';
   const EG = global.EG, DB = EG.DB, U = EG.UI, E = EG.Ecrans;
@@ -31,6 +31,7 @@
     return {
       app: 'ÉduGestion Pro Master', base: 'memp-cp/data/pedagogie/', coursParDefaut: cours || undefined,
       peutAnnoter: ANNOTENT.indexOf(u.role) >= 0, auteur: ((u.prenoms || '') + ' ' + (u.nom || '')).trim(),
+      titulaire: () => u.role === 'ENSEIGNANT' ? ((u.nom || '') + ' ' + (u.prenoms || '')).trim() : '',
       notes: { charger: () => DB.meta('pedagogieNotes').then(v => v || {}), enregistrer: (o) => DB.setMeta('pedagogieNotes', o).then(() => { if (EG.majSynchro) EG.majSynchro(); }) },
       imprimer: (titre, html, o) => EG.Sortie.imprimer(titre, html, { paysage: false, enTete: o && o.epreuve ? false : undefined }),
       memo: { get: (k) => { try { return localStorage.getItem('eg.ped.' + k); } catch (e) { return null; } }, set: (k, v) => { try { localStorage.setItem('eg.ped.' + k, v); } catch (e) { /* indisponible */ } } },

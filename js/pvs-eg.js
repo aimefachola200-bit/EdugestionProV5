@@ -2,7 +2,7 @@
    CS Pobè, Mon école, MEMP-CP et DOSP) : sport scolaire, tableau de bord du pilotage (lot A).
    Entités, droits, cachets, visas : ceux des bureaux UASCEP (js/uascep-eg.js). Données : méta « pvs ».
    Pièces signées : registre « documents » (type PVS), vérifiables par verification.html.
-   Conception : Maître Aimé FACHE */
+   Conception : Maître Aimé FACHOLA */
 (function (global) {
   'use strict';
   const EG = global.EG, DB = EG.DB, U = EG.UI, E = EG.Ecrans;

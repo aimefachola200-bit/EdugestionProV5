@@ -78,9 +78,11 @@
         zone.appendChild(el('div', { class: 'carte-ecole-tete' }, [
           el('div', {}, [
             el('h2', { text: ec.nom }),
+            ec.devise ? el('p', { class: 'devise-ecole', text: '« ' + ec.devise + ' »' }) : null,
             el('p', { class: 'muet', text: [ec.code_ecole, U.libelle(ec.cycle), ec.statut ? U.libelle(ec.statut) : null].filter(Boolean).join(' • ') }),
             ec.actif === false ? U.badge('École inactive', 'neutre') : null
           ]),
+          global.LogoEcole ? el('div', { class: 'logo-ecole-carte', html: global.LogoEcole.svgDe(ec, 96) }) : null,
           el('div', { class: 'cachet-apercu', html: EG.Docs.cachet(ec, { taille: 96 }) })
         ]));
         zone.appendChild(el('div', { class: 'grille grille-stats' }, [
@@ -106,6 +108,11 @@
 
         const actions = [];
         if (peutEditer()) actions.push(el('button', { class: 'btn btn-primaire', text: '\uE006 Modifier', onclick: () => E.editer('ecoles', ec, rafraichir_) }));
+        /* Logo de l'école (automatique, réglable ou importé) et devise : en tête de ses documents et dans la barre du haut */
+        if (peutEditer() && global.LogoEcole) actions.push(el('button', { class: 'btn btn-fantome', text: '\uE047 Logo et devise', 'data-le': 'ouvrir',
+          onclick: () => global.LogoEcole.editer({ nom: ec.nom, valeur: ec.logo_cfg, devise: ec.devise, surEnregistrer: (v) =>
+            DB.put('ecoles', Object.assign({}, ec, { logo_cfg: v.cfg, logo: v.png || '', devise: v.devise || '' }))
+              .then(r => DB.audit('LOGO_ECOLE', 'ecoles', r.id, {})).then(() => { U.toast('Logo et devise enregistrés'); EG.majSynchro(); if (EG.majMarqueEcole) EG.majMarqueEcole(); rafraichir_(); }) }) }));
         actions.push(el('button', { class: 'btn btn-fantome', text: '\uE008 Imprimer', onclick: () => sortie(ec, lignes, effectif, 'imprimer') }));
         actions.push(el('button', { class: 'btn btn-fantome', text: '\uE00D Word', onclick: () => sortie(ec, lignes, effectif, 'word') }));
         actions.push(el('button', { class: 'btn btn-fantome', text: '\uE00C Excel', onclick: () => S().excel('carte-identite-' + S().slug(ec.nom).slice(0, 30),

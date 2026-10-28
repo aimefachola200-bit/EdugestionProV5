@@ -217,9 +217,12 @@
       EG.MotDePasse.boutonRetour(),
       el('button', {
         class: 'marque-mini', onclick: () => Routeur.aller('accueil'), 'aria-label': 'Accueil'
-      }, [el('span', { class: 'marque-drapeau petit-drapeau', 'aria-hidden': 'true' }), el('span', { text: 'ÉduGestion Pro Master' })]),
+      }, [el('span', { class: 'marque-drapeau petit-drapeau', 'aria-hidden': 'true', id: 'marqueLogoEcole' }), el('span', { text: 'ÉduGestion Pro Master', id: 'marqueNomEcole' })]),
       el('div', { class: 'barre-droite' }, [
         indicateur,
+        el('button', { class: 'icone-btn', 'aria-label': 'Guide d’utilisation', title: 'Guide d’utilisation', 'data-guide': 'menu', text: '\uE07B',
+          onclick: () => { const r = { ADMIN_MEMP: 'admin', ADMIN_TECHNIQUE: 'admin', DDEMP: 'ddemp', CS: 'cs', CONSEILLER_PEDAGOGIQUE: 'cp', DIRECTEUR: 'directeur', ENSEIGNANT: 'enseignant', PARENT: 'parent', ELEVE: 'parent' }[(EG.session.user || {}).role] || '';
+            if (global.Guide) global.Guide.ouvrir(global.GUIDE_CONTENU, { role: r }); } }),
         el('button', {
           class: 'icone-btn', 'aria-label': 'Compte et déconnexion', text: '⋯',
           onclick: menuCompte
@@ -243,6 +246,7 @@
       nav
     ]));
     EG.majSynchro();
+    if (EG.majMarqueEcole) EG.majMarqueEcole();
   }
 
   /* ---------------- Tableau des menus ---------------- */
@@ -697,4 +701,14 @@
 
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', demarrer);
   else demarrer();
+  /* Barre du haut : logo et nom de l'école de la session (logo automatique ou importé, voir js/logo-ecole.js) */
+  EG.majMarqueEcole = function () {
+    const id = EG.session && EG.session.ecole_id; if (!id || !global.LogoEcole) return Promise.resolve();
+    return EG.DB.get('ecoles', id).then(e => {
+      const g = document.getElementById('marqueLogoEcole'), n = document.getElementById('marqueNomEcole');
+      if (!e || !g) return;
+      g.className = 'marque-logo-ecole'; g.innerHTML = global.LogoEcole.svgDe(e, 26);
+      if (n) { n.textContent = e.nom; n.title = e.devise || ''; }
+    }).catch(() => {});
+  };
 })(window);

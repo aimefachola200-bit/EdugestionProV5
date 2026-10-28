@@ -227,6 +227,7 @@
           casc: { typeCible: 'ZONE_PEDAGOGIQUE', ancetreChamp: ['territoire_id', 'departement_id'], optionnelSansParent: true } }),
         f('up_id', 'Unité pédagogique', 'ref', { ref: 'territoires',
           casc: { typeCible: 'UNITE_PEDAGOGIQUE', ancetreChamp: ['zone_id', 'territoire_id', 'departement_id'], ouEnfantDirectDe: 'territoire_id', optionnelSansParent: true } }),
+        f('devise', 'Devise de l’école', 'text'),
         f('directeur_nom', 'Nom du directeur', 'text'),
         f('cachet_haut', 'Cachet — texte de l’arc supérieur', 'text'),
         f('cachet_centre', 'Cachet — texte central', 'text', { def: 'LE DIRECTEUR' }),
