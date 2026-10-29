@@ -12,16 +12,34 @@
   const COURS = ['CI', 'CP', 'CE1', 'CE2', 'CM1', 'CM2'];
   const sansAccent = (t) => String(t || '').normalize('NFKD').replace(/[̀-ͯ]/g, '').toLowerCase().trim();
 
-  /** Cours de la classe de l'enseignant (titulaire dont le nom est celui du compte), sinon rien */
-  function coursDuCompte() {
+  /** Classe de l'enseignant : celle choisie dans son compte (« Classe tenue »), sinon celle dont son agent est titulaire.
+      Les anciens comptes reliés par le nom sont rattachés une fois pour toutes (agent et classe enregistrés dans le compte). */
+  function classeDuCompte() {
     const u = EG.session.user || {};
     if (u.role !== 'ENSEIGNANT') return Promise.resolve(null);
+    const annee = (x) => !EG.session.annee_id || x.annee_scolaire_id === EG.session.annee_id;
     return Promise.all([DB.all('personnels').catch(() => []), DB.all('classes').catch(() => [])]).then(([pers, cls]) => {
-      const moi = pers.filter(p => (!EG.session.ecole_id || p.ecole_id === EG.session.ecole_id) && sansAccent(p.nom) === sansAccent(u.nom) && (!u.prenoms || sansAccent(p.prenoms) === sansAccent(u.prenoms))).map(p => p.id);
-      const c = cls.find(x => moi.indexOf(x.titulaire_id) >= 0 && (!EG.session.annee_id || x.annee_scolaire_id === EG.session.annee_id) && COURS.indexOf(x.niveau) >= 0);
-      return c ? c.niveau : null;
+      let c = u.classe_id ? cls.find(x => x.id === u.classe_id) : null;
+      if (!c && u.personnel_id) c = cls.find(x => x.titulaire_id === u.personnel_id && annee(x) && COURS.indexOf(x.niveau) >= 0);
+      if (c) return c;
+      // ancien rattachement par le nom (comptes créés avant la 6.33.0) : migré dans le compte
+      const moi = pers.filter(p => (!EG.session.ecole_id || p.ecole_id === EG.session.ecole_id) && sansAccent(p.nom) === sansAccent(u.nom) && (!u.prenoms || sansAccent(p.prenoms) === sansAccent(u.prenoms)));
+      if (moi.length !== 1) return null;
+      c = cls.find(x => x.titulaire_id === moi[0].id && annee(x) && COURS.indexOf(x.niveau) >= 0) || null;
+      if (u.id) DB.get('users', u.id).then(r => { if (r && !r.personnel_id) { r.personnel_id = moi[0].id; if (c && !r.classe_id) r.classe_id = c.id; return DB.put('users', r); } }).catch(() => {});
+      return c;
     });
   }
+  function coursDuCompte() {
+    return classeDuCompte().then(c => {
+      if (!c) return null;
+      return (c.titulaire_id ? DB.get('personnels', c.titulaire_id).catch(() => null) : Promise.resolve(null)).then(p => {
+        if (p) titulaireCompte = ((p.nom || '') + ' ' + (p.prenoms || '')).trim();
+        return COURS.indexOf(c.niveau) >= 0 ? c.niveau : null;
+      });
+    });
+  }
+  let titulaireCompte = '';
   function adaptateur(cours) {
     const u = EG.session.user || {};
     const liens = [{ l: 'Évaluations', route: 'evaluations', icone: 'fiche' }, { l: 'CEP et examens blancs', route: 'cep', icone: 'stade' }];
@@ -31,7 +49,7 @@
     return {
       app: 'ÉduGestion Pro Master', base: 'memp-cp/data/pedagogie/', coursParDefaut: cours || undefined,
       peutAnnoter: ANNOTENT.indexOf(u.role) >= 0, auteur: ((u.prenoms || '') + ' ' + (u.nom || '')).trim(),
-      titulaire: () => u.role === 'ENSEIGNANT' ? ((u.nom || '') + ' ' + (u.prenoms || '')).trim() : '',
+      titulaire: () => u.role === 'ENSEIGNANT' ? (titulaireCompte || ((u.nom || '') + ' ' + (u.prenoms || '')).trim()) : '',
       notes: { charger: () => DB.meta('pedagogieNotes').then(v => v || {}), enregistrer: (o) => DB.setMeta('pedagogieNotes', o).then(() => { if (EG.majSynchro) EG.majSynchro(); }) },
       imprimer: (titre, html, o) => EG.Sortie.imprimer(titre, html, { paysage: false, enTete: o && o.epreuve ? false : undefined }),
       memo: { get: (k) => { try { return localStorage.getItem('eg.ped.' + k); } catch (e) { return null; } }, set: (k, v) => { try { localStorage.setItem('eg.ped.' + k, v); } catch (e) { /* indisponible */ } } },

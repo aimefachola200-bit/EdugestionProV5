@@ -420,6 +420,7 @@
         f('telephone', 'Téléphone', 'text'),
         f('email', 'E-mail', 'text'),
         f('personnel_id', 'Agent (compte d’enseignant)', 'ref', { ref: 'personnels' }),
+        f('classe_id', 'Classe tenue (compte d’enseignant)', 'ref', { ref: 'classes' }),
         f('eleve_id', 'Élève (compte d’élève)', 'ref', { ref: 'eleves' }),
         f('mot_de_passe', 'Mot de passe (réinitialiser)', 'password'),
         f('doit_changer_mdp', 'Doit choisir un nouveau mot de passe à la connexion', 'bool'),
@@ -1769,6 +1770,8 @@
   };
 
   global.EG = global.EG || {};
+  /* Version de l'application : même valeur que version.txt et le cache du service worker (tools/version.mjs) */
+  global.EG.VERSION = '6.33.0';
   global.EG.SCHEMA = SCHEMA;
   global.EG.MODULES = MODULES;
   global.EG.CATEGORIES_MODULES = CATEGORIES_MODULES;

@@ -80,7 +80,8 @@
     const numero = 'UASCEP-' + new Date().getFullYear() + '-' + String(Date.now()).slice(-6);
     const hash = EG.empreinte(doc.empreinte + numero);
     return DB.put('documents', { numero, type_code: 'UASCEP', titre: doc.typeLib + ' — ' + (r.bureau || ''), ecole_id: EG.session.ecole_id || null, annee_scolaire_id: EG.session.annee_id,
-      orientation: 'PORTRAIT', sensibilite: 'INTERNE', statut: 'GENERE', hash_sha256: hash, uascep: Object.assign({ code: doc.type }, r) })
+      orientation: 'PORTRAIT', sensibilite: 'INTERNE', statut: 'GENERE', hash_sha256: hash, uascep: Object.assign({ code: doc.type }, r),
+      source: { kind: 'uascep', type: doc.type, bureauIds: doc.bureauIds || [], membreId: doc.membreId || null, options: doc.options || null } })
       .then(d => DB.put('signatures_documents', { document_id: d.id, signataire_label: r.signataire || ((u.prenoms || '') + ' ' + u.nom).trim(), role_signature: 'UASCEP — ' + (r.fonction || doc.typeLib),
         type_signature: 'NUMERIQUE', hash_document: hash, signed_at: new Date().toISOString() }))
       .then(() => { DB.audit('GENERATION_DOCUMENT', 'documents', numero, { type: 'UASCEP', piece: doc.type }); if (EG.majSynchro) EG.majSynchro(); })

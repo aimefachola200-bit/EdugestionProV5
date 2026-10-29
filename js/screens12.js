@@ -101,7 +101,7 @@
     const mdp = S().motDePasseProvisoire(8);
     return EG.hashMotDePasse(mdp)
       .then(h => DB.put('users', Object.assign({}, user, { password_hash: h, doit_changer_mdp: true, actif: true })))
-      .then(u => { DB.audit('REINITIALISATION_MDP', 'users', u.id, {}); return { user: u, mdp }; });
+      .then(u => { DB.audit('REINITIALISATION_MDP', 'users', u.id, {}); if (window.Securite) window.Securite.reussite((EG.DB.nom || 'edugestion'), u.identifiant); return { user: u, mdp }; });
   }
 
   function basculerActif(user) {

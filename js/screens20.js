@@ -567,9 +567,10 @@
             const nb = Object.keys(d.donnees).reduce((s, k) => s + d.donnees[k].length, 0);
             S().enregistrer('edugestion-sauvegarde-' + new Date().toISOString().slice(0, 10) + '.json', new Blob([JSON.stringify(d)], { type: 'application/json' }));
             DB.audit('SAUVEGARDE', null, null, { enregistrements: nb });
+            if (EG.SauvegardesAuto) EG.SauvegardesAuto.marquerExport();
           });
         }
-      }))
+      }), EG.SauvegardesAuto ? el('button', { class: 'btn', 'data-sauvegarde': 'copies', text: '\uE007 Copies automatiques et restauration', onclick: () => EG.SauvegardesAuto.fenetre() }) : null)
     ]));
     if (!peutGerer()) return;
     const fichier = el('input', { type: 'file', accept: '.json' });

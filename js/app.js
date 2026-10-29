@@ -82,11 +82,20 @@
       erreur.textContent = '';
       const ident = identifiant.value.trim();
       if (!ident || !motdepasse.value) { erreur.textContent = 'Saisissez votre identifiant et votre mot de passe.'; return; }
+      const S = global.Securite, reste = S ? S.blocage((EG.DB.nom || 'edugestion'), ident) : 0;
+      if (reste) { erreur.textContent = S.texteBlocage(reste); return; }
       DB.where('users', u => u.identifiant === ident && u.actif !== false).then(users => {
-        if (!users.length) { erreur.textContent = 'Identifiant inconnu.'; return; }
+        if (!users.length) { if (S) S.echec((EG.DB.nom || 'edugestion'), ident); erreur.textContent = 'Identifiant inconnu.'; return; }
         const u = users[0];
         return EG.hashMotDePasse(motdepasse.value).then(h => {
-          if (h !== u.password_hash) { erreur.textContent = 'Mot de passe incorrect.'; return; }
+          if (h !== u.password_hash) {
+            const r = S ? S.echec((EG.DB.nom || 'edugestion'), ident) : { restants: 0 };
+            erreur.textContent = r.bloqueMs ? S.texteBlocage(r.bloqueMs) : 'Mot de passe incorrect.' + (r.restants && r.restants <= 3 ? ' Encore ' + r.restants + ' essai(s) avant blocage temporaire.' : '');
+            return;
+          }
+          if (S) S.reussite((EG.DB.nom || 'edugestion'), ident);
+          // mot de passe de départ (admin123…) : changement obligatoire avant d'aller plus loin
+          if (S && S.deDepart(motdepasse.value) && !u.doit_changer_mdp) return ouvrirSession(Object.assign({}, u, { doit_changer_mdp: true }));
           return ouvrirSession(u);
         });
       });
@@ -147,7 +156,20 @@
     return DB.setMeta('session_utilisateur', user.id)
       .then(() => DB.audit('CONNEXION', 'users', user.id))
       .then(() => EG.GeoRef && EG.GeoRef.defautSession())
-      .then(() => { construireCoquille(); Routeur.aller('accueil'); });
+      .then(() => {
+        construireCoquille(); Routeur.aller('accueil');
+        // copies de sauvegarde automatiques de l'appareil (instantanés) et rappel d'export après 7 jours
+        if (global.SauvegardeAuto && !EG.SauvegardesAuto) {
+          EG.SauvegardesAuto = global.SauvegardeAuto.installer({
+            app: 'edugestion-' + (DB.nom || 'pro'), titre: 'ÉduGestion Pro Master', couleur: '#1F4E79', garder: 10, intervalleH: 20,
+            peutRestaurer: () => !!(EG.session && EG.session.user && ['ADMIN_MEMP', 'ADMIN_TECHNIQUE', 'DIRECTEUR', 'CS', 'DDEMP'].indexOf(EG.session.user.role) >= 0),
+            lire: () => DB.exportAll().then(d => JSON.stringify(d)),
+            restaurer: (texte) => DB.reset().then(() => DB.importAll(JSON.parse(texte))).then(() => { setTimeout(() => location.reload(), 700); })
+          });
+        }
+        // déconnexion automatique après 20 minutes sans action (données d'élèves et de personnel sur l'appareil)
+        if (global.Securite) global.Securite.inactivite(20, () => { DB.audit('DECONNEXION_INACTIVITE', 'users', user.id).catch(() => {}); deconnecter(); });
+      });
   }
 
   /** Écran plein cadre : choisir son mot de passe. Rend l'utilisateur mis à jour. */
@@ -156,14 +178,15 @@
       document.body.className = 'connexion';
       const racine = document.getElementById('app');
       racine.textContent = '';
-      const n1 = el('input', { type: 'password', id: 'nmdp', autocomplete: 'new-password', required: true, minlength: '6' });
+      const n1 = el('input', { type: 'password', id: 'nmdp', autocomplete: 'new-password', required: true, minlength: '8' });
       const n2 = el('input', { type: 'password', id: 'nmdp2', autocomplete: 'new-password', required: true });
       const erreur = el('p', { class: 'erreur-connexion' });
       const form = el('form', {
         class: 'carte-connexion', onsubmit: e => {
           e.preventDefault();
           erreur.textContent = '';
-          if (n1.value.length < 6) { erreur.textContent = 'Choisissez un mot de passe d’au moins 6 caractères.'; return; }
+          const faible = global.Securite ? global.Securite.faible(n1.value, user.identifiant) : (n1.value.length < 6 ? 'Choisissez un mot de passe d’au moins 6 caractères.' : '');
+          if (faible) { erreur.textContent = faible; return; }
           if (n1.value !== n2.value) { erreur.textContent = 'Les deux saisies ne sont pas identiques.'; return; }
           EG.hashMotDePasse(n1.value).then(h => {
             if (h === user.password_hash) { erreur.textContent = 'Choisissez un mot de passe différent du mot de passe provisoire.'; return; }
@@ -176,7 +199,8 @@
           el('span', { class: 'marque-drapeau', 'aria-hidden': 'true' }),
           el('div', {}, [el('h1', { text: 'Choisissez votre mot de passe' }), el('p', { text: 'Bienvenue ' + (user.prenoms || user.nom) })])
         ]),
-        el('p', { class: 'muet', text: 'Le mot de passe qui vous a été remis est provisoire. Choisissez-en un que vous seul connaissez.' }),
+        el('p', { class: 'muet', text: 'Le mot de passe qui vous a été remis est provisoire (ou c’est un mot de passe de départ, connu de tous). Choisissez-en un que vous seul connaissez.' }),
+        el('p', { class: 'muet petit', text: global.Securite ? global.Securite.regle : '' }),
         el('div', { class: 'champ' }, [el('label', { for: 'nmdp', text: 'Nouveau mot de passe' }), n1]),
         el('div', { class: 'champ' }, [el('label', { for: 'nmdp2', text: 'Confirmez le mot de passe' }), n2]),
         erreur,
@@ -188,6 +212,7 @@
   }
 
   function deconnecter() {
+    if (global.Securite) global.Securite.arreterInactivite();
     DB.setMeta('session_utilisateur', null).then(() => {
       EG.session = null;
       ecranConnexion();
@@ -482,7 +507,7 @@
     U.modal('Mon compte', el('div', {}, [
       el('p', {}, [el('strong', { text: (u.prenoms || '') + ' ' + u.nom }), el('br'), document.createTextNode(U.libelle(u.role))]),
       el('p', { class: 'muet', text: EG.session.ecole_nom + ' • année ' + EG.session.annee_code }),
-      el('p', { class: 'muet petit', text: 'ÉduGestion Pro Master V5.9 — fonctionne hors ligne, les données restent sur cet appareil jusqu’à la synchronisation.' }),
+      el('p', { class: 'muet petit', text: 'ÉduGestion Pro Master ' + (EG.VERSION || '') + ' — fonctionne hors ligne, les données restent sur cet appareil jusqu’à la synchronisation.' }),
       el('p', { class: 'muet petit', text: u.signature_image ? 'Signature enregistrée : elle est apposée sur les documents que vous éditez.' : 'Aucune signature enregistrée : vos documents porteront un emplacement à signer à la main.' }),
       el('div', { class: 'barre-actions' }, [
         el('button', {

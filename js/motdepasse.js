@@ -116,7 +116,7 @@
                 if (!peutReinit(a, u)) { U.toast('Ce compte ne peut pas réinitialiser celui-ci.', 'danger'); return; }
                 const mdp = EG.Sortie.motDePasseProvisoire(8);
                 return EG.hashMotDePasse(mdp).then(hp => base().put('users', Object.assign({}, u, { password_hash: hp, doit_changer_mdp: true, actif: true }))).then(maj => {
-                  base().audit('REINITIALISATION_MDP', 'users', maj.id, { par: a.identifiant, motif: 'oubli' });
+                  base().audit('REINITIALISATION_MDP', 'users', maj.id, { par: a.identifiant, motif: 'oubli' }); if (window.Securite) window.Securite.reussite((EG.DB.nom || 'edugestion'), u.identifiant);
                   corps.textContent = '';
                   corps.append(el('p', { text: 'Mot de passe provisoire de ' + u.identifiant + ' :' }),
                     el('p', { style: 'font-size:1.6rem;font-weight:800;letter-spacing:.08em;text-align:center', text: mdp }),
@@ -131,13 +131,14 @@
       });
     }
     function nouveau(u) {
-      const [b1, n1] = champ('oubli-n1', 'Nouveau mot de passe (6 caractères minimum)', 'password', { autocomplete: 'new-password' });
+      const [b1, n1] = champ('oubli-n1', 'Nouveau mot de passe (8 caractères, lettres et chiffres)', 'password', { autocomplete: 'new-password' });
       const [b2, n2] = champ('oubli-n2', 'Confirmation', 'password', { autocomplete: 'new-password' });
       corps.textContent = '';
       corps.append(el('p', { text: 'Réponse correcte. Choisissez votre nouveau mot de passe.' }), b1, b2, el('button', { class: 'btn btn-primaire pleine', type: 'button', text: 'Enregistrer', onclick: () => {
-        if (n1.value.length < 6) { U.toast('6 caractères minimum.', 'danger'); return; }
+        { const fb = window.Securite ? window.Securite.faible(n1.value, u.identifiant) : (n1.value.length < 6 ? '6 caractères minimum.' : ''); if (fb) { U.toast(fb, 'danger'); return; } }
         if (n1.value !== n2.value) { U.toast('Les deux saisies ne sont pas identiques.', 'danger'); return; }
         EG.hashMotDePasse(n1.value).then(h => base().put('users', Object.assign({}, u, { password_hash: h, doit_changer_mdp: false }))).then(maj => {
+          if (window.Securite) window.Securite.reussite((EG.DB.nom || 'edugestion'), u.identifiant);
           base().audit('CHANGEMENT_MDP', 'users', maj.id, { motif: 'question de secours' }); U.toast('Mot de passe modifié : vous pouvez vous connecter.'); fermer();
         });
       } }));
@@ -148,9 +149,9 @@
   /* ---------------- Mon compte : mot de passe, question de secours ---------------- */
   function verifierActuel(mdp) { return EG.hashMotDePasse(mdp).then(h => base().get('users', EG.session.user.id).then(u => (h === u.password_hash ? u : null))); }
   function changerMotDePasse() {
-    const [b0, a] = champ('cm-a', 'Mot de passe actuel', 'password'), [b1, n1] = champ('cm-n1', 'Nouveau mot de passe (6 caractères minimum)', 'password'), [b2, n2] = champ('cm-n2', 'Confirmation', 'password');
+    const [b0, a] = champ('cm-a', 'Mot de passe actuel', 'password'), [b1, n1] = champ('cm-n1', 'Nouveau mot de passe (8 caractères, lettres et chiffres)', 'password'), [b2, n2] = champ('cm-n2', 'Confirmation', 'password');
     U.modal('Changer mon mot de passe', el('div', {}, [b0, b1, b2]), f => [el('button', { class: 'btn btn-fantome', text: 'Annuler', onclick: f }), el('button', { class: 'btn btn-primaire', text: 'Enregistrer', onclick: () => {
-      if (n1.value.length < 6) { U.toast('6 caractères minimum.', 'danger'); return; }
+      { const fb = window.Securite ? window.Securite.faible(n1.value, (EG.session.user || {}).identifiant) : (n1.value.length < 6 ? '6 caractères minimum.' : ''); if (fb) { U.toast(fb, 'danger'); return; } }
       if (n1.value !== n2.value) { U.toast('Les deux saisies ne sont pas identiques.', 'danger'); return; }
       verifierActuel(a.value).then(u => {
         if (!u) { U.toast('Mot de passe actuel incorrect.', 'danger'); return; }

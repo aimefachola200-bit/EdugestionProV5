@@ -20,7 +20,8 @@
     const numero = 'PVS-' + new Date().getFullYear() + '-' + String(Date.now()).slice(-6) + Math.floor(Math.random() * 10);
     const hash = EG.empreinte(doc.empreinte + numero);
     return DB.put('documents', { numero, type_code: 'PVS', titre: doc.typeLib + ' — ' + (r.objet || r.entite || ''), ecole_id: EG.session.ecole_id || null, annee_scolaire_id: EG.session.annee_id,
-      orientation: 'PORTRAIT', sensibilite: 'INTERNE', statut: 'GENERE', hash_sha256: hash, pvs: Object.assign({ code: doc.type, module: doc.module }, r) })
+      orientation: 'PORTRAIT', sensibilite: 'INTERNE', statut: 'GENERE', hash_sha256: hash, pvs: Object.assign({ code: doc.type, module: doc.module }, r),
+      source: { kind: 'pvs', type: doc.type, ref: doc.ref || {} } })
       .then(d => DB.put('signatures_documents', { document_id: d.id, signataire_label: r.signataire || ((u.prenoms || '') + ' ' + u.nom).trim(), role_signature: r.type || doc.typeLib,
         type_signature: 'NUMERIQUE', hash_document: hash, signed_at: new Date().toISOString() }))
       .then(() => { DB.audit('GENERATION_DOCUMENT', 'documents', numero, { type: 'PVS', piece: doc.type }); if (EG.majSynchro) EG.majSynchro(); })

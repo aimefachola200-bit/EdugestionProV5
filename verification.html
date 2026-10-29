@@ -42,6 +42,9 @@
     </p>
   </div>
 
+<script src="js/uascep.js"></script>
+<script src="js/pvs-modules.js"></script>
+<script src="js/pvs.js"></script>
 <script>
 (function () {
   'use strict';
@@ -80,6 +83,52 @@
     return d.getDate() + ' ' + mois[d.getMonth()] + ' ' + d.getFullYear();
   }
 
+  /* Même empreinte que l'application (EG.empreinte) */
+  function empreinte(texte) {
+    let h1 = 0x811c9dc5, h2 = 0x01000193;
+    for (let i = 0; i < texte.length; i++) {
+      h1 = (h1 ^ texte.charCodeAt(i)) >>> 0; h1 = (h1 * 16777619) >>> 0;
+      h2 = (h2 + texte.charCodeAt(i) * (i + 7)) >>> 0;
+    }
+    return (h1.toString(16) + h2.toString(16)).padStart(16, '0');
+  }
+  function meta(db, cle) {
+    return new Promise(res => {
+      if (!db.objectStoreNames.contains('meta')) return res(null);
+      const r = db.transaction(['meta'], 'readonly').objectStore('meta').get(cle);
+      r.onsuccess = () => res(r.result ? r.result.valeur : null); r.onerror = () => res(null);
+    });
+  }
+  /**
+   * Contrôle du contenu : l'empreinte est recalculée
+   *  - pour les pièces UASCEP et PVS, sur les données telles qu'elles sont enregistrées aujourd'hui (bureau, registres, licences…) :
+   *    toute modification faite après l'édition est signalée ;
+   *  - pour les autres pièces, sur le texte conservé dans le registre : une pièce du registre retouchée est signalée.
+   * Rend { etat: 'ok' | 'modifie' | 'inconnu', texte }.
+   */
+  function controleContenu(db, doc) {
+    const src = doc.source || {};
+    if ((src.kind === 'uascep' && window.UASCEP) || (src.kind === 'pvs' && window.PVS)) {
+      return meta(db, src.kind).then(etat => {
+        let c;
+        try {
+          c = src.kind === 'uascep'
+            ? window.UASCEP.canon(window.UASCEP.contenuDocument(etat || { bureaux: [], membres: [] }, src.type, src.bureauIds || [], src.membreId, src.options || undefined))
+            : window.PVS.canon(window.PVS.contenuDocument(etat || {}, src.type, src.ref || {}));
+        } catch (e) { return { etat: 'inconnu', texte: 'Les données d’origine n’ont pas pu être relues.' }; }
+        return empreinte(c + doc.numero) === doc.hash_sha256
+          ? { etat: 'ok', texte: 'Les données enregistrées n’ont pas changé depuis l’édition de la pièce.' }
+          : { etat: 'modifie', texte: 'Les données enregistrées ont été modifiées depuis l’édition de la pièce (bureau, registre, notes ou résultats) : le document imprimé ne correspond plus à l’état actuel. Faites-le rééditer et signer de nouveau.' };
+      });
+    }
+    if (doc.contenu_html) {
+      return Promise.resolve(empreinte(doc.contenu_html + doc.numero) === doc.hash_sha256
+        ? { etat: 'ok', texte: 'Le texte conservé dans le registre correspond à son empreinte.' }
+        : { etat: 'modifie', texte: 'Le texte conservé dans le registre ne correspond plus à son empreinte : la pièce a été retouchée après son édition.' });
+    }
+    return Promise.resolve({ etat: 'inconnu', texte: 'Pièce éditée par une version antérieure : seul le numéro et l’empreinte du registre sont contrôlés.' });
+  }
+
   function lire(numero) {
     return new Promise((resolve, reject) => {
       const requete = indexedDB.open('edugestion_pro');
@@ -91,7 +140,8 @@
         const tout = t.objectStore('documents').getAll();
         tout.onsuccess = () => {
           const trouve = (tout.result || []).filter(d => d.numero === numero)[0] || null;
-          db.close(); resolve(trouve);
+          if (!trouve) { db.close(); return resolve(null); }
+          controleContenu(db, trouve).then(c => { trouve._controle = c; db.close(); resolve(trouve); }, () => { db.close(); resolve(trouve); });
         };
         tout.onerror = () => { db.close(); reject(new Error('lecture impossible')); };
       };
@@ -151,7 +201,15 @@
       ['Saison', doc.uascep.saison], ['Date', doc.uascep.date], ['Signataire', doc.uascep.signataire]].filter(x => x[1]).map(x => el('p', {}, [el('strong', { text: x[0] + ' : ' }), x[1]])) : [])
       .concat(reference(numero, doc.hash_sha256));
 
+      const ctl = doc._controle || { etat: 'inconnu' };
+      if (concorde && ctl.etat === 'modifie') {
+        verdict('alerte', 'Document modifié après son édition', [
+          el('p', { text: ctl.texte })
+        ].concat(details));
+        return;
+      }
       if (concorde) {
+        if (ctl.etat === 'ok') details.unshift(el('p', { class: 'muet', text: ctl.texte }));
         verdict('ok', 'Document authentique', [
           el('p', { text: 'Ce numéro figure dans le registre de l’établissement et l’empreinte '
             + 'correspond : le document n’a pas été modifié depuis son édition.' })

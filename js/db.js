@@ -74,6 +74,7 @@
   }
 
   const DB = {
+    nom: DB_NAME,
     NOM: DB_NAME,
     uuid,
     open,
