@@ -570,7 +570,8 @@
             if (EG.SauvegardesAuto) EG.SauvegardesAuto.marquerExport();
           });
         }
-      }), EG.SauvegardesAuto ? el('button', { class: 'btn', 'data-sauvegarde': 'copies', text: '\uE007 Copies automatiques et restauration', onclick: () => EG.SauvegardesAuto.fenetre() }) : null)
+      }), EG.SauvegardesAuto ? el('button', { class: 'btn', 'data-sauvegarde': 'copies', text: '\uE007 Copies automatiques et restauration', onclick: () => EG.SauvegardesAuto.fenetre() }) : null,
+        EG.Synchronisation ? el('button', { class: 'btn', 'data-sync': 'ouvrir', text: '\uE058 Synchronisation entre niveaux', onclick: () => { location.hash = '#/synchronisation'; } }) : null)
     ]));
     if (!peutGerer()) return;
     const fichier = el('input', { type: 'file', accept: '.json' });

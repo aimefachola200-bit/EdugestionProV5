@@ -131,7 +131,7 @@
 
   function lire(numero) {
     return new Promise((resolve, reject) => {
-      const requete = indexedDB.open('edugestion_pro');
+      const requete = indexedDB.open((location && /github\.io$/.test(location.hostname)) ? 'edugestion_pro_master' : 'edugestion_pro');
       requete.onerror = () => reject(new Error('stockage inaccessible'));
       requete.onsuccess = e => {
         const db = e.target.result;
