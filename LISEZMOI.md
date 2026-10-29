@@ -1,6 +1,6 @@
 # Guide d’utilisation — ÉduGestion Pro Master — gestion scolaire
 
-_Version 7.0.0_
+_Version 7.1.0_
 
 Rôles : Administration (MEMP, technique) · DDEMP · Circonscription scolaire · Conseiller pédagogique · Directeur / directrice · Enseignant(e) · Parent
 
@@ -47,11 +47,13 @@ _Pour : Directeur / directrice, Enseignant(e), Conseiller pédagogique_
 
 ## 6. Pédagogie : fiches, résumés, épreuves
 
-1. Ouvrez « **Pédagogie** », choisissez le cours (CI à CM2) puis l’onglet : Planification, Fiches de préparation, Résumés, Épreuves, Progressions, Programmes, Guides.
-2. Filtrez par matière, sous-matière, SA et séance, ou cherchez un mot du titre.
-3. Ouvrez une fiche : saisissez le nom du titulaire (filigrane), puis « **Imprimer / PDF** ». Le « **Classeur** » imprime toutes les fiches de la sélection, d’un jour, d’une semaine ou d’un mois.
-4. Résumés : version enseignant (avec réponses) ou version élève (sans réponses) ; « **Cahier de résumés** » pour tout un cours.
-5. Épreuves : sujets et corrigés par période (mensuelle, trimestrielle, passage, CEP blanc) ; « **Modifier** » pour adapter un énoncé, un barème ou l’en-tête (votre version reste sur l’appareil, « **Rétablir l’original** » revient au texte de départ).
+1. Ouvrez « **Pédagogie** », choisissez le cours (Maternelle, CI à CM2) puis l’onglet : Planification, Fiches de préparation, Résumés, Épreuves, Progressions, Programmes, Guides.
+2. Maternelle (une école maternelle ou une classe EM s’ouvre directement dessus) : choisissez la section (petits ou grands), puis le domaine (D1 à D5), le thème et le mois ou la semaine. Onglets : fiches d’activités, repères pour l’éducateur, grilles d’observation (à imprimer avec la liste des enfants), progressions, domaines et compétences ; la planification se lit par jour (emploi du temps de la section), semaine ou mois.
+3. ES et EPS : les programmes suivent les mesures correctives en vigueur (onglet « **Programmes** », mention « **en vigueur** ») et les fiches y sont rattachées.
+4. Filtrez par matière, sous-matière, SA et séance, ou cherchez un mot du titre.
+5. Ouvrez une fiche : saisissez le nom du titulaire (filigrane), puis « **Imprimer / PDF** ». Le « **Classeur** » imprime toutes les fiches de la sélection, d’un jour, d’une semaine ou d’un mois.
+6. Résumés : version enseignant (avec réponses) ou version élève (sans réponses) ; « **Cahier de résumés** » pour tout un cours.
+7. Épreuves : sujets et corrigés par période (mensuelle, trimestrielle, passage, CEP blanc) ; « **Modifier** » pour adapter un énoncé, un barème ou l’en-tête (votre version reste sur l’appareil, « **Rétablir l’original** » revient au texte de départ).
 
 **Bon à savoir**
 

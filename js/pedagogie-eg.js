@@ -10,6 +10,10 @@
   const EG = global.EG, DB = EG.DB, U = EG.UI, E = EG.Ecrans;
   const ANNOTENT = ['ADMIN_MEMP', 'ADMIN_TECHNIQUE', 'DDEMP', 'CS', 'CONSEILLER_PEDAGOGIQUE', 'DIRECTEUR'];
   const COURS = ['CI', 'CP', 'CE1', 'CE2', 'CM1', 'CM2'];
+  /* Maternelle (niveaux EM1, EM2, PETITS, MOYENS, GRANDS) : contenus de la maternelle, section des petits ou des grands */
+  const NIV_MAT = { EM1: 'petits', PETITS: 'petits', EM2: 'grands', MOYENS: 'grands', GRANDS: 'grands' };
+  const enseigne = (c) => COURS.indexOf(c.niveau) >= 0 || !!NIV_MAT[c.niveau];
+  let sectionCompte = '';
   const sansAccent = (t) => String(t || '').normalize('NFKD').replace(/[̀-ͯ]/g, '').toLowerCase().trim();
 
   /** Classe de l'enseignant : celle choisie dans son compte (« Classe tenue »), sinon celle dont son agent est titulaire.
@@ -20,21 +24,27 @@
     const annee = (x) => !EG.session.annee_id || x.annee_scolaire_id === EG.session.annee_id;
     return Promise.all([DB.all('personnels').catch(() => []), DB.all('classes').catch(() => [])]).then(([pers, cls]) => {
       let c = u.classe_id ? cls.find(x => x.id === u.classe_id) : null;
-      if (!c && u.personnel_id) c = cls.find(x => x.titulaire_id === u.personnel_id && annee(x) && COURS.indexOf(x.niveau) >= 0);
+      if (!c && u.personnel_id) c = cls.find(x => x.titulaire_id === u.personnel_id && annee(x) && enseigne(x));
       if (c) return c;
       // ancien rattachement par le nom (comptes créés avant la 6.33.0) : migré dans le compte
       const moi = pers.filter(p => (!EG.session.ecole_id || p.ecole_id === EG.session.ecole_id) && sansAccent(p.nom) === sansAccent(u.nom) && (!u.prenoms || sansAccent(p.prenoms) === sansAccent(u.prenoms)));
       if (moi.length !== 1) return null;
-      c = cls.find(x => x.titulaire_id === moi[0].id && annee(x) && COURS.indexOf(x.niveau) >= 0) || null;
+      c = cls.find(x => x.titulaire_id === moi[0].id && annee(x) && enseigne(x)) || null;
       if (u.id) DB.get('users', u.id).then(r => { if (r && !r.personnel_id) { r.personnel_id = moi[0].id; if (c && !r.classe_id) r.classe_id = c.id; return DB.put('users', r); } }).catch(() => {});
       return c;
     });
   }
+  /** Hors compte enseignant : une école maternelle (cycle MATERNELLE) ouvre le module sur la maternelle */
+  function coursDeLEcole() {
+    if (!EG.session.ecole_id) return Promise.resolve(null);
+    return DB.get('ecoles', EG.session.ecole_id).then(e => (e && e.cycle === 'MATERNELLE' ? 'MAT' : null)).catch(() => null);
+  }
   function coursDuCompte() {
     return classeDuCompte().then(c => {
-      if (!c) return null;
+      if (!c) return (EG.session.user || {}).role === 'ENSEIGNANT' ? null : coursDeLEcole();
       return (c.titulaire_id ? DB.get('personnels', c.titulaire_id).catch(() => null) : Promise.resolve(null)).then(p => {
         if (p) titulaireCompte = ((p.nom || '') + ' ' + (p.prenoms || '')).trim();
+        if (NIV_MAT[c.niveau]) { sectionCompte = NIV_MAT[c.niveau]; return 'MAT'; }
         return COURS.indexOf(c.niveau) >= 0 ? c.niveau : null;
       });
     });
@@ -47,7 +57,7 @@
     if (EG.peutVoirModule('pvs-examens')) liens.push({ l: 'Examens et concours', route: 'pvs-examens', icone: 'examen' });
     if (EG.peutVoirModule('documents-officiels')) liens.push({ l: 'Documents officiels', route: 'documents-officiels', icone: 'document' });
     return {
-      app: 'ÉduGestion Pro Master', base: 'memp-cp/data/pedagogie/', coursParDefaut: cours || undefined,
+      app: 'ÉduGestion Pro Master', base: 'memp-cp/data/pedagogie/', coursParDefaut: cours || undefined, sectionParDefaut: sectionCompte || undefined,
       peutAnnoter: ANNOTENT.indexOf(u.role) >= 0, auteur: ((u.prenoms || '') + ' ' + (u.nom || '')).trim(),
       titulaire: () => u.role === 'ENSEIGNANT' ? (titulaireCompte || ((u.nom || '') + ' ' + (u.prenoms || '')).trim()) : '',
       notes: { charger: () => DB.meta('pedagogieNotes').then(v => v || {}), enregistrer: (o) => DB.setMeta('pedagogieNotes', o).then(() => { if (EG.majSynchro) EG.majSynchro(); }) },
@@ -60,7 +70,7 @@
 
   U.Routeur.definir('pedagogie', function (racine) {
     if (!EG.peutVoirModule('pedagogie')) { racine.appendChild(U.vide('Ce module n’est pas ouvert à votre compte.')); return; }
-    racine.appendChild(E.entete('Pédagogie', 'Programmes, guides, progressions annuelles, fiches de préparation, résumés, épreuves avec corrigés et planification du CI au CM2.'));
+    racine.appendChild(E.entete('Pédagogie', 'Programmes, guides, progressions annuelles, fiches de préparation, résumés, épreuves avec corrigés et planification, de la maternelle au CM2.'));
     const zone = U.el('div'); racine.appendChild(zone);
     if (!global.Pedagogie) { zone.appendChild(U.vide('Module indisponible : rechargez l’application.')); return; }
     coursDuCompte().catch(() => null).then(c => global.Pedagogie.monter(zone, adaptateur(c), { cours: c || undefined }))

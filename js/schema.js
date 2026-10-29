@@ -1771,7 +1771,7 @@
 
   global.EG = global.EG || {};
   /* Version de l'application : même valeur que version.txt et le cache du service worker (tools/version.mjs) */
-  global.EG.VERSION = '7.0.0';
+  global.EG.VERSION = '7.1.0';
   global.EG.SCHEMA = SCHEMA;
   global.EG.MODULES = MODULES;
   global.EG.CATEGORIES_MODULES = CATEGORIES_MODULES;
