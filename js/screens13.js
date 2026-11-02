@@ -135,6 +135,7 @@
 
       zone.appendChild(el('div', { class: 'grille grille-stats' }, [
         U.stat(U.nombre(EG.NIVEAUX_PRIM.length - manquants.length) + ' / ' + EG.NIVEAUX_PRIM.length, 'Cours du primaire ouverts', manquants.length ? 'attention' : ''),
+        (() => { const x = EG.Classes.ecole({}, classes); return U.stat(U.nombre(x.ouvertes), 'Classes ouvertes (' + x.simples + ' simple(s), ' + x.jumelees + ' jumelée(s), ' + x.multigrades + ' multigrade(s))'); })(),
         U.stat(U.nombre(classes.length - sansTitulaire), 'Classes avec titulaire'),
         U.stat(U.nombre(sansTitulaire), 'Classes sans titulaire', sansTitulaire ? 'attention' : ''),
         U.stat(U.nombre(enseignants.length), 'Enseignants en poste')

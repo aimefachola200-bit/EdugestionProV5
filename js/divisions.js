@@ -74,12 +74,13 @@
         if (s) {
           Object.keys(s.effectifs || {}).forEach(c => { const v = s.effectifs[c] || [0, 0]; o.cours[c] = [num(v[0]), num(v[1])]; o.g += num(v[0]); o.f += num(v[1]); });
           if (!o.g && !o.f) { o.g = num(s.total_garcons); o.f = num(s.total_filles); }
-          o.classes = num(s.classes_autorisees); o.perso = num(s.personnel_fe) + num(s.personnel_acdpe) + num(s.personnel_ame);
+          o.autorisees = num(s.classes_autorisees); o.perso = num(s.personnel_fe) + num(s.personnel_acdpe) + num(s.personnel_ame);
         } else {
           ins.filter(i => i.ecole_id === e.id).forEach(i => { const x = ie[i.eleve_id] || {}; const k = x.sexe === 'F' ? 1 : 0; o.cours[i.niveau] = o.cours[i.niveau] || [0, 0]; o.cours[i.niveau][k]++; if (k) o.f++; else o.g++; });
         }
-        const cl = T.classes.filter(c => c.ecole_id === e.id && c.annee_scolaire_id === anneeId).length;
-        if (!o.classes) o.classes = cl;
+        // classes OUVERTES (une classe jumelée ou multigrade compte pour une) ; à défaut, les autorisées déclarées
+        const cx = EG.Classes.ecole(e, T.classes.filter(c => c.ecole_id === e.id && c.annee_scolaire_id === anneeId), s);
+        Object.assign(o, { classes: EG.Classes.pourRatios(cx).n, ouvertes: cx.ouvertes, simples: cx.simples, jumelees: cx.jumelees, multigrades: cx.multigrades, autorisees: cx.autorisees || o.autorisees || 0 });
         eff[e.id] = o;
       });
       const perso = T.personnels.filter(p => dans(p) && p.actif !== false);
@@ -120,7 +121,7 @@
       const cours = coursPresents(D);
       return {
         kpis: [['Écoles', D.ecoles.length, pub + ' publiques · ' + (D.ecoles.length - pub) + ' privées'], ['Élèves', g + f, g + ' G · ' + f + ' F (' + fpc(pc(f, g + f)) + ' de filles)'],
-          ['Enseignants', ens, 'ratio ' + fr(ens ? (g + f) / ens : null) + ' élèves par maître'], ['Classes', cl, fr(cl ? (g + f) / cl : null) + ' élèves par classe']],
+          ['Enseignants', ens, 'ratio ' + fr(ens ? (g + f) / ens : null) + ' élèves par maître'], ['Classes ouvertes', cl, fr(cl ? (g + f) / cl : null) + ' élèves par classe ouverte · ' + D.ecoles.reduce((a, e) => a + (D.eff[e.id].jumelees || 0), 0) + ' jumelée(s), ' + D.ecoles.reduce((a, e) => a + (D.eff[e.id].multigrades || 0), 0) + ' multigrade(s)']],
         graphes: [{ titre: 'Effectifs par cours et par sexe', labels: cours, series: [{ nom: 'Garçons', color: C.G, values: cours.map(c => somCours(D, c, 0)) }, { nom: 'Filles', color: C.F, values: cours.map(c => somCours(D, c, 1)) }] },
           { titre: 'Élèves par ' + libGroupe(D).toLowerCase(), labels: D.groupes, series: [{ nom: 'Garçons', color: C.G, values: parGroupe(D, e => D.eff[e.id].g) }, { nom: 'Filles', color: C.F, values: parGroupe(D, e => D.eff[e.id].f) }] }],
         tableaux: [{ titre: 'Synthèse par ' + libGroupe(D).toLowerCase(), entetes: [libGroupe(D), 'Écoles', 'Classes', 'Garçons', 'Filles', 'Total', 'Enseignants', 'Élèves / maître'],

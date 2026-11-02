@@ -300,7 +300,7 @@
 
         /* Structure pédagogique */
         f('classes_autorisees', 'Classes autorisées', 'number'),
-        f('classes_existantes', 'Classes existantes', 'number'),
+        f('classes_existantes', 'Classes ouvertes (simples + jumelées + multigrades)', 'number'),
         f('salles_existantes', 'Salles existantes', 'number'),
         f('salles_utilisees', 'Salles utilisées', 'number'),
         f('classes_simples', 'Classes simples', 'number'),
@@ -334,6 +334,7 @@
         f('code', 'Code', 'text', { list: 1 }),
         f('libelle', 'Libellé', 'text', { list: 1 }),
         f('titulaire_id', 'Enseignant titulaire', 'ref', { ref: 'personnels', list: 1 }),
+        f('regroupement', 'Classe jumelée / multigrade (cours regroupés, ex. CI-CP)', 'text', { aide: 'Même salle, même maître : une classe jumelée ou multigrade compte pour une seule classe ouverte. Laisser vide pour une classe simple.' }),
         f('effectif_max', 'Effectif maximum', 'number', { def: 60 }),
         f('actif', 'Active', 'bool', { def: true })
       ]
@@ -1772,7 +1773,7 @@
 
   global.EG = global.EG || {};
   /* Version de l'application : même valeur que version.txt et le cache du service worker (tools/version.mjs) */
-  global.EG.VERSION = '7.3.0';
+  global.EG.VERSION = '7.4.0';
   global.EG.SCHEMA = SCHEMA;
   global.EG.MODULES = MODULES;
   global.EG.CATEGORIES_MODULES = CATEGORIES_MODULES;

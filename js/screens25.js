@@ -316,7 +316,7 @@
           const st = parEcole[e.id] || null;
           const tt = st ? T(st) : { t: 0, pers: 0 };
           const inscrits = X.data.ins.filter(i => i.ecole_id === e.id).length;
-          const classes = X.data.classes.filter(c => c.ecole_id === e.id && c.actif !== false).length;
+          const classes = EG.Classes.ecole(e, X.data.classes.filter(c => c.ecole_id === e.id), st).ouvertes;
           const agents = X.data.pers.filter(p => p.ecole_id === e.id && p.actif !== false && ['ENSEIGNANT', 'AME'].indexOf(categoriePersonnel(p)) >= 0).length;
           const declEleves = st && st.effectifs ? tt.t : null;
           const declClasses = st && st.classes_autorisees !== null && st.classes_autorisees !== undefined ? st.classes_autorisees : (e.classes_autorisees || null);
@@ -326,11 +326,11 @@
           const eClasses = declClasses !== null && classes ? classes - declClasses : null;
           const ePers = declPers !== null && agents ? agents - declPers : null;
           if (eEleves) alertes.push('élèves inscrits ≠ déclarés');
-          if (eClasses && eClasses > 0) alertes.push('plus de classes que d’autorisées');
+          if (eClasses && eClasses > 0) alertes.push('classes ouvertes au-delà des autorisées (+' + eClasses + ')');
           const publique = (e.statut || 'PUBLIQUE') === 'PUBLIQUE';
           if (ePers && publique) alertes.push(ePers > 0 ? 'plus d’agents que déclarés' : 'agents manquants dans l’application');
-          if (declEleves && declClasses && declEleves / declClasses > 50) alertes.push('plus de 50 élèves par classe');
-          if (publique && declPers !== null && declClasses && declPers < declClasses) alertes.push('moins d’enseignants que de classes');
+          if (declEleves && (classes || declClasses) && declEleves / (classes || declClasses) > 50) alertes.push('plus de 50 élèves par classe ouverte');
+          if (publique && declPers !== null && (classes || declClasses) && declPers < (classes || declClasses)) alertes.push('moins d’enseignants que de classes ouvertes');
           if (!e.directeur_nom) alertes.push('directeur non renseigné');
           return { e, declEleves, inscrits, eEleves, declClasses, classes, eClasses, declPers, agents, ePers, alertes,
             ratio: declEleves && declClasses ? Math.round(declEleves / declClasses * 10) / 10 : null };
@@ -403,8 +403,8 @@
           const ins = D.ins.filter(i => i.ecole_id === e.id);
           const f = ins.filter(i => i._eleve && i._eleve.sexe === 'F').length;
           const eleves = ins.length || tt.t, filles = ins.length ? f : tt.f;
-          const classesOuv = D.classes.filter(c => c.ecole_id === e.id && c.actif !== false).length;
-          const classes = classesOuv || (st && st.classes_autorisees) || e.classes_autorisees || 0;
+          // classes ouvertes : une classe jumelée ou multigrade compte pour une (js/classes-eg.js)
+          const cx = EG.Classes.ecole(e, D.classes.filter(c => c.ecole_id === e.id), st), classes = EG.Classes.pourRatios(cx).n;
           const agents = D.pers.filter(p => p.ecole_id === e.id && p.actif !== false && ['ENSEIGNANT', 'AME'].indexOf(categoriePersonnel(p)) >= 0).length;
           const pers = agents || tt.pers;
           const salles = D.infra.filter(x => x.ecole_id === e.id && x.type_local === 'SALLE_CLASSE');

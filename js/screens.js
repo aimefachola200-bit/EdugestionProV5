@@ -1411,7 +1411,11 @@
       { c: 'eleves_filles', l: 'Dont filles', auto: 'eleves_filles' },
       { c: 'redoublants', l: 'Redoublants', auto: 'redoublants' },
       { c: 'handicap', l: 'Élèves en situation de handicap', auto: 'handicap' },
-      { c: 'classes_ouvertes', l: 'Classes ouvertes', auto: 'classes' }
+      { c: 'classes_simples', l: 'Classes simples', auto: 'classes_simples' },
+      { c: 'classes_jumelees', l: 'Classes jumelées (2 cours, une salle, un maître)', auto: 'classes_jumelees' },
+      { c: 'classes_multigrades', l: 'Classes multigrades (3 cours et plus)', auto: 'classes_multigrades' },
+      { c: 'classes_ouvertes', l: 'Classes ouvertes (simples + jumelées + multigrades)', auto: 'classes' },
+      { c: 'classes_autorisees', l: 'Classes autorisées', auto: 'classes_autorisees' }
     ] },
     { code: 'PERSONNEL', nom: 'Personnel', champs: [
       { c: 'personnel_total', l: 'Personnel en poste', auto: 'personnel' },
@@ -1612,7 +1616,9 @@
         eleves_filles: depuisStat ? t.f : ins.filter(i => ie[i.eleve_id] && ie[i.eleve_id].sexe === 'F').length,
         redoublants: ins.filter(i => i.redoublant).length,
         handicap: handicaps.filter(h => h.actif !== false && idsEleves[h.eleve_id]).length,
-        classes: (!classes.length && stat && stat.classes_autorisees) ? stat.classes_autorisees : classes.length,
+        // classes ouvertes : une classe jumelée ou multigrade compte pour une (js/classes-eg.js) ; les autorisées à part
+        ...(() => { const x = EG.Classes.ecole({}, classes, stat); return { classes: x.ouvertes || null, classes_simples: x.ouvertes ? x.simples : null, classes_jumelees: x.ouvertes ? x.jumelees : null,
+          classes_multigrades: x.ouvertes ? x.multigrades : null, classes_autorisees: x.autorisees }; })(),
         personnel: nbPers,
         personnel_femmes: actifs.filter(p => p.sexe === 'F').length,
         ratio: nbPers ? Math.round(nbEleves / nbPers) : null,
