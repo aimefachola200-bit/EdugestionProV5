@@ -165,6 +165,7 @@
         class: 'raccourci', onclick: () => Routeur.aller(route)
       }, [el('span', { class: 'raccourci-icone', text: icone }), el('span', { text: titre })]));
 
+      if (['PARENT', 'ELEVE'].indexOf(u.role) < 0 && EG.peutVoirModule('eleves')) ajoute('\uE01F', 'Listes de classe', 'listes-classe');
       if (u.role === 'ENSEIGNANT') {
         ajoute('\uE004', 'Faire l’appel', 'presences');
         ajoute('\uE00E', 'Saisir les notes', 'evaluations');

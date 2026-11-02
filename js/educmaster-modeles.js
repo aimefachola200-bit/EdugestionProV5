@@ -58,20 +58,25 @@
       const ecole = C.ecoles.filter(e => e.id === ecoleId)[0] || {};
       const ie = {}; C.eleves.forEach(e => { ie[e.id] = e; });
       const ic = {}; C.classes.forEach(c => { ic[c.id] = c; });
-      let total = 0;
-      const feuilles = FEUILLES_CLASSE.map(([nom, niveaux]) => {
-        const lignes = C.inscriptions.filter(i => i.ecole_id === ecoleId && niveaux.indexOf(i.niveau) >= 0 && ie[i.eleve_id])
-          .map(i => ({ e: ie[i.eleve_id], c: ic[i.classe_id] }))
-          .sort((a, b) => String(a.c ? a.c.libelle || a.c.code : '').localeCompare(String(b.c ? b.c.libelle || b.c.code : ''), 'fr')
-            || String(a.e.nom).localeCompare(String(b.e.nom), 'fr') || String(a.e.prenoms).localeCompare(String(b.e.prenoms), 'fr'))
-          .map(({ e }) => [(e.nom || '').toUpperCase(), e.prenoms || '', e.sexe === 'F' ? 'F' : (e.sexe ? 'M' : ''), dateFr(e.date_naissance),
-            e.lieu_naissance || e.commune_naissance || '', e.tuteur_telephone || '', e.nationalite || NATIONALITE, e.npi || '']);
-        total += lignes.length;
-        return { nom, lignes: [COLONNES_CLASSE].concat(lignes), entete: 0 };
-      });
+      const rows = C.inscriptions.filter(i => i.ecole_id === ecoleId && ie[i.eleve_id]).map(i => ({ e: ie[i.eleve_id], c: ic[i.classe_id], niveau: i.niveau }));
+      const total = rows.filter(r => FEUILLES_CLASSE.some(([, n]) => n.indexOf(r.niveau) >= 0)).length;
+      const feuilles = feuillesEleves(rows);
       EG.Sortie.excel('EducMaster_eleves_' + EG.Sortie.slug(ecole.nom || 'ecole').slice(0, 30) + '_' + session().annee_code, feuilles);
       DB.audit('EDUCMASTER_EXPORT_ELEVES', 'eleves', null, { ecole: ecole.nom, eleves: total });
       return total;
+    });
+  }
+
+  /** Classeur « modèle des classes » d'EducMaster (importation) : rows = [{ e: élève, c: classe, niveau }] ; toutes les
+      feuilles du modèle, chaque élève sur la feuille de son niveau (aussi utilisé par « Listes de classe »). */
+  function feuillesEleves(rows) {
+    return FEUILLES_CLASSE.map(([nom, niveaux]) => {
+      const lignes = rows.filter(r => niveaux.indexOf(r.niveau) >= 0 && r.e)
+        .sort((a, b) => String(a.c ? a.c.libelle || a.c.code : '').localeCompare(String(b.c ? b.c.libelle || b.c.code : ''), 'fr')
+          || String(a.e.nom).localeCompare(String(b.e.nom), 'fr') || String(a.e.prenoms).localeCompare(String(b.e.prenoms), 'fr'))
+        .map(({ e }) => [(e.nom || '').toUpperCase(), e.prenoms || '', e.sexe === 'F' ? 'F' : (e.sexe ? 'M' : ''), dateFr(e.date_naissance),
+          e.lieu_naissance || e.commune_naissance || '', e.tuteur_telephone || '', e.nationalite || NATIONALITE, e.npi || '']);
+      return { nom, lignes: [COLONNES_CLASSE].concat(lignes), entete: 0 };
     });
   }
 
@@ -184,6 +189,22 @@
       DB.audit('EDUCMASTER_EXPORT_NOTES', 'notes', null, { classe: classe.libelle || classe.code, notes: nNotes });
       return { eleves: ins.length, notes: nNotes, sansMatricule: ins.filter(i => !ie[i.eleve_id].educmaster_matricule).length };
     });
+  }
+
+  /** Notes d'une classe pour le modèle officiel (Listes de classe) : { parFeuille: { feuille: [{ matricule, nom, prenoms, notes[9] }] } } */
+  function donneesNotes(C, classe) {
+    const ie = {}; C.eleves.forEach(e => { ie[e.id] = e; });
+    const ins = C.inscriptions.filter(i => i.classe_id === classe.id && ie[i.eleve_id]);
+    const parCode = {}; C.matieres.forEach(m => { parCode[m.code] = m.id; });
+    const parFeuille = {};
+    FEUILLES_NOTES.forEach(([nom, type, rang]) => {
+      const ev = evaluationPour(C, classe, type, rang), idx = {};
+      if (ev) C.notes.filter(n => n.evaluation_id === ev.id).forEach(n => { idx[n.inscription_id + '|' + n.matiere_id] = n; });
+      parFeuille[nom] = ins.map(i => { const e = ie[i.eleve_id];
+        return { matricule: e.educmaster_matricule || '', nom: (e.nom || '').toUpperCase(), prenoms: e.prenoms || '',
+          notes: MATIERES_MODELE.map(([, code]) => { const n = idx[i.id + '|' + parCode[code]]; return n && typeof n.note === 'number' ? n.note : null; }) }; });
+    });
+    return { parFeuille, sansMatricule: ins.filter(i => !ie[i.eleve_id].educmaster_matricule).length };
   }
 
   /* ---------------- 2. notes : import ---------------- */
@@ -343,5 +364,5 @@
     }).catch(e => U.toast('Fichier illisible : ' + e.message, 'danger'));
   }
 
-  EG.EducMasterModeles = { bloc, exporterEleves, exporterNotes, analyserEleves, analyserNotes, enregistrerEleves, enregistrerNotes, contexte, FEUILLES_CLASSE, FEUILLES_NOTES, MATIERES_MODELE };
+  EG.EducMasterModeles = { bloc, feuillesEleves, donneesNotes, COLONNES_CLASSE, exporterEleves, exporterNotes, analyserEleves, analyserNotes, enregistrerEleves, enregistrerNotes, contexte, FEUILLES_CLASSE, FEUILLES_NOTES, MATIERES_MODELE };
 })(window);

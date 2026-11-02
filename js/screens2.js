@@ -622,7 +622,8 @@
 
   Routeur.definir('personnel', function (racine) {
     racine.appendChild(entete('Personnel', 'Dossier de carrière, affectations, formations et évaluation.',
-      EG.peutEcrire() ? [el('button', { class: 'btn btn-primaire', text: 'Ajouter un agent', onclick: () => editer('personnels', {}, () => Routeur.aller('personnel')) })] : null));
+      [EG.peutEcrire() ? el('button', { class: 'btn btn-primaire', text: 'Ajouter un agent', onclick: () => editer('personnels', {}, () => Routeur.aller('personnel')) }) : null,
+        EG.session.ecole_id && EG.ListesClasse ? el('button', { class: 'btn btn-fantome', 'data-educmaster': 'agents', text: 'Excel EducMaster (agents)', title: 'Personnel en activité de l’école, modèle officiel « Mes agents »', onclick: () => EG.ListesClasse.exporterAgents(EG.session.ecole_id) }) : null].filter(Boolean)));
     const filtres = el('div', { class: 'barre-filtres' });
     const zone = el('div');
     racine.appendChild(filtres); racine.appendChild(zone);

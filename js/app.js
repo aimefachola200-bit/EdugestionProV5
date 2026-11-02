@@ -299,7 +299,7 @@
     const an = (/(\d{4})\D+(\d{4})/.exec(EG.session.annee_code || '') || [])[2] || '';
     return [
       { nom: 'Menu principal', icone: '\uE00F', coul: '#008751', items: [
-        ['accueil', '\uE015', 'Tableau de bord', null], ['carte-ecole', '\uE01D', 'Ma fiche école', 'carte-ecole'],
+        ['accueil', '\uE015', 'Tableau de bord', null], ['listes-classe', '\uE01F', 'Listes de classe', 'eleves'], ['carte-ecole', '\uE01D', 'Ma fiche école', 'carte-ecole'],
         ['gestion-ecoles', '\uE022', 'Écoles', 'reseau'], ['personnel-cs/enseignants', '\uE01C', 'Personnel enseignant', 'personnel-cs'],
         ['personnel-cs/administratif', '\uE011', 'Personnel administratif', 'personnel-cs'],
         ['statuts-cs/fe', '\uE01E', 'Personnel FE (directeurs, adjoints)', 'statuts-personnel'], ['statuts-cs/acdpe', '\uE01E', 'Personnel ACDPE (directeurs, adjoints)', 'statuts-personnel'],
@@ -396,6 +396,8 @@
       return aside;
     }
     aside.appendChild(lien('accueil', '\uE000', 'Accueil', 'menu-accueil'));
+    /* Accès rapide aux listes de classe (lecture seule), sans passer par les inscriptions */
+    if (EG.peutVoirModule('eleves')) aside.appendChild(lien('listes-classe', '\uE01F', 'Listes de classe', 'menu-accueil'));
     /* La liste complète des modules reste à portée de clic sur ordinateur comme sur téléphone. */
     if (!['PARENT', 'ELEVE'].includes(user.role)) aside.appendChild(lien('modules', '\uE054', 'Tous les modules', 'menu-accueil'));
     if (blocMempCp) aside.appendChild(blocMempCp);
