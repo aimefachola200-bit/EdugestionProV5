@@ -56,6 +56,7 @@
     { code: 'pvs-sante', cat: 'PEDAGOGIE', nom: 'Santé et inclusion (visites médicales, infirmerie, besoins spécifiques, filles)', icone: '\uE07F', entites: [], ecran: 'pvs-sante' },
     { code: 'pvs-inspection', cat: 'PILOTAGE', nom: 'Formation et animations pédagogiques (plans, animations UP, attestations)', icone: '\uE082', entites: [], ecran: 'pvs-inspection' },
     { code: 'pvs-patrimoine', cat: 'PATRIMOINE', nom: 'Manuels, besoins et dotations (PV de réception)', icone: '\uE083', entites: [], ecran: 'pvs-patrimoine' },
+    { code: 'pvs-territoire', cat: 'PILOTAGE', nom: 'Territoire et suivi administratif (fiche de rentrée, fiche signalétique, structures)', icone: '\uE048', entites: [], ecran: 'pvs-territoire' },
     { code: 'pvs-examens', cat: 'PEDAGOGIE', nom: 'Examens et concours (CEP : centres, jurys, notes, délibération ; concours)', icone: '\uE084', entites: [], ecran: 'pvs-examens' },
     { code: 'carrieres', cat: 'ADMIN', nom: 'Gestion des carrières', icone: '\uE016', entites: ['carrieres_personnel', 'affectations_personnel', 'diplomes_personnel', 'formations_personnel'], ecran: 'carrieres' },
     { code: 'scolarite-privee', cat: 'FINANCES', nom: 'Scolarité (école privée)', icone: '\uE020', entites: ['frais_scolarite', 'paiements_scolarite', 'remises_scolarite'], ecran: 'scolarite-privee',
@@ -1771,7 +1772,7 @@
 
   global.EG = global.EG || {};
   /* Version de l'application : même valeur que version.txt et le cache du service worker (tools/version.mjs) */
-  global.EG.VERSION = '7.2.0';
+  global.EG.VERSION = '7.3.0';
   global.EG.SCHEMA = SCHEMA;
   global.EG.MODULES = MODULES;
   global.EG.CATEGORIES_MODULES = CATEGORIES_MODULES;

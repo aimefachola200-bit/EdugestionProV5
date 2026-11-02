@@ -12,6 +12,7 @@
     'pvs-sante': ['sante', 'Santé et inclusion', 'Visites médicales et aptitude sportive, infirmerie, élèves à besoins spécifiques, scolarisation des filles.'],
     'pvs-inspection': ['inspection', 'Formation et animations pédagogiques', 'Plans de formation, animations pédagogiques d’UP et de zone, attestations de participation.'],
     'pvs-patrimoine': ['patrimoine', 'Manuels, besoins et dotations', 'Manuels scolaires par cours et matière, besoins exprimés, dotations reçues et PV de réception.'],
+    'pvs-territoire': ['territoire', 'Territoire et suivi administratif', 'Fiche statistique de rentrée validée par la circonscription et le département, fiche signalétique (GPS, eau, latrines, électricité, agrément), référentiel des structures, décisions transmises.'],
     'pvs-examens': ['examens', 'Examens et concours', 'CEP : épreuves, centres, jurys, candidats, numéros de table, notes, délibération, résultats ; concours scolaires.'] };
   const I = (n) => (global.Icones ? global.Icones.code(n) + ' ' : '');
 
@@ -86,7 +87,7 @@
       enregistrer: (etat) => DB.setMeta('pvs', etat).then(() => { if (EG.majSynchro) EG.majSynchro(); }),
       signer, indicateurs, eleves, absences,
       utilisateur: () => { const u = EG.session.user || {}; return ((u.prenoms || '') + ' ' + (u.nom || '')).trim(); },
-      exclure: ['sante.cantine', 'sante.stocks', 'sante.decrochage', 'inspection.visites', 'inspection.recommandations', 'patrimoine.batiments', 'patrimoine.tables', 'patrimoine.materiel'],
+      exclure: ['territoire.presences', 'sante.cantine', 'sante.stocks', 'sante.decrochage', 'inspection.visites', 'inspection.recommandations', 'patrimoine.batiments', 'patrimoine.tables', 'patrimoine.materiel'],
       cepCandidats,
       uascep: () => ({ charger: base.charger, enregistrer: base.enregistrer }),
       memo: { get: (k) => { try { return localStorage.getItem('eg.pvs.' + k); } catch (e) { return null; } }, set: (k, v) => { try { localStorage.setItem('eg.pvs.' + k, v); } catch (e) { /* indisponible */ } } },

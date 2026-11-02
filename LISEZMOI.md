@@ -1,6 +1,6 @@
 # Guide d’utilisation — ÉduGestion Pro Master — gestion scolaire
 
-_Version 7.2.0_
+_Version 7.3.0_
 
 Rôles : Administration (MEMP, technique) · DDEMP · Circonscription scolaire · Conseiller pédagogique · Directeur / directrice · Enseignant(e) · Parent
 
@@ -45,7 +45,40 @@ _Pour : Directeur / directrice, Enseignant(e), Conseiller pédagogique_
 5. Onglet « **Logo** » : le logo UASCEP du bureau (texte du bas modifiable).
 6. Le module « **Sport scolaire** » gère les licences, compétitions, feuilles de match, classements et palmarès ; les résultats alimentent le rapport de saison.
 
-## 6. Pédagogie : fiches, résumés, épreuves
+## 6. Territoire et suivi administratif
+
+Le suivi administratif entre l’école, la circonscription et le département : fiche statistique de rentrée validée à chaque niveau, fiche signalétique de l’école, courrier administratif avec accusé de lecture, référentiel des structures.
+
+1. Ouvrez « **Territoire et suivi administratif** » (menu Vie scolaire, sport et pilotage).
+2. Fiche signalétique : position GPS (bouton « **Position actuelle** » sur le téléphone, « **Voir sur la carte** »), statut juridique, autorisation et agrément, salles, latrines, point d’eau, électricité.
+3. Fiche statistique de rentrée : « **Ajouter** » propose les effectifs, les classes, les enseignants et les infrastructures déjà connus ; complétez puis « **Transmettre** ».
+4. La circonscription « **Valide** » ou « **Renvoie** » (motif obligatoire) ; le département valide puis « **Clôture** ». L’onglet « **Suivi des fiches de rentrée** » montre les écoles dont la fiche n’est pas reçue.
+5. Courrier administratif (module « **Communication et alertes** ») : rédigez, puis « **Envoyer** » (numéro de départ D-AAAA-0001). Le destinataire l’ouvre (accusé de lecture daté, numéro d’arrivée A-AAAA-0001), le « **Marque traité** », puis l’archive.
+6. Référentiel des structures (circonscription, département) : « **Amorcer le référentiel** », puis complétez les services ; « **Arbre des structures** » montre les rattachements.
+7. Les décisions (validation, renvoi, lecture du courrier) redescendent par la synchronisation dans l’onglet « **Décisions transmises** ».
+
+**Bon à savoir**
+
+- Une fiche transmise ou un courrier envoyé ne se modifient plus (sauf fiche renvoyée).
+- Visites de classe : « **Statut de la visite** » (planifiée, réalisée, rapport rédigé, validée) et « **Date de la prochaine visite** » ; une alerte signale les visites planifiées dépassées et les prochaines visites des 14 jours.
+- Incidents de discipline (module « **Santé, cantine et inclusion** ») : registre interne de l’école, jamais transmis ; les châtiments corporels sont interdits.
+
+## 7. CEP 2027 : centres et salles de composition
+
+Le point des candidats par centre d’examen et des salles de composition en bon état, au format du tableau de synthèse de la DDEMP.
+
+1. Ouvrez « **Examens et concours** », onglet « **CEP 2027 — Centres et salles** ».
+2. Vérifiez la session (JUIN 2027) et le nombre de candidats par salle (30 à 40, 30 par défaut).
+3. Onglet « **Saisie des centres** » : pour chaque centre, candidats officiels et libres (garçons, filles, dont handicapés) et salles disponibles ; « **Reprendre des listes CEP** » compte les candidats inscrits par centre. « **Ajouter un centre** », la corbeille et « **Réinitialiser** » gèrent la liste.
+4. Les totaux, les salles nécessaires (effectif ÷ candidats par salle, arrondi au-dessus) et l’observation (« **Capacité suffisante** » ou « **Capacité dépassée : N salle(s) manquante(s)** ») se calculent seuls ; les centres en dépassement sont surlignés.
+5. Onglets « **Tableau officiel (DDEMP)** » et « **Tableau détaillé** » : « **Télécharger PDF** » (A4 paysage, signé, code QR) ou « **Télécharger Excel** » (formules des totaux et des salles nécessaires).
+
+**Bon à savoir**
+
+- Une observation saisie à la main remplace l’observation automatique.
+- La colonne « **Salles nécessaires** » n’entre dans les fichiers que si la case est cochée.
+
+## 8. Pédagogie : fiches, résumés, épreuves
 
 1. Ouvrez « **Pédagogie** », choisissez le cours (Maternelle, CI à CM2) puis l’onglet : Planification, Fiches de préparation, Résumés, Épreuves, Progressions, Programmes, Guides.
 2. Maternelle (une école maternelle ou une classe EM s’ouvre directement dessus) : choisissez la section (petits ou grands), puis le domaine (D1 à D5), le thème et le mois ou la semaine. Onglets : fiches d’activités, repères pour l’éducateur, grilles d’observation (à imprimer avec la liste des enfants), progressions, domaines et compétences ; la planification se lit par jour (emploi du temps de la section), semaine ou mois.
@@ -60,7 +93,7 @@ _Pour : Directeur / directrice, Enseignant(e), Conseiller pédagogique_
 - Les contenus sont conçus selon l’APC et restent à valider par le conseiller pédagogique.
 - Le conseiller, le directeur et l’administration peuvent ajouter des notes visibles des enseignants.
 
-## 7. Logo et devise de l’école
+## 9. Logo et devise de l’école
 
 Chaque école peut avoir son logo, créé automatiquement à partir de son nom, et sa devise. Ils figurent en tête de ses documents.
 
@@ -69,7 +102,7 @@ Chaque école peut avoir son logo, créé automatiquement à partir de son nom, 
 3. Ou importez votre propre logo (photo ou image).
 4. Touchez « **Enregistrer** ». « **Télécharger SVG / PNG** » donne le logo en fichier ; « **Réinitialiser** » revient au logo automatique.
 
-## 8. Télécharger en PDF ou en Word, imprimer
+## 10. Télécharger en PDF ou en Word, imprimer
 
 1. Ouvrez le document (fiche, liste, attestation, épreuve…) puis touchez « **Imprimer** » (ou « **Imprimer / PDF** ») : trois choix s’affichent.
 2. « **Télécharger en PDF** » : un fichier PDF prêt à imprimer ou à envoyer (WhatsApp, e-mail). Sur téléphone et tablette, il est enregistré dans « **Téléchargements** », dans le dossier de l’application.
@@ -84,7 +117,7 @@ Chaque école peut avoir son logo, créé automatiquement à partir de son nom, 
 - Les fiches de préparation portent en filigrane oblique le nom du titulaire de la classe : saisissez-le une fois dans la fenêtre de la fiche (« **Titulaire** »).
 - Une épreuve courte s’imprime deux fois par feuille A4 (ligne de coupe) ; réglage « **1 par page** » dans l’onglet Épreuves.
 
-## 9. Code QR et vérification des documents
+## 11. Code QR et vérification des documents
 
 Les pièces officielles (attestations, PV, relevés, documents UASCEP, certificats…) portent un numéro, une empreinte et un code QR.
 
@@ -96,7 +129,7 @@ Les pièces officielles (attestations, PV, relevés, documents UASCEP, certifica
 
 - Une pièce dont le contenu a été changé après signature est signalée « **modifiée** » : rééditez-la et faites-la signer de nouveau.
 
-## 10. Sauvegarder, restaurer, transmettre
+## 12. Sauvegarder, restaurer, transmettre
 
 Faites une sauvegarde au moins une fois par semaine, et toujours avant de changer d’appareil ou de mettre à jour.
 
@@ -112,7 +145,7 @@ Faites une sauvegarde au moins une fois par semaine, et toujours avant de change
 - Copies automatiques : l’application garde aussi sur l’appareil les 10 dernières copies de vos données (une par jour d’utilisation). « **Copies automatiques et restauration** » permet de revenir à l’une d’elles ; une copie endommagée est refusée.
 - Un bandeau vous rappelle d’exporter une sauvegarde quand la dernière date de plus de 7 jours.
 
-## 11. Sécurité des comptes et de l’appareil
+## 13. Sécurité des comptes et de l’appareil
 
 Les données d’élèves et de personnel sont protégées : mots de passe personnels, blocage après des essais faux, déconnexion après 20 minutes sans action.
 
@@ -126,7 +159,7 @@ Les données d’élèves et de personnel sont protégées : mots de passe perso
 - Ne communiquez jamais votre mot de passe, même à un collègue.
 - Sur une application sans comptes (CS Pobè, Mon école), définissez un mot de passe d’accès dans « **Sécurité et sauvegardes** ».
 
-## 12. Synchronisation entre niveaux
+## 14. Synchronisation entre niveaux
 
 Les données remontent école → zone → circonscription → département sans ressaisie : bureaux et vie UASCEP, sport scolaire, examens, versions d’épreuves et de fiches. Les notes de service, échéances et l’agenda redescendent. Tout fonctionne hors ligne, par fichier ; par Internet quand un hub SCOLARIS est disponible.
 
@@ -143,7 +176,7 @@ Les données remontent école → zone → circonscription → département sans
 - Après un changement d’appareil, le niveau supérieur doit « **Accepter la nouvelle clé** ».
 - Les dossiers de santé, les besoins spécifiques, les signatures et les cachets ne quittent jamais l’appareil.
 
-## 13. Comptes, rôles et sécurité
+## 15. Comptes, rôles et sécurité
 
 _Pour : Administration (MEMP, technique), DDEMP, Circonscription scolaire, Directeur / directrice_
 
@@ -151,7 +184,7 @@ _Pour : Administration (MEMP, technique), DDEMP, Circonscription scolaire, Direc
 2. L’enseignant est relié à sa classe par son nom : écrivez-le exactement comme celui du titulaire.
 3. Le parent ne voit que l’espace parents.
 
-## 14. Travailler sans connexion
+## 16. Travailler sans connexion
 
 L’application fonctionne sans internet une fois ouverte une première fois sur l’appareil. Les données sont enregistrées dans l’appareil lui-même.
 
@@ -165,7 +198,7 @@ L’application fonctionne sans internet une fois ouverte une première fois sur
 - Les données d’un appareil ne passent pas toutes seules sur un autre : utilisez la sauvegarde (ou l’envoi des fiches) pour les transmettre.
 - Si vous videz les données du navigateur, vous effacez aussi les données de l’application : faites d’abord une sauvegarde.
 
-## 15. Questions fréquentes et dépannage
+## 17. Questions fréquentes et dépannage
 
 **L’application affiche une ancienne version.**  
 Fermez-la complètement puis rouvrez-la avec une connexion ; dans le navigateur, rechargez la page. Sur un site en ligne, videz le cache du navigateur pour ce site si besoin (après une sauvegarde).
