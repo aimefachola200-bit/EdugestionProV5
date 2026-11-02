@@ -1414,7 +1414,7 @@
       { c: 'classes_simples', l: 'Classes simples', auto: 'classes_simples' },
       { c: 'classes_jumelees', l: 'Classes jumelées (2 cours, une salle, un maître)', auto: 'classes_jumelees' },
       { c: 'classes_multigrades', l: 'Classes multigrades (3 cours et plus)', auto: 'classes_multigrades' },
-      { c: 'classes_ouvertes', l: 'Classes ouvertes (simples + jumelées + multigrades)', auto: 'classes' },
+      { c: 'classes_ouvertes', l: 'Classes ouvertes (simples + jumelées + multigrades ; jumelées et multigrades comptées une fois)', auto: 'classes' },
       { c: 'classes_autorisees', l: 'Classes autorisées', auto: 'classes_autorisees' }
     ] },
     { code: 'PERSONNEL', nom: 'Personnel', champs: [
@@ -1541,6 +1541,33 @@
         }
         Object.keys(controles).forEach(k => controles[k].inp.addEventListener('input', verifier));
         verifier();
+
+        /* Fiche remplie : PDF (téléchargement direct) et Excel, avec les valeurs affichées (retenues ou proposées) et leur origine */
+        const nomFiche = 'recensement-' + EG.Sortie.slug((ecole ? ecole.nom : 'ecole') + '-' + (EG.session.annee_code || ''));
+        const lignesFiche = () => {
+          const L = [];
+          RUBRIQUES.forEach(rub => rub.champs.forEach(ch => {
+            const c = controles[rub.code + '.' + ch.c], v = c.inp.value;
+            const orig = c.existante && String(c.existante.valeur) === v ? U.libelle(c.existante.origine) : (c.auto !== undefined && c.auto !== null && String(c.auto) === v ? 'Automatique' : 'Saisie');
+            L.push([rub.nom, ch.l, c.auto === undefined || c.auto === null ? '' : String(c.auto), v, orig]);
+          }));
+          return L;
+        };
+        const ENT = ['Rubrique', 'Donnée', 'Valeur calculée', 'Valeur retenue', 'Origine'];
+        const ech = EG.Docs.echapper;
+        const fichePdf = () => {
+          if (global.DocExport) global.DocExport.prochain('pdf', nomFiche);
+          EG.Sortie.imprimer('Fiche de recensement — ' + (ecole ? ecole.nom : ''), () => '<h2>Fiche de recensement annuel — ' + ech(ecole ? ecole.nom : '') + ' — ' + ech(EG.session.annee_code || '') + '</h2>'
+            + '<p>Statut : ' + ech(U.libelle(rec.statut)) + ' · éditée le ' + ech(new Date().toLocaleDateString('fr-FR')) + '</p>'
+            + '<table><thead><tr>' + ENT.map(t => '<th>' + ech(t) + '</th>').join('') + '</tr></thead><tbody>'
+            + lignesFiche().map(l => '<tr>' + l.map(x => '<td>' + ech(x) + '</td>').join('') + '</tr>').join('') + '</tbody></table>'
+            + '<p style="font-size:9pt">Classes : une classe jumelée ou multigrade est comptée une fois (une salle, un maître).</p>', { ecole });
+        };
+        const ficheExcel = () => EG.Sortie.excel(nomFiche, [{ nom: 'Recensement', lignes: [ENT].concat(lignesFiche()) }]);
+        zone.appendChild(el('div', { class: 'barre-actions' }, [
+          el('button', { class: 'btn btn-fantome', 'data-fiche': 'pdf', text: '\uE00D Télécharger la fiche remplie (PDF)', onclick: fichePdf }),
+          el('button', { class: 'btn btn-fantome', 'data-fiche': 'excel', text: '\uE00C Télécharger la fiche remplie (Excel)', onclick: ficheExcel })
+        ]));
 
         if (!verrouille && EG.peutEcrire()) {
           zone.appendChild(el('div', { class: 'barre-actions' }, [

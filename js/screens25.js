@@ -448,8 +448,9 @@
           return btns[mode].click();
         };
         actions.appendChild(el('button', { class: 'btn btn-primaire', text: '\uE008 Imprimer le rapport', onclick: () => sortie(1) }));
+        actions.appendChild(el('button', { class: 'btn btn-fantome', 'data-fiche': 'pdf', text: '\uE00D Télécharger la fiche remplie (PDF)', onclick: () => { if (global.DocExport) global.DocExport.prochain('pdf', 'rapport-rentree-' + (cs.code || cs.nom || '')); sortie(1); } }));
         actions.appendChild(el('button', { class: 'btn btn-fantome', text: '\uE00D Word', onclick: () => sortie(2) }));
-        actions.appendChild(el('button', { class: 'btn btn-fantome', text: '\uE00C Excel', onclick: () => sortie(0) }));
+        actions.appendChild(el('button', { class: 'btn btn-fantome', 'data-fiche': 'excel', text: '\uE00C Télécharger la fiche remplie (Excel)', onclick: () => sortie(0) }));
         zone.appendChild(zoneStats);
         zone.appendChild(U.carte('Synthèse', el('p', { text: texte() })));
         zone.appendChild(U.carte('Observations de la circonscription', zoneObs));

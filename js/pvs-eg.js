@@ -41,7 +41,10 @@
       const add = (ec, k, n) => { const o = out[ec] = out[ec] || {}; o[k] = (o[k] || 0) + n; };
       if (aid) {
         ins.filter(i => i.annee_scolaire_id === aid && i.ecole_id).forEach(i => { const e = el.get(i.eleve_id) || {}; add(i.ecole_id, e.sexe === 'F' ? 'effF' : 'effG', 1); if (i.redoublant) add(i.ecole_id, e.sexe === 'F' ? 'redoublantsF' : 'redoublantsG', 1); });
-        cls.filter(c => c.annee_scolaire_id === aid && c.ecole_id && c.actif !== false).forEach(c => add(c.ecole_id, 'groupes', 1));
+        // classes ouvertes : une classe jumelée ou multigrade compte pour une classe (outils/lots/spec-classes.md)
+        const parEc = new Map(); cls.filter(c => c.annee_scolaire_id === aid && c.ecole_id && c.actif !== false).forEach(c => { if (!parEc.has(c.ecole_id)) parEc.set(c.ecole_id, []); parEc.get(c.ecole_id).push(c); });
+        parEc.forEach((L, ec) => { const cl = EG.Classes && global.ClassesOrg ? global.ClassesOrg.compter(EG.Classes.organisation(L)) : { ouvertes: L.length, simples: L.length, jumelees: 0, multigrades: 0 };
+          add(ec, 'groupes', cl.ouvertes); add(ec, 'classesSimples', cl.simples); add(ec, 'classesJumelees', cl.jumelees); add(ec, 'classesMultigrades', cl.multigrades); });
         const insId = new Map(ins.map(i => [i.id, i]));
         cep.forEach(r => { const i = insId.get(r.inscription_id); if (!i || i.annee_scolaire_id !== aid || !i.ecole_id) return; const e = el.get(i.eleve_id) || {}, sx = e.sexe === 'F' ? 'F' : 'G';
           if (r.inscrit !== false) add(i.ecole_id, 'cepInscrits' + sx, 1); if (r.a_compose) add(i.ecole_id, 'cepPresents' + sx, 1); if (r.admis) add(i.ecole_id, 'cepAdmis' + sx, 1); });
