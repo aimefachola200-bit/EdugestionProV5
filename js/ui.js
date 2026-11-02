@@ -67,7 +67,7 @@
     NOUVELLE: 'Nouvelle', AFFECTEE: 'Affectée', PRISE_EN_CHARGE: 'Prise en charge',
     EN_ATTENTE: 'En attente', EN_COURS: 'En cours', RESOLUE: 'Résolue', IGNOREE: 'Ignorée',
     A_EXAMINER: 'À examiner', SURVEILLANCE: 'Surveillance', CLASSEE: 'Classée',
-    A_FAIRE: 'À faire', REALISEE: 'Réalisée', A_VERIFIER: 'À vérifier',
+    A_FAIRE: 'À faire', REALISEE: 'Réalisée', A_VERIFIER: 'À vérifier', PLANIFIEE: 'Planifiée', RAPPORT_REDIGE: 'Rapport rédigé',
     NON_APPLICABLE: 'Non applicable', ABANDONNEE: 'Abandonnée', SUIVI: 'Suivi',
     PASSAGE: 'Passage', REDOUBLEMENT: 'Redoublement',
     SORTIE_PRIMAIRE: 'Sortie du primaire', SORTIE_PRIMAIRE_CEP: 'Sortie du primaire (CEP)',

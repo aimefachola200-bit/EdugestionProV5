@@ -1586,7 +1586,9 @@
         f('date_visite', 'Date', 'date', { req: 1, list: 1 }),
         f('objet', 'Objet', 'textarea'),
         f('conclusion', 'Conclusion', 'textarea'),
-        f('statut', 'Statut', 'select', { list: 1, o: ['BROUILLON', 'EN_COURS', 'A_CONTRESIGNER', 'VALIDEE', 'SUIVI', 'CLOTUREE'], def: 'BROUILLON' })
+        f('statut', 'Statut', 'select', { list: 1, o: ['BROUILLON', 'PLANIFIEE', 'EN_COURS', 'REALISEE', 'RAPPORT_REDIGE', 'A_CONTRESIGNER', 'VALIDEE', 'SUIVI', 'CLOTUREE'], def: 'BROUILLON' }),
+        // v7.6.1 : suivi des visites par étapes (planifiée → réalisée → rapport rédigé → validée) et prochaine visite
+        f('date_prochaine_visite', 'Date de la prochaine visite', 'date')
       ]
     },
     observations_visites: {
@@ -1773,7 +1775,7 @@
 
   global.EG = global.EG || {};
   /* Version de l'application : même valeur que version.txt et le cache du service worker (tools/version.mjs) */
-  global.EG.VERSION = '7.6.0';
+  global.EG.VERSION = '7.6.1';
   global.EG.SCHEMA = SCHEMA;
   global.EG.MODULES = MODULES;
   global.EG.CATEGORIES_MODULES = CATEGORIES_MODULES;
