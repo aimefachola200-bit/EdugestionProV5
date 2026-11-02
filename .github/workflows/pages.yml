@@ -15,6 +15,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+      - name: Liste de blocage (filigrane interdit)
+        run: node tools/verifier-filigrane.mjs .
+      - name: Test des anciennetés (31/12 de la seconde année)
+        run: node tools/test-anciennete.mjs
       - name: Publier sur la branche gh-pages
         run: |
           rm -rf /tmp/site && mkdir /tmp/site

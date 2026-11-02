@@ -28,6 +28,13 @@
   const ICONES = { RECRUTEMENT: '\uE05C', TITULARISATION: '\uE004', AVANCEMENT_ECHELON: '\uE076', PROMOTION_GRADE: '\uE04D', RECLASSEMENT: '\uE058', MUTATION: '\uE02D', DETACHEMENT: '\uE057',
     DISPONIBILITE: '\uE06A', MISE_A_DISPOSITION: '\uE044', REPRISE_SERVICE: '\uE039', CONGE: '\uE06B', DISTINCTION: '\uE04D', SANCTION: '\uE041', ADMISSION_RETRAITE: '\uE019', AUTRE: '\uE00D' };
   const aujourdhui = () => new Date().toISOString().slice(0, 10);
+  /** Anciennetés arrêtées au 31 décembre de la seconde année de l'année scolaire active (« 2026-2027 » → 2027-12-31).
+      L'avancement d'échelon et la retraite restent calculés à la date du jour. */
+  function refAnciennete() {
+    const an = (/(\d{4})\D+(\d{4})/.exec((EG.session && EG.session.annee_code) || '') || [])[2];
+    return an ? an + '-12-31' : new Date().getFullYear() + '-12-31';
+  }
+  const libAnc = () => 'Ancienneté (au 31/12/' + refAnciennete().slice(0, 4) + ')';
   const nomAgent = a => a ? ((a.nom || '').toUpperCase() + ' ' + (a.prenoms || '')).trim() : '—';
 
   /* =======================================================================
@@ -62,7 +69,7 @@
     ref = ref || aujourdhui();
     const actes = (ctx.actes || []).filter(a => a.date_effet).slice().sort((a, b) => String(a.date_effet).localeCompare(String(b.date_effet)));
     const debut = p.date_premiere_prise_service || (actes.filter(a => a.type_acte === 'RECRUTEMENT')[0] || {}).date_effet || null;
-    const anc = debut ? moisEntre(debut, ref) : null;
+    const m0 = debut ? moisEntre(debut, ctx.refAnc || refAnciennete()) : null, anc = m0 == null ? null : Math.max(0, m0);
     const pivots = actes.filter(a => ACTES_ECHELON.indexOf(a.type_acte) >= 0 && a.date_effet <= ref);
     const dernier = pivots.length ? pivots[pivots.length - 1] : null;
     const echelon = num(p.echelon) || num((actes.filter(a => a.echelon && a.date_effet <= ref).pop() || {}).echelon) || null;
@@ -163,7 +170,7 @@
         && (!filtre.etat || (filtre.etat === 'BIENTOT' ? l.s.etat === 'A_JOUR' && l.s.dans <= 6 : l.s.etat === filtre.etat))
         && (!filtre.q || sa([l.p.nom, l.p.prenoms, l.p.matricule, l.p.nip].join(' ')).indexOf(filtre.q) >= 0))
         .sort((a, b) => (b.s.etat === 'RETARD') - (a.s.etat === 'RETARD') || (b.s.retard - a.s.retard) || nomAgent(a.p).localeCompare(nomAgent(b.p), 'fr'));
-      const enTete = ['Agent', 'Matricule', 'École', 'Statut', 'Grade', 'Échelon', 'Ancienneté', 'Dernier avancement', 'Prochain avancement', 'Départ à la retraite', 'Dossier'];
+      const enTete = ['Agent', 'Matricule', 'École', 'Statut', 'Grade', 'Échelon', libAnc(), 'Dernier avancement', 'Prochain avancement', 'Départ à la retraite', 'Dossier'];
       const ligne = l => [nomAgent(l.p), l.p.matricule || '', l.ecole ? l.ecole.nom : '', C.LIB_CAT[l.s.statut] || l.s.statut, l.p.grade || l.p.categorie || '', l.s.echelon || '',
         duree(l.s.anc), l.s.dernier ? U.dateCourte(l.s.dernier.date_effet) : '', texteEtat(l.s), l.s.prevision ? U.dateCourte(l.s.prevision.date_retraite) : '', l.s.complets + '/' + l.s.controles.length];
 
@@ -192,7 +199,7 @@
           { titre: 'École', valeur: l => l.ecole ? l.ecole.nom : '—' },
           { titre: 'Statut', valeur: l => C.LIB_CAT[l.s.statut] || l.s.statut },
           { titre: 'Grade', valeur: l => (l.p.grade || l.p.categorie || '—') + (l.s.echelon ? ' · éch. ' + l.s.echelon : '') },
-          { titre: 'Ancienneté', valeur: l => duree(l.s.anc) },
+          { titre: libAnc(), valeur: l => duree(l.s.anc) },
           { titre: 'Dernier avancement', valeur: l => l.s.dernier ? U.dateCourte(l.s.dernier.date_effet) : '—' },
           { titre: 'Prochain avancement', valeur: l => badgeEtat(l.s) },
           { titre: 'Retraite', valeur: l => l.s.prevision ? U.dateCourte(l.s.prevision.date_retraite) : '—' },
@@ -219,7 +226,7 @@
       + t('Nom et prénoms', nomAgent(p)) + t('Date et lieu de naissance', [p.date_naissance ? U.dateFR(p.date_naissance) : '', p.lieu_naissance || ''].filter(Boolean).join(' à '))
       + t('Statut', C.LIB_CAT[s.statut] || s.statut) + t('Emploi', p.emploi) + t('Fonction', X0.LIB_FONCTION[p.fonction] || p.fonction)
       + t('Poste actuel', ecole ? ecole.nom : '') + t('Grade', p.grade) + t('Catégorie et échelon', [p.categorie, s.echelon ? 'échelon ' + s.echelon : ''].filter(Boolean).join(' — '))
-      + t('Première prise de service', s.debut ? U.dateFR(s.debut) : '') + t('Ancienneté', duree(s.anc))
+      + t('Première prise de service', s.debut ? U.dateFR(s.debut) : '') + t(libAnc(), duree(s.anc))
       + t('Dernier avancement', s.dernier ? U.dateFR(s.dernier.date_effet) : '') + t('Prochain avancement d’échelon', texteEtat(s))
       + t('Départ à la retraite prévu', s.prevision ? U.dateFR(s.prevision.date_retraite) + ' (' + s.prevision.age_retraite + ' ans)' : '') + '</table>'
       + '<h3>Actes de carrière</h3>' + X0.htmlTableau(['Date d’effet', 'Nature de l’acte', 'Grade', 'Catégorie', 'Échelon', 'Référence'],
@@ -252,7 +259,7 @@
         ]));
 
         zone.appendChild(el('div', { class: 'grille grille-stats' }, [
-          U.stat(duree(s.anc), 'Ancienneté', s.debut ? '' : 'attention'),
+          U.stat(duree(s.anc), libAnc(), s.debut ? '' : 'attention'),
           U.stat(s.prevision ? s.prevision.age_actuel + ' ans' : '—', 'Âge'),
           U.stat((p.grade || p.categorie || '—') + (s.echelon ? ' · éch. ' + s.echelon : ''), 'Grade et échelon'),
           U.stat(texteEtat(s), 'Prochain avancement d’échelon', s.etat === 'RETARD' ? 'attention' : ''),
@@ -296,5 +303,5 @@
     });
   });
 
-  EG.Carrieres = { situation, projection, ajouteMois, moisEntre, duree, DUREE_ECHELON, ECHELON_MAX };
+  EG.Carrieres = { situation, refAnciennete, projection, ajouteMois, moisEntre, duree, DUREE_ECHELON, ECHELON_MAX };
 })(window);
