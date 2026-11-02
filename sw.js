@@ -1,6 +1,6 @@
 /* ÉduGestion Pro Master — service worker : l'application démarre sans réseau. */
 const PREFIXE = 'edugestion-master-v';
-const CACHE = PREFIXE + '7.5.0';
+const CACHE = PREFIXE + '7.5.1';
 const PORTEE = new URL(self.registration.scope).pathname;
 const RESSOURCES = [
   './', './index.html', './verification.html', './manifest.webmanifest', './css/app.css',

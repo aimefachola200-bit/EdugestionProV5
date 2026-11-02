@@ -1,6 +1,6 @@
 # Guide d’utilisation — ÉduGestion Pro Master — gestion scolaire
 
-_Version 7.5.0_
+_Version 7.5.1_
 
 Rôles : Administration (MEMP, technique) · DDEMP · Circonscription scolaire · Conseiller pédagogique · Directeur / directrice · Enseignant(e) · Parent
 
