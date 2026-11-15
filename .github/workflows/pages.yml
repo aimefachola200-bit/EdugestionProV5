@@ -23,6 +23,8 @@ jobs:
         run: node tools/test-territoire.cjs
       - name: Test des classes ouvertes (jumelées et multigrades)
         run: node tools/test-classes.cjs
+      - name: Test du secondaire et des déclarations de paiement
+        run: node tools/test-secondaire.mjs
       - name: Publier sur la branche gh-pages
         run: |
           rm -rf /tmp/site && mkdir /tmp/site

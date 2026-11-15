@@ -1,6 +1,17 @@
 # Guide d’utilisation — ÉduGestion Pro Master — gestion scolaire
 
-_Version 7.6.1_
+_Version 8.1.0_
+
+### 8.1.0
+- Épreuves du secondaire : 106 épreuves APC (11 nouvelles épreuves originales de SVT en terminale (séries D, A et B), structure restitution + deux situations-problèmes + perfectionnement).
+
+### 8.0.0
+- Notes et bulletins du secondaire (6e à Tle) : élèves par classe, programme et coefficients, saisie des notes avec périmètre enseignant, moyennes, rangs, mentions, bulletins imprimables.
+- Pédagogie du secondaire (6e à Tle) avec périmètre par niveau et matière.
+- Préparation de classe du primaire : périmètre par cours de la classe.
+- Déclarations de paiement des parents (écoles privées) avec confirmation et reçu.
+- Guide, tests (`tools/test-secondaire.mjs`) et notice `DEPLOIEMENT-GITHUB.md`.
+
 
 Rôles : Administration (MEMP, technique) · DDEMP · Circonscription scolaire · Conseiller pédagogique · Directeur / directrice · Enseignant(e) · Parent
 

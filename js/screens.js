@@ -209,6 +209,14 @@
       }
       if (['PARENT', 'ELEVE'].indexOf(u.role) < 0) ajoute('\uE031', 'Documents officiels', 'documents-officiels');
       if (['PARENT', 'ELEVE'].indexOf(u.role) < 0) ajoute('\uE031', 'Fiches, résumés et épreuves', 'pedagogie');
+      if (['PARENT', 'ELEVE'].indexOf(u.role) < 0 && EG.peutVoirModule('pedagogie-sec')) ajoute('\uE031', 'Pédagogie du secondaire', 'pedagogie-sec');
+      if (['PARENT', 'ELEVE'].indexOf(u.role) < 0 && EG.peutVoirModule('bulletins-sec')) ajoute('\uE010', 'Notes et bulletins du secondaire', 'bulletins-sec');
+      if (['PARENT', 'ELEVE'].indexOf(u.role) < 0 && EG.peutVoirModule('maitre-semaine')) ajoute('\uE004', 'Maître de semaine', 'maitre-semaine');
+      if (['PARENT', 'ELEVE'].indexOf(u.role) < 0 && EG.peutVoirModule('annonces-personnel')) ajoute('\uE050', 'Annonces au personnel', 'annonces-personnel');
+      if (['PARENT', 'ELEVE'].indexOf(u.role) < 0 && EG.peutVoirModule('releves-mensuels')) ajoute('\uE004', 'Relevé mensuel des présences', 'releves-mensuels');
+      if (['PARENT', 'ELEVE', 'ENSEIGNANT'].indexOf(u.role) < 0 && EG.peutVoirModule('vie-etablissement')) ajoute('\uE054', 'Vie de l’établissement (secondaire)', 'vie-etablissement');
+      if (['PARENT', 'ELEVE', 'ENSEIGNANT'].indexOf(u.role) < 0 && EG.peutVoirModule('examens-sec')) ajoute('\uE00F', 'Examens BEPC / BAC', 'examens-sec');
+      if (['PARENT', 'ELEVE', 'ENSEIGNANT'].indexOf(u.role) < 0 && EG.peutVoirModule('pilotage-sec')) ajoute('\uE00A', 'Pilotage et ETP (secondaire)', 'pilotage-sec');
       zone.appendChild(U.carte('Accès rapide', el('div', { class: 'raccourcis' }, liens)));
 
       /* Points de vigilance */

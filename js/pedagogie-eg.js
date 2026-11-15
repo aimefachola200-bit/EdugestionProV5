@@ -39,8 +39,20 @@
     if (!EG.session.ecole_id) return Promise.resolve(null);
     return DB.get('ecoles', EG.session.ecole_id).then(e => (e && e.cycle === 'MATERNELLE' ? 'MAT' : null)).catch(() => null);
   }
+  /** Périmètre de la préparation de classe : un enseignant n'ouvre que le cours de sa classe (et les cours regroupés
+      d'une classe jumelée ou multigrade, ex. « CI-CP », ou ceux listés dans « Cours ouverts » de son compte). null = tous les cours. */
+  function perimetreCours(c) {
+    const u = EG.session.user || {};
+    if (u.role !== 'ENSEIGNANT') return null;
+    const ls = [];
+    const ajoute = (t) => String(t || '').toUpperCase().split(/[^A-Z0-9]+/).forEach(x => { if (COURS.indexOf(x) >= 0 && ls.indexOf(x) < 0) ls.push(x); });
+    ajoute(u.cours_ped);
+    if (c) { if (NIV_MAT[c.niveau]) ls.push('MAT'); else if (COURS.indexOf(c.niveau) >= 0) ajoute(c.niveau); ajoute(c.regroupement); }
+    return ls.length ? ls : null;
+  }
   function coursDuCompte() {
     return classeDuCompte().then(c => {
+      coursAutorisesCompte = perimetreCours(c);
       if (!c) return (EG.session.user || {}).role === 'ENSEIGNANT' ? null : coursDeLEcole();
       return (c.titulaire_id ? DB.get('personnels', c.titulaire_id).catch(() => null) : Promise.resolve(null)).then(p => {
         if (p) titulaireCompte = ((p.nom || '') + ' ' + (p.prenoms || '')).trim();
@@ -50,6 +62,7 @@
     });
   }
   let titulaireCompte = '';
+  let coursAutorisesCompte = null;
   function adaptateur(cours) {
     const u = EG.session.user || {};
     const liens = [{ l: 'Évaluations', route: 'evaluations', icone: 'fiche' }, { l: 'CEP et examens blancs', route: 'cep', icone: 'stade' }];
@@ -57,7 +70,7 @@
     if (EG.peutVoirModule('pvs-examens')) liens.push({ l: 'Examens et concours', route: 'pvs-examens', icone: 'examen' });
     if (EG.peutVoirModule('documents-officiels')) liens.push({ l: 'Documents officiels', route: 'documents-officiels', icone: 'document' });
     return {
-      app: 'ÉduGestion Pro Master', base: 'memp-cp/data/pedagogie/', coursParDefaut: cours || undefined, sectionParDefaut: sectionCompte || undefined,
+      app: 'ÉduGestion Pro Master', base: 'memp-cp/data/pedagogie/', coursParDefaut: cours || undefined, coursAutorises: coursAutorisesCompte || undefined, sectionParDefaut: sectionCompte || undefined,
       peutAnnoter: ANNOTENT.indexOf(u.role) >= 0, auteur: ((u.prenoms || '') + ' ' + (u.nom || '')).trim(),
       titulaire: () => u.role === 'ENSEIGNANT' ? (titulaireCompte || ((u.nom || '') + ' ' + (u.prenoms || '')).trim()) : '',
       notes: { charger: () => DB.meta('pedagogieNotes').then(v => v || {}), enregistrer: (o) => DB.setMeta('pedagogieNotes', o).then(() => { if (EG.majSynchro) EG.majSynchro(); }) },

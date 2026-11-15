@@ -59,7 +59,7 @@
     { code: 'pvs-territoire', cat: 'PILOTAGE', nom: 'Territoire et suivi administratif (fiche de rentrée, fiche signalétique, structures)', icone: '\uE048', entites: [], ecran: 'pvs-territoire' },
     { code: 'pvs-examens', cat: 'PEDAGOGIE', nom: 'Examens et concours (CEP : centres, jurys, notes, délibération ; concours)', icone: '\uE084', entites: [], ecran: 'pvs-examens' },
     { code: 'carrieres', cat: 'ADMIN', nom: 'Gestion des carrières', icone: '\uE016', entites: ['carrieres_personnel', 'affectations_personnel', 'diplomes_personnel', 'formations_personnel'], ecran: 'carrieres' },
-    { code: 'scolarite-privee', cat: 'FINANCES', nom: 'Scolarité (école privée)', icone: '\uE020', entites: ['frais_scolarite', 'paiements_scolarite', 'remises_scolarite'], ecran: 'scolarite-privee',
+    { code: 'scolarite-privee', cat: 'FINANCES', nom: 'Scolarité (école privée)', icone: '\uE020', entites: ['frais_scolarite', 'paiements_scolarite', 'remises_scolarite', 'declarations_paiement'], ecran: 'scolarite-privee',
       annexes: [['scolarite-privee/bareme', 'Barème et tranches', '\uE056'], ['scolarite-privee/paiements', 'Paiements et reçus', '\uE04E'],
         ['scolarite-privee/impayes', 'Impayés et relances', '\uE01A'], ['scolarite-privee/classes', 'Fonds reçus par classe', '\uE040']] },
     { code: 'caisse-privee', cat: 'FINANCES', nom: 'Cahier de gestion des fonds (école privée)', icone: '\uE030', entites: ['cahier_fonds'], ecran: 'caisse-privee',
@@ -83,6 +83,15 @@
     { code: 'classes-roles', cat: 'ADMIN', nom: 'Classes & rôles de gestion', icone: '\uE01E', entites: ['classes', 'membres_instances'], ecran: 'classes-roles',
       annexes: [['classes-roles/classes', 'Classes et titulaires', '\uE074'], ['classes-roles/roles', 'Rôles de gestion collégiale', '\uE044']] },
     { code: 'pedagogie', cat: 'PEDAGOGIE', nom: 'Pédagogie : fiches, résumés, épreuves et guides', icone: '\uE031', entites: [], ecran: 'pedagogie' },
+    { code: 'declarations-paiement', cat: 'FINANCES', nom: 'Déclarations de paiement (parents, école privée)', icone: '\uE04E', entites: ['declarations_paiement'], ecran: 'declarations-paiement' },
+    { code: 'bulletins-sec', cat: 'PEDAGOGIE', nom: 'Notes et bulletins du secondaire (6e à Tle)', icone: '\uE010', entites: ['eleves_sec', 'programme_sec', 'notes_sec'], ecran: 'bulletins-sec' },
+    { code: 'maitre-semaine', cat: 'PEDAGOGIE', nom: 'Maître de semaine : planning, journal quotidien, rapport hebdomadaire', icone: '\uE004', entites: ['ms_planning', 'ms_journal'], ecran: 'maitre-semaine' },
+    { code: 'vie-etablissement', cat: 'PEDAGOGIE', nom: 'Vie de l’établissement (secondaire) : professeurs, conseils, discipline, emplois du temps, stages', icone: '\uE054', entites: ['reg_sec'], ecran: 'vie-etablissement' },
+    { code: 'examens-sec', cat: 'PEDAGOGIE', nom: 'Examens BEPC / BAC : centres, candidats, statistiques', icone: '\uE00F', entites: ['reg_sec'], ecran: 'examens-sec' },
+    { code: 'annonces-personnel', cat: 'PEDAGOGIE', nom: 'Annonces au personnel (accusé de lecture)', icone: '\uE050', entites: ['annonces_personnel'], ecran: 'annonces-personnel' },
+    { code: 'releves-mensuels', cat: 'PEDAGOGIE', nom: 'Relevé mensuel des présences', icone: '\uE004', entites: ['presences'], ecran: 'releves-mensuels' },
+    { code: 'pilotage-sec', cat: 'PEDAGOGIE', nom: 'Pilotage et enseignement technique (secondaire) : synoptique, identité, filières, ateliers', icone: '\uE00A', entites: ['reg_sec'], ecran: 'pilotage-sec' },
+    { code: 'pedagogie-sec', cat: 'PEDAGOGIE', nom: 'Pédagogie du secondaire : fiches, épreuves APC, banque, langues', icone: '\uE031', entites: [], ecran: 'pedagogie-sec' },
     { code: 'documents-officiels', cat: 'PEDAGOGIE', nom: 'Documents officiels (SCOLARIS / GESCOL)', icone: '\uE031', entites: [], ecran: 'documents-officiels' },
     { code: 'telechargements', cat: 'ADMIN', nom: 'Téléchargements', icone: '\uE009', entites: [], ecran: 'telechargements',
       annexes: [['telechargements/recensement', 'Fiches de recensement', '\uE040'], ['telechargements/fiches', 'Fiches à remplir', '\uE00E'],
@@ -423,6 +432,9 @@
         f('email', 'E-mail', 'text'),
         f('personnel_id', 'Agent (compte d’enseignant)', 'ref', { ref: 'personnels' }),
         f('classe_id', 'Classe tenue (compte d’enseignant)', 'ref', { ref: 'classes' }),
+        f('niveaux_sec', 'Niveaux du secondaire (ex. 6e, 5e, Tle)', 'text'),
+        f('cours_ped', 'Cours ouverts en préparation de classe (ex. CI, CP) — facultatif', 'text'),
+        f('matieres_sec', 'Matières du secondaire (ex. Français, SVT)', 'text'),
         f('eleve_id', 'Élève (compte d’élève)', 'ref', { ref: 'eleves' }),
         f('mot_de_passe', 'Mot de passe (réinitialiser)', 'password'),
         f('doit_changer_mdp', 'Doit choisir un nouveau mot de passe à la connexion', 'bool'),
@@ -1297,6 +1309,109 @@
         f('observations', 'Observations', 'text')
       ]
     },
+    eleves_sec: {
+      label: 'Élèves du secondaire', singulier: 'Élève du secondaire', icone: '\uE01F',
+      titre: r => ((r.nom || '') + ' ' + (r.prenoms || '')).trim(),
+      champs: [
+        f('ecole_id', 'École', 'ref', { ref: 'ecoles', req: 1, scope: 1 }),
+        f('annee_scolaire_id', 'Année', 'ref', { ref: 'annees_scolaires', req: 1, annee: 1 }),
+        f('classe', 'Classe', 'text', { req: 1, list: 1 }),
+        f('niveau', 'Niveau', 'select', { req: 1, list: 1, o: ['6e', '5e', '4e', '3e', '2nde', '1ère', 'Tle'] }),
+        f('serie', 'Série', 'text'),
+        f('nom', 'Nom', 'text', { req: 1, list: 1 }), f('prenoms', 'Prénoms', 'text', { list: 1 }),
+        f('sexe', 'Sexe', 'text'), f('matricule', 'Matricule', 'text')
+      ]
+    },
+    programme_sec: {
+      label: 'Programme du secondaire', singulier: 'Coefficient', icone: '\uE054',
+      titre: r => r.matiere + ' (' + r.niveau + ')',
+      champs: [
+        f('ecole_id', 'École', 'ref', { ref: 'ecoles', req: 1, scope: 1 }),
+        f('annee_scolaire_id', 'Année', 'ref', { ref: 'annees_scolaires', req: 1, annee: 1 }),
+        f('niveau', 'Niveau', 'text', { req: 1, list: 1 }), f('serie', 'Série', 'text'),
+        f('matiere', 'Matière', 'text', { req: 1, list: 1 }), f('coefficient', 'Coefficient', 'number', { list: 1, min: 0 })
+      ]
+    },
+    notes_sec: {
+      label: 'Notes du secondaire', singulier: 'Note', icone: '\uE040',
+      champs: [
+        f('ecole_id', 'École', 'ref', { ref: 'ecoles', req: 1, scope: 1 }),
+        f('annee_scolaire_id', 'Année', 'ref', { ref: 'annees_scolaires', req: 1, annee: 1 }),
+        f('eleve_sec_id', 'Élève', 'ref', { ref: 'eleves_sec', req: 1, list: 1 }),
+        f('matiere', 'Matière', 'text', { req: 1, list: 1 }), f('periode', 'Période', 'text', { req: 1, list: 1 }),
+        f('evaluation', 'Évaluation', 'text', { list: 1 }), f('valeur', 'Note /20', 'number', { list: 1, min: 0, max: 20, step: 0.25 }),
+        f('dispense', 'Dispensé / absent', 'bool'), f('saisi_par', 'Saisi par', 'text')
+      ]
+    },
+    ms_planning: {
+      label: 'Planning des maîtres de semaine', singulier: 'Semaine', icone: '\uE004',
+      titre: r => (r.lundi || '') + ' — ' + (r.maitre_nom || ''),
+      champs: [
+        f('ecole_id', 'École', 'ref', { ref: 'ecoles', req: 1, scope: 1 }),
+        f('annee_scolaire_id', 'Année', 'ref', { ref: 'annees_scolaires', annee: 1 }),
+        f('lundi', 'Lundi de la semaine', 'date', { req: 1, list: 1 }), f('maitre_nom', 'Maître de semaine', 'text', { list: 1 })
+      ]
+    },
+    ms_journal: {
+      label: 'Journal du maître de semaine', singulier: 'Journée', icone: '\uE004',
+      titre: r => r.date,
+      champs: [
+        f('ecole_id', 'École', 'ref', { ref: 'ecoles', req: 1, scope: 1 }),
+        f('annee_scolaire_id', 'Année', 'ref', { ref: 'annees_scolaires', annee: 1 }),
+        f('date', 'Date', 'date', { req: 1, list: 1 }), f('lundi', 'Lundi', 'date'), f('maitre_nom', 'Maître de semaine', 'text', { list: 1 }),
+        f('heure_arrivee', 'Heure d’arrivée', 'text'), f('salut_couleurs', 'Salut des couleurs', 'text'),
+        f('proprete_cour', 'Propreté de la cour', 'text'), f('proprete_classes', 'Propreté des classes', 'text'), f('discipline_etat', 'Discipline', 'text'),
+        f('abs_g', 'Absents garçons', 'number'), f('abs_f', 'Absentes filles', 'number'), f('ret_g', 'Retards garçons', 'number'), f('ret_f', 'Retards filles', 'number'),
+        f('absences_ens', 'Absences enseignants', 'text'), f('retards_ens', 'Retards enseignants', 'text'), f('discipline', 'Cas de discipline', 'text'),
+        f('visites', 'Visites', 'text'), f('incidents', 'Incidents', 'text'), f('activites', 'Activités', 'json'), f('observations', 'Observations', 'text'),
+        f('visa_le', 'Visé le', 'text'), f('visa_nom', 'Visé par', 'text'), f('saisi_par', 'Saisi par', 'text')
+      ]
+    },
+    reg_sec: {
+      label: 'Registres du secondaire', singulier: 'Ligne de registre', icone: '\uE054',
+      titre: r => (r.registre || '') + ' — ' + ((r.donnees && (r.donnees.nom || r.donnees.classe || r.donnees.eleve)) || ''),
+      champs: [
+        f('ecole_id', 'École', 'ref', { ref: 'ecoles', req: 1, scope: 1 }),
+        f('annee_scolaire_id', 'Année', 'ref', { ref: 'annees_scolaires', annee: 1 }),
+        f('registre', 'Registre', 'text', { req: 1, list: 1 }),
+        f('donnees', 'Données', 'json')
+      ]
+    },
+    annonces_personnel: {
+      label: 'Annonces au personnel', singulier: 'Annonce', icone: '\uE050',
+      titre: r => r.sujet,
+      champs: [
+        f('ecole_id', 'École', 'ref', { ref: 'ecoles', req: 1, scope: 1 }),
+        f('sujet', 'Sujet', 'text', { req: 1, list: 1 }), f('texte', 'Texte', 'textarea', { req: 1 }),
+        f('cible', 'Destinataires', 'select', { list: 1, o: ['ENSEIGNANTS', 'TOUS'], def: 'ENSEIGNANTS' }),
+        f('auteur_nom', 'Auteur', 'text'), f('date_publication', 'Publication', 'text', { list: 1 }), f('lus', 'Lue par', 'json')
+      ]
+    },
+    declarations_paiement: {
+      label: 'Déclarations de paiement', singulier: 'Déclaration de paiement', icone: '\uE04E',
+      titre: r => (r.reference || 'Déclaration') + ' — ' + (r.montant || 0) + ' FCFA',
+      champs: [
+        f('ecole_id', 'École', 'ref', { ref: 'ecoles', req: 1, scope: 1 }),
+        f('annee_scolaire_id', 'Année', 'ref', { ref: 'annees_scolaires', req: 1, annee: 1 }),
+        f('inscription_id', 'Élève (inscription)', 'ref', { ref: 'inscriptions_eleves', req: 1, list: 1 }),
+        f('eleve_id', 'Élève', 'ref', { ref: 'eleves' }),
+        f('tranche', 'Versement', 'select', { req: 1, list: 1, o: ['INSCRIPTION', 'TRANCHE_1', 'TRANCHE_2', 'TRANCHE_3', 'RESTE'], def: 'TRANCHE_1' }),
+        f('montant', 'Montant (FCFA)', 'number', { req: 1, min: 1, list: 1 }),
+        f('mode', 'Mode', 'select', { list: 1, o: ['MOBILE_MONEY', 'VIREMENT', 'ESPECES', 'CHEQUE'], def: 'MOBILE_MONEY' }),
+        f('operateur', 'Opérateur', 'text'),
+        f('reference', 'Référence', 'text', { list: 1 }),
+        f('date_paiement', 'Date du paiement', 'date', { list: 1 }),
+        f('message', 'Message', 'text'),
+        f('statut', 'État', 'select', { list: 1, o: ['EN_ATTENTE', 'CONFIRMEE', 'REJETEE'], def: 'EN_ATTENTE' }),
+        f('motif', 'Motif du rejet', 'text'),
+        f('numero_recu', 'N° du reçu', 'text'),
+        f('paiement_id', 'Paiement créé', 'text'),
+        f('declare_par', 'Déclaré par', 'text'),
+        f('date_declaration', 'Déclaré le', 'text'),
+        f('date_decision', 'Décision le', 'text'),
+        f('decide_par', 'Décidé par', 'text')
+      ]
+    },
     cahier_fonds: {
       label: 'Cahier de gestion des fonds', singulier: 'Écriture de caisse', icone: '\uE030',
       titre: r => (r.libelle || '') + ' — ' + (r.montant || 0) + ' FCFA',
@@ -1775,7 +1890,7 @@
 
   global.EG = global.EG || {};
   /* Version de l'application : même valeur que version.txt et le cache du service worker (tools/version.mjs) */
-  global.EG.VERSION = '7.6.1';
+  global.EG.VERSION = '8.1.0';
   global.EG.SCHEMA = SCHEMA;
   global.EG.MODULES = MODULES;
   global.EG.CATEGORIES_MODULES = CATEGORIES_MODULES;

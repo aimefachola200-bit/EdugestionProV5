@@ -701,8 +701,10 @@
       zone.append(h('p', { class: 'ped-vide' }, 'Le contenu pédagogique n’a pas pu être chargé (pas de connexion et rien d’enregistré sur cet appareil). Réessayez une fois connecté.'));
       return;
     }
-    const coursDispo = COURS.concat((ix.cours || []).some(c => c.cours === MAT) ? [MAT] : []);
-    if (!coursDispo.includes(F.cours)) F.cours = 'CM2';
+    let coursDispo = COURS.concat((ix.cours || []).some(c => c.cours === MAT) ? [MAT] : []);
+    /* Périmètre d'accès (facultatif) : l'adaptateur peut limiter les cours ouverts (ex. enseignant : le ou les cours de sa classe) */
+    if (Array.isArray(A.coursAutorises) && A.coursAutorises.length) { const ok = coursDispo.filter(c => A.coursAutorises.includes(c)); if (ok.length) coursDispo = ok; }
+    if (!coursDispo.includes(F.cours)) F.cours = coursDispo.includes('CM2') ? 'CM2' : coursDispo[0];
     if (coursDispo.includes(MAT)) intro.firstChild.textContent = 'Maternelle (sections des petits et des grands) et CI au CM2 : programmes, guides, progressions, fiches, résumés, épreuves et grilles d’observation (contenus de SCOLARIS, consultables sans connexion une fois ouverts). ';
     (A.liens || []).forEach(l => liens.append(btn(l.icone || 'lien', l.l, () => A.ouvrir && A.ouvrir(l.route), 's')));
     const hl = btn('telecharger', 'Rendre tout disponible hors ligne', async () => {

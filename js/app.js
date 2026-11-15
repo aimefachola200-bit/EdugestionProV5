@@ -16,7 +16,7 @@
       ecrire: true, modules: ['eleves', 'inscriptions', 'presences', 'evaluations', 'cep', 'personnel',
         'visites', 'risques', 'alertes', 'analytics', 'rapports', 'documents', 'recensement',
         'reseau', 'telechargements', 'espace-cs', 'unites-pedagogiques', 'repertoire', 'calendrier-scolaire',
-        'carte-ecole', 'carte-eleve', 'fiche-cep', 'stats-cs', 'divisions', 'signatures', 'documents-officiels', 'pedagogie', 'uascep', 'pvs-sport', 'pvs-pilotage', 'pvs-communication', 'pvs-territoire', 'pvs-sante', 'pvs-inspection', 'pvs-patrimoine', 'pvs-examens']
+        'carte-ecole', 'carte-eleve', 'fiche-cep', 'stats-cs', 'divisions', 'signatures', 'documents-officiels', 'pedagogie', 'pedagogie-sec', 'bulletins-sec', 'maitre-semaine', 'annonces-personnel', 'releves-mensuels', 'vie-etablissement', 'examens-sec', 'pilotage-sec', 'uascep', 'pvs-sport', 'pvs-pilotage', 'pvs-communication', 'pvs-territoire', 'pvs-sante', 'pvs-inspection', 'pvs-patrimoine', 'pvs-examens']
     },
     DIRECTEUR: {
       ecrire: true, modules: '*', sauf: ['securite', 'support', 'reseau', 'espace-cs', 'unites-pedagogiques', 'personnel-cs', 'statuts-personnel', 'courriers', 'ecoles-cm2', 'ecarts-cs', 'rapport-rentree', 'divisions']
@@ -24,9 +24,9 @@
     ENSEIGNANT: {
       ecrire: true, modules: ['eleves', 'inscriptions', 'presences', 'evaluations', 'cep', 'cantine',
         'risques', 'documents', 'parents', 'educmaster', 'telechargements', 'repertoire', 'calendrier-scolaire',
-        'carte-ecole', 'carte-eleve', 'signatures', 'documents-officiels', 'pedagogie']
+        'carte-ecole', 'carte-eleve', 'signatures', 'documents-officiels', 'pedagogie', 'pedagogie-sec', 'bulletins-sec', 'maitre-semaine', 'annonces-personnel', 'releves-mensuels']
     },
-    PARENT: { ecrire: false, modules: ['parents'] },
+    PARENT: { ecrire: false, modules: ['parents', 'declarations-paiement'] },
     ELEVE: { ecrire: false, modules: ['parents'] }
   };
 
@@ -36,7 +36,7 @@
   };
   /* Finances propres aux écoles privées : le directeur d'une école publique ne les voit pas ;
      circonscriptions, directions départementales et administration les consultent. */
-  const MODULES_PRIVE = ['scolarite-privee', 'caisse-privee', 'salaires-privee'];
+  const MODULES_PRIVE = ['scolarite-privee', 'caisse-privee', 'salaires-privee', 'declarations-paiement'];
   EG.peutVoirModule = function (code) {
     const d = DROITS[EG.session.user.role];
     if (!d) return false;
@@ -57,7 +57,7 @@
       ['patrimoine', '\uE022', 'École'], ['alertes', '\uE055', 'Alertes'], ['modules', '\uE054', 'Modules']
     ],
     PARENT: [
-      ['accueil', '\uE000', 'Accueil'], ['parents', '\uE01F', 'Mes enfants']
+      ['accueil', '\uE000', 'Accueil'], ['parents', '\uE01F', 'Mes enfants'], ['declarations-paiement', '\uE020', 'Payer']
     ],
     ELEVE: [
       ['accueil', '\uE000', 'Accueil'], ['parents', '\uE021', 'Mon dossier']
@@ -317,6 +317,14 @@
       ] },
       { nom: 'Gestion pédagogique', icone: '\uE021', coul: '#2166AC', items: [
         ['pedagogie', '\uE031', 'Fiches, résumés, épreuves et guides', 'pedagogie'],
+        ['pedagogie-sec', '\uE031', 'Pédagogie du secondaire (6e à Tle)', 'pedagogie-sec'],
+        ['bulletins-sec', '\uE010', 'Notes et bulletins du secondaire', 'bulletins-sec'],
+        ['maitre-semaine', '\uE004', 'Maître de semaine : planning, journal, rapport', 'maitre-semaine'],
+        ['annonces-personnel', '\uE050', 'Annonces au personnel', 'annonces-personnel'],
+        ['releves-mensuels', '\uE004', 'Relevé mensuel des présences', 'releves-mensuels'],
+        ['vie-etablissement', '\uE054', 'Vie de l’établissement (secondaire)', 'vie-etablissement'],
+        ['examens-sec', '\uE00F', 'Examens BEPC / BAC', 'examens-sec'],
+        ['pilotage-sec', '\uE00A', 'Pilotage et enseignement technique (secondaire)', 'pilotage-sec'],
         ['evaluations', '\uE00E', 'Évaluations', 'evaluations'], ['eleves', '\uE01F', 'Listes des apprenants', 'eleves'],
         ['presences', '\uE017', 'Présence des apprenants', 'presences'], ['presences-personnel', '\uE018', 'Présence du personnel', 'presences'],
         ['bulletins', '\uE010', 'Notes et bulletins', 'evaluations'], ['fiche-cep', '\uE00F', 'Inscription CEP', 'fiche-cep'],
