@@ -1,6 +1,10 @@
 # Guide d’utilisation — ÉduGestion Pro Master — gestion scolaire
 
-_Version 8.1.0_
+_Version 8.2.0_
+
+### 8.2.0
+- **Lycée agricole** : nouveau module « Ferme-école » (campagnes agricoles, parcelles et champs-école, cahier des travaux, cheptel avec mortalité et indice de consommation, santé animale, intrants et stocks, récoltes et ventes, matériel agricole) ; huit disciplines agricoles dans la pédagogie du secondaire (périmètre enseignant par discipline).
+- Bibliothèque du secondaire : 130 épreuves APC (dont interrogations écrites et devoirs surveillés agricoles, corrigés et barèmes) et 43 fiches de préparation (8 fiches agricoles). Les valeurs chiffrées des exercices agricoles sont des ordres de grandeur à adapter au programme.
 
 ### 8.1.0
 - Épreuves du secondaire : 106 épreuves APC (11 nouvelles épreuves originales de SVT en terminale (séries D, A et B), structure restitution + deux situations-problèmes + perfectionnement).

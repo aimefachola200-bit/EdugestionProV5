@@ -216,6 +216,7 @@
       if (['PARENT', 'ELEVE'].indexOf(u.role) < 0 && EG.peutVoirModule('releves-mensuels')) ajoute('\uE004', 'Relevé mensuel des présences', 'releves-mensuels');
       if (['PARENT', 'ELEVE', 'ENSEIGNANT'].indexOf(u.role) < 0 && EG.peutVoirModule('vie-etablissement')) ajoute('\uE054', 'Vie de l’établissement (secondaire)', 'vie-etablissement');
       if (['PARENT', 'ELEVE', 'ENSEIGNANT'].indexOf(u.role) < 0 && EG.peutVoirModule('examens-sec')) ajoute('\uE00F', 'Examens BEPC / BAC', 'examens-sec');
+      if (['PARENT', 'ELEVE', 'ENSEIGNANT'].indexOf(u.role) < 0 && EG.peutVoirModule('ferme-ecole')) ajoute('\uE00A', 'Ferme-école (lycée agricole)', 'ferme-ecole');
       if (['PARENT', 'ELEVE', 'ENSEIGNANT'].indexOf(u.role) < 0 && EG.peutVoirModule('pilotage-sec')) ajoute('\uE00A', 'Pilotage et ETP (secondaire)', 'pilotage-sec');
       zone.appendChild(U.carte('Accès rapide', el('div', { class: 'raccourcis' }, liens)));
 

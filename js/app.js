@@ -16,7 +16,7 @@
       ecrire: true, modules: ['eleves', 'inscriptions', 'presences', 'evaluations', 'cep', 'personnel',
         'visites', 'risques', 'alertes', 'analytics', 'rapports', 'documents', 'recensement',
         'reseau', 'telechargements', 'espace-cs', 'unites-pedagogiques', 'repertoire', 'calendrier-scolaire',
-        'carte-ecole', 'carte-eleve', 'fiche-cep', 'stats-cs', 'divisions', 'signatures', 'documents-officiels', 'pedagogie', 'pedagogie-sec', 'bulletins-sec', 'maitre-semaine', 'annonces-personnel', 'releves-mensuels', 'vie-etablissement', 'examens-sec', 'pilotage-sec', 'uascep', 'pvs-sport', 'pvs-pilotage', 'pvs-communication', 'pvs-territoire', 'pvs-sante', 'pvs-inspection', 'pvs-patrimoine', 'pvs-examens']
+        'carte-ecole', 'carte-eleve', 'fiche-cep', 'stats-cs', 'divisions', 'signatures', 'documents-officiels', 'pedagogie', 'pedagogie-sec', 'bulletins-sec', 'maitre-semaine', 'annonces-personnel', 'releves-mensuels', 'vie-etablissement', 'ferme-ecole', 'examens-sec', 'pilotage-sec', 'uascep', 'pvs-sport', 'pvs-pilotage', 'pvs-communication', 'pvs-territoire', 'pvs-sante', 'pvs-inspection', 'pvs-patrimoine', 'pvs-examens']
     },
     DIRECTEUR: {
       ecrire: true, modules: '*', sauf: ['securite', 'support', 'reseau', 'espace-cs', 'unites-pedagogiques', 'personnel-cs', 'statuts-personnel', 'courriers', 'ecoles-cm2', 'ecarts-cs', 'rapport-rentree', 'divisions']
@@ -324,6 +324,7 @@
         ['releves-mensuels', '\uE004', 'Relevé mensuel des présences', 'releves-mensuels'],
         ['vie-etablissement', '\uE054', 'Vie de l’établissement (secondaire)', 'vie-etablissement'],
         ['examens-sec', '\uE00F', 'Examens BEPC / BAC', 'examens-sec'],
+        ['ferme-ecole', '\uE00A', 'Ferme-école (lycée agricole)', 'ferme-ecole'],
         ['pilotage-sec', '\uE00A', 'Pilotage et enseignement technique (secondaire)', 'pilotage-sec'],
         ['evaluations', '\uE00E', 'Évaluations', 'evaluations'], ['eleves', '\uE01F', 'Listes des apprenants', 'eleves'],
         ['presences', '\uE017', 'Présence des apprenants', 'presences'], ['presences-personnel', '\uE018', 'Présence du personnel', 'presences'],

@@ -15,7 +15,8 @@
   const el = U.el;
   const BASE = 'data/secondaire/';
   const NIVEAUX = ['6e', '5e', '4e', '3e', '2nde', '1ère', 'Tle'];
-  const MATIERES = ['Français', 'Mathématiques', 'Anglais', 'Allemand', 'Espagnol', 'Physique-Chimie-Technologie', 'SVT', 'Histoire-Géographie', 'Philosophie'];
+  const MATIERES = ['Français', 'Mathématiques', 'Anglais', 'Allemand', 'Espagnol', 'Physique-Chimie-Technologie', 'SVT', 'Histoire-Géographie', 'Philosophie',
+    'Productions végétales', 'Productions animales', 'Pédologie et agronomie', 'Protection des cultures et santé animale', 'Machinisme et génie rural', 'Transformation et conservation des produits agricoles', 'Économie rurale et gestion d’exploitation', 'Travaux pratiques agricoles'];
   const TOUT_VOIR = ['ADMIN_MEMP', 'ADMIN_TECHNIQUE', 'DDEMP', 'CS', 'CONSEILLER_PEDAGOGIQUE', 'DIRECTEUR'];
 
   const esc = (v) => String(v == null ? '' : v).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
@@ -38,6 +39,10 @@
     return m ? m[1] + 'e' : '';
   }
   const ALIAS_MATIERES = [
+    [/production.*veget|culture|maraich|horticul/, 'Productions végétales'], [/production.*animal|elevage|aviculture|pisciculture|zootech/, 'Productions animales'],
+    [/pedolog|agronom|^sol/, 'Pédologie et agronomie'], [/protection|phytosanit|sante animale|veterin/, 'Protection des cultures et santé animale'],
+    [/machinisme|genie rural|topograph|irrigation/, 'Machinisme et génie rural'], [/transformation|conservation/, 'Transformation et conservation des produits agricoles'],
+    [/economie rurale|gestion d.?exploitation|cooperative/, 'Économie rurale et gestion d’exploitation'], [/travaux pratiques agricoles|tp agricole|ferme/, 'Travaux pratiques agricoles'],
     [/fran[cç]ais|lettres|^fr$/, 'Français'], [/math/, 'Mathématiques'], [/angl|english/, 'Anglais'], [/allem/, 'Allemand'], [/espag/, 'Espagnol'],
     [/physique|chimie|pct|techno/, 'Physique-Chimie-Technologie'], [/svt|vie et de la terre|biolog|science/, 'SVT'],
     [/hist|geo|^hg$/, 'Histoire-Géographie'], [/philo/, 'Philosophie']

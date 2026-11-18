@@ -87,6 +87,7 @@
     { code: 'bulletins-sec', cat: 'PEDAGOGIE', nom: 'Notes et bulletins du secondaire (6e à Tle)', icone: '\uE010', entites: ['eleves_sec', 'programme_sec', 'notes_sec'], ecran: 'bulletins-sec' },
     { code: 'maitre-semaine', cat: 'PEDAGOGIE', nom: 'Maître de semaine : planning, journal quotidien, rapport hebdomadaire', icone: '\uE004', entites: ['ms_planning', 'ms_journal'], ecran: 'maitre-semaine' },
     { code: 'vie-etablissement', cat: 'PEDAGOGIE', nom: 'Vie de l’établissement (secondaire) : professeurs, conseils, discipline, emplois du temps, stages', icone: '\uE054', entites: ['reg_sec'], ecran: 'vie-etablissement' },
+    { code: 'ferme-ecole', cat: 'PEDAGOGIE', nom: 'Ferme-école (lycée agricole) : parcelles, cheptel, intrants, production', icone: '\uE00A', entites: ['reg_sec'], ecran: 'ferme-ecole' },
     { code: 'examens-sec', cat: 'PEDAGOGIE', nom: 'Examens BEPC / BAC : centres, candidats, statistiques', icone: '\uE00F', entites: ['reg_sec'], ecran: 'examens-sec' },
     { code: 'annonces-personnel', cat: 'PEDAGOGIE', nom: 'Annonces au personnel (accusé de lecture)', icone: '\uE050', entites: ['annonces_personnel'], ecran: 'annonces-personnel' },
     { code: 'releves-mensuels', cat: 'PEDAGOGIE', nom: 'Relevé mensuel des présences', icone: '\uE004', entites: ['presences'], ecran: 'releves-mensuels' },
@@ -1890,7 +1891,7 @@
 
   global.EG = global.EG || {};
   /* Version de l'application : même valeur que version.txt et le cache du service worker (tools/version.mjs) */
-  global.EG.VERSION = '8.1.0';
+  global.EG.VERSION = '8.2.0';
   global.EG.SCHEMA = SCHEMA;
   global.EG.MODULES = MODULES;
   global.EG.CATEGORIES_MODULES = CATEGORIES_MODULES;

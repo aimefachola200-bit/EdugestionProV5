@@ -18,5 +18,5 @@ for (const s of ['secondaire.js', 'declarations-paiement.js', 'bulletins-sec.js'
   if (!index.includes('js/' + s)) echec(s + ' absent de index.html');
   if (!sw.includes('./js/' + s)) echec(s + ' absent de sw.js (hors ligne)');
 }
-for (const c of ["code: 'pedagogie-sec'", "code: 'declarations-paiement'", "code: 'bulletins-sec'", "code: 'vie-etablissement'", "code: 'examens-sec'", "code: 'pilotage-sec'", "code: 'annonces-personnel'", "code: 'releves-mensuels'", 'annonces_personnel: {', "code: 'maitre-semaine'", 'reg_sec: {', 'ms_journal: {', 'eleves_sec: {', 'notes_sec: {', 'programme_sec: {', 'declarations_paiement: {', "f('niveaux_sec'", "f('matieres_sec'", "f('cours_ped'"]) if (!sch.includes(c)) echec('schéma : ' + c);
+for (const c of ["code: 'pedagogie-sec'", "code: 'declarations-paiement'", "code: 'bulletins-sec'", "code: 'vie-etablissement'", "code: 'examens-sec'", "code: 'pilotage-sec'", "code: 'ferme-ecole'", "code: 'annonces-personnel'", "code: 'releves-mensuels'", 'annonces_personnel: {', "code: 'maitre-semaine'", 'reg_sec: {', 'ms_journal: {', 'eleves_sec: {', 'notes_sec: {', 'programme_sec: {', 'declarations_paiement: {', "f('niveaux_sec'", "f('matieres_sec'", "f('cours_ped'"]) if (!sch.includes(c)) echec('schéma : ' + c);
 console.log('ok secondaire (' + ep.length + ' épreuves APC) et déclarations de paiement');
