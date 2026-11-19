@@ -16,7 +16,7 @@
       ecrire: true, modules: ['eleves', 'inscriptions', 'presences', 'evaluations', 'cep', 'personnel',
         'visites', 'risques', 'alertes', 'analytics', 'rapports', 'documents', 'recensement',
         'reseau', 'telechargements', 'espace-cs', 'unites-pedagogiques', 'repertoire', 'calendrier-scolaire',
-        'carte-ecole', 'carte-eleve', 'fiche-cep', 'stats-cs', 'divisions', 'signatures', 'documents-officiels', 'pedagogie', 'pedagogie-sec', 'bulletins-sec', 'maitre-semaine', 'annonces-personnel', 'releves-mensuels', 'vie-etablissement', 'ferme-ecole', 'examens-sec', 'pilotage-sec', 'uascep', 'pvs-sport', 'pvs-pilotage', 'pvs-communication', 'pvs-territoire', 'pvs-sante', 'pvs-inspection', 'pvs-patrimoine', 'pvs-examens']
+        'carte-ecole', 'carte-eleve', 'fiche-cep', 'stats-cs', 'divisions', 'signatures', 'documents-officiels', 'docs-pedagogiques', 'pedagogie', 'pedagogie-sec', 'bulletins-sec', 'maitre-semaine', 'annonces-personnel', 'releves-mensuels', 'vie-etablissement', 'ferme-ecole', 'examens-sec', 'pilotage-sec', 'uascep', 'pvs-sport', 'pvs-pilotage', 'pvs-communication', 'pvs-territoire', 'pvs-sante', 'pvs-inspection', 'pvs-patrimoine', 'pvs-examens']
     },
     DIRECTEUR: {
       ecrire: true, modules: '*', sauf: ['securite', 'support', 'reseau', 'espace-cs', 'unites-pedagogiques', 'personnel-cs', 'statuts-personnel', 'courriers', 'ecoles-cm2', 'ecarts-cs', 'rapport-rentree', 'divisions']
@@ -24,7 +24,7 @@
     ENSEIGNANT: {
       ecrire: true, modules: ['eleves', 'inscriptions', 'presences', 'evaluations', 'cep', 'cantine',
         'risques', 'documents', 'parents', 'educmaster', 'telechargements', 'repertoire', 'calendrier-scolaire',
-        'carte-ecole', 'carte-eleve', 'signatures', 'documents-officiels', 'pedagogie', 'pedagogie-sec', 'bulletins-sec', 'maitre-semaine', 'annonces-personnel', 'releves-mensuels']
+        'carte-ecole', 'carte-eleve', 'signatures', 'documents-officiels', 'docs-pedagogiques', 'pedagogie', 'pedagogie-sec', 'bulletins-sec', 'maitre-semaine', 'annonces-personnel', 'releves-mensuels']
     },
     PARENT: { ecrire: false, modules: ['parents', 'declarations-paiement'] },
     ELEVE: { ecrire: false, modules: ['parents'] }
@@ -333,7 +333,7 @@
         ['carte-eleve', '\uE02B', 'Cartes d’identité', 'carte-eleve']
       ] },
       { nom: 'Administration', icone: '\uE023', coul: '#7B4FA8', items: [
-        ['documents-officiels', '\uE031', 'Documents officiels', 'documents-officiels'], ['telechargements', '\uE011', 'Fiches officielles', 'telechargements'], ['certificats', '\uE02F', 'Certificats', 'personnel'],
+        ['docs-pedagogiques', '\uE031', 'Documents pédagogiques (PDF)', 'docs-pedagogiques'], ['documents-officiels', '\uE031', 'Documents officiels', 'documents-officiels'], ['telechargements', '\uE011', 'Fiches officielles', 'telechargements'], ['certificats', '\uE02F', 'Certificats', 'personnel'],
         ['rapport-rentree', '\uE00D', 'Rapports de rentrée', 'rapport-rentree'], ['courriers', '\uE04F', 'Archive courriers', 'courriers'],
         ['divisions', '\uE023', 'Divisions et services (statistiques, courbes)', 'divisions'], ['signatures', '\uE029', 'Signatures des acteurs', 'signatures'],
         ['ecarts-cs', '\uE016', 'Analyses et écarts', 'ecarts-cs'], ['cachet', '\uE033', 'Cachets et signatures', 'cachets'],

@@ -486,6 +486,11 @@
         if (c.max !== undefined) ctrl.max = c.max;
         if (c.step) ctrl.step = c.step;
         ctrl.value = c.t === 'datetime' && val ? String(val).slice(0, 16) : (val === null ? '' : val);
+        if (c.sug) {      /* v8.3.0 : suggestions (liste déroulante) tout en gardant la saisie libre */
+          const dlId = 'sug_' + c.n + '_' + Math.random().toString(36).slice(2, 7);
+          ctrl.setAttribute('list', dlId);
+          ctrl._dl = el('datalist', { id: dlId }, c.sug.map(o => el('option', { value: o })));
+        }
       }
       if (c.req) ctrl.required = true;
       controles[c.n] = { ctrl, def: c };
@@ -494,6 +499,7 @@
           ? [ctrl, el('label', { for: idc, text: c.l })]
           : [el('label', { for: idc, text: c.l + (c.req ? ' *' : '') }), ctrl]
             .concat(c.t === 'image' ? [ctrl.apercu] : [])));
+      if (ctrl._dl) form.appendChild(ctrl._dl);
     });
 
     /* Un champ dont une cascade dépend doit la redéclencher à chaque

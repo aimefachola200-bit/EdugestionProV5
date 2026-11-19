@@ -93,6 +93,7 @@
     { code: 'releves-mensuels', cat: 'PEDAGOGIE', nom: 'Relevé mensuel des présences', icone: '\uE004', entites: ['presences'], ecran: 'releves-mensuels' },
     { code: 'pilotage-sec', cat: 'PEDAGOGIE', nom: 'Pilotage et enseignement technique (secondaire) : synoptique, identité, filières, ateliers', icone: '\uE00A', entites: ['reg_sec'], ecran: 'pilotage-sec' },
     { code: 'pedagogie-sec', cat: 'PEDAGOGIE', nom: 'Pédagogie du secondaire : fiches, épreuves APC, banque, langues', icone: '\uE031', entites: [], ecran: 'pedagogie-sec' },
+    { code: 'docs-pedagogiques', cat: 'PEDAGOGIE', nom: 'Documents pédagogiques : cahiers, fichiers et cahiers de révision (PDF)', icone: '\uE031', entites: [], ecran: 'docs-pedagogiques' },
     { code: 'documents-officiels', cat: 'PEDAGOGIE', nom: 'Documents officiels (SCOLARIS / GESCOL)', icone: '\uE031', entites: [], ecran: 'documents-officiels' },
     { code: 'telechargements', cat: 'ADMIN', nom: 'Téléchargements', icone: '\uE009', entites: [], ecran: 'telechargements',
       annexes: [['telechargements/recensement', 'Fiches de recensement', '\uE040'], ['telechargements/fiches', 'Fiches à remplir', '\uE00E'],
@@ -827,7 +828,7 @@
       champs: [
         f('personnel_id', 'Agent', 'ref', { ref: 'personnels', req: 1, list: 1 }),
         f('type', 'Type', 'select', { o: ['ACADEMIQUE', 'PROFESSIONNEL'], list: 1 }),
-        f('libelle', 'Libellé', 'text', { req: 1, list: 1 }),
+        f('libelle', 'Libellé', 'text', { req: 1, list: 1, sug: ['BEPC','BAC A','BAC B','BAC C','BAC D','BAC E/F/G','DUT','BTS','Licence','Master','Doctorat','CEAP','CAP','BAPES (secondaire, 1er cycle)','CAPES (secondaire, 2nd cycle)','CAPET (enseignement technique)','CAPEPS (EPS)','CAPEN (écoles normales)'], ph: 'Choisir dans la liste ou saisir' }),
         f('annee_obtention', 'Année d\'obtention', 'number', { list: 1 }),
         f('principal', 'Principal', 'bool')
       ]
@@ -1891,7 +1892,7 @@
 
   global.EG = global.EG || {};
   /* Version de l'application : même valeur que version.txt et le cache du service worker (tools/version.mjs) */
-  global.EG.VERSION = '8.2.0';
+  global.EG.VERSION = '8.3.0';
   global.EG.SCHEMA = SCHEMA;
   global.EG.MODULES = MODULES;
   global.EG.CATEGORIES_MODULES = CATEGORIES_MODULES;

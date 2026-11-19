@@ -1,5 +1,10 @@
 # Guide d’utilisation — ÉduGestion Pro Master — gestion scolaire
 
+
+## Version 8.3.0 — corrections de terrain
+- **Documents pédagogiques (PDF)** : nouvel écran (menu Gestion pédagogique) — cahiers de l'apprenant, fichiers de résumés, d'exercices et d'évaluations, cahier d'écriture, fiches de révision CEP, fichiers de révision 4e-3e (Anglais, SVT, EPS, Français, Histoire-Géographie, PCT) et cahiers de révision de Terminale, classés par niveau et par matière, à ouvrir ou à télécharger (dossier `docs-pedagogiques/`).
+- **Diplômes du personnel** : liste de propositions (BAPES, CAPES, CAPET, CAPEPS, CAPEN, CEAP, CAP, BAC, Licence, Master…) avec saisie libre conservée.
+
 _Version 8.2.0_
 
 ### 8.2.0
