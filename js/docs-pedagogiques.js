@@ -5,7 +5,7 @@
   'use strict';
   const EG = global.EG, U = EG.UI, el = U.el;
   const BASE = 'docs-pedagogiques/';
-  const FAM = { A: 'Cahier de l’apprenant', F: 'Fichier de résumés, d’exercices et d’évaluations', E: 'Cahier d’écriture', R: 'Fichier de révision (4e-3e, BEPC)', C: 'Fiches de révision (CEP)', T: 'Cahier de révision (Terminale)' };
+  const FAM = { A: 'Cahier de l’apprenant', F: 'Fichier de résumés, d’exercices et d’évaluations', E: 'Cahier d’écriture', R: 'Fichier de révision (4e-3e, BEPC)', C: 'Fiches de révision (CEP)', P: 'Fiches de préparation (EPS)', T: 'Cahier de révision (Terminale)' };
   const NIV = ['CI', 'CP', 'CE1', 'CE2', 'CM1', 'CM2', '4e', '3e', 'Tle A', 'Tle B'];
   const D = (f, titre, niveaux, matiere, fam, pages) => ({ fichier: f, titre, niveaux, matiere, famille: FAM[fam], pages });
   const DOCS = [
@@ -23,6 +23,8 @@
     D('revision_francais_4e_3e.pdf', 'Fichier de révision de Français — 4e et 3e', ['4e', '3e'], 'Français', 'R', 185),
     D('revision_histgeo_4e_3e.pdf', 'Fichier de révision d’Histoire-Géographie — 4e et 3e', ['4e', '3e'], 'Histoire-Géographie', 'R', 124),
     D('revision_pct_4e_3e.pdf', 'Fichier de révision de Physique-Chimie-Technologie — 4e et 3e', ['4e', '3e'], 'PCT', 'R', 105),
+    D('fiches_eps_cp_sa10_sa13.pdf', 'Fiches de préparation d’EPS — CP, SA 10 à SA 13', ['CP'], 'EPS', 'P', 38),
+    D('revision_allemand_4e_3e.pdf', 'Fichier de révision d’Allemand — 4e et 3e', ['4e', '3e'], 'Allemand', 'R', 106),
     D('revision_anglais_4e_3e.pdf', 'Fichier de révision d’Anglais — 4e et 3e', ['4e', '3e'], 'Anglais', 'R', 86),
     D('revision_svt_4e_3e.pdf', 'Fichier de révision de SVT — 4e et 3e', ['4e', '3e'], 'SVT', 'R', 95),
     D('revision_francais_tle_ab.pdf', 'Français — Terminales A et B', ['Tle A', 'Tle B'], 'Français', 'T', 76),
