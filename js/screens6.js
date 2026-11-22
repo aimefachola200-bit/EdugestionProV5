@@ -58,6 +58,41 @@
       ]
     },
     {
+      code: 'PRESENCE_POSTE_PRIVE', titre: 'CERTIFICAT DE PRÉSENCE AU POSTE', court: 'Présence au poste (école privée)',
+      sousTitre: 'Enseignant(e) d’une école privée', signataire: 'DIRECTEUR', reference: 'EPP/EM',
+      intro: [
+        { texte: 'Je soussigné (e)', auto: c => c.signataireNom },
+        { texte: 'Direct…… de l’École Privée', auto: c => c.ecoleNom }
+      ],
+      corps: [
+        { l: 'Atteste que Mr ou Mme', auto: c => nomAgent(c.agent) },
+        { l: 'Né (e) le', auto: c => U.dateCourte(c.agent.date_naissance) + ' à ' + (c.agent.lieu_naissance || '') },
+        { l: 'Titulaire du diplôme', auto: c => c.agent.diplome_recrutement },
+        { l: 'Recruté(e) par l’école suivant le contrat n°', cle: 'reference_acte' },
+        { l: 'Est en service à', auto: c => c.ecoleNom },
+        { l: 'En qualité de (Fonction)', auto: c => U.libelle(c.agent.fonction) },
+        { l: 'Depuis le', cle: 'depuis', type: 'date' },
+        { l: 'jusqu’à ce jour', auto: c => U.dateCourte(new Date().toISOString()) }
+      ]
+    },
+    {
+      code: 'PRISE_SERVICE_PRIVE', titre: 'CERTIFICAT DE PRISE DE SERVICE', court: 'Prise de service (école privée)',
+      sousTitre: 'Enseignant(e) d’une école privée', signataire: 'DIRECTEUR', reference: 'EPP/EM',
+      intro: [
+        { texte: 'Je soussigné (e)', auto: c => c.signataireNom },
+        { texte: 'Direct…… de l’École Privée', auto: c => c.ecoleNom }
+      ],
+      corps: [
+        { l: 'Certifie que Mr ou Mme', auto: c => nomAgent(c.agent) },
+        { l: 'Titulaire du diplôme', auto: c => c.agent.diplome_recrutement },
+        { l: 'Recruté(e) par l’école suivant le contrat n°', cle: 'reference_acte' },
+        { l: 'du', cle: 'date_acte', type: 'date' },
+        { l: 'Affecté(e) à l’école', auto: c => c.ecoleNom },
+        { l: 'En qualité de', auto: c => U.libelle(c.agent.fonction) },
+        { l: 'A effectivement pris service le', cle: 'date_effet', type: 'date' }
+      ]
+    },
+    {
       code: 'PRISE_SERVICE', titre: 'CERTIFICAT DE PRISE DE SERVICE', court: 'Prise de service',
       signataire: 'DIRECTEUR', reference: 'EPP/EM',
       intro: [
