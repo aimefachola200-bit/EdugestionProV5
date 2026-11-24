@@ -638,7 +638,8 @@
     }
     function tout() { document.querySelectorAll('#contenu table, .modal table').forEach(fixer); placer(); }
     let minuterie = null, image = false;
-    const plusTard = () => { clearTimeout(minuterie); minuterie = setTimeout(tout, 120); };
+    const plusTard = () => { clearTimeout(minuterie); minuterie = setTimeout(() => { const a = document.activeElement; if (a && /^(INPUT|TEXTAREA|SELECT)$/.test(a.tagName) && a.closest('table')) return; tout(); }, 120); };
+    document.addEventListener('focusout', plusTard, true);
     document.addEventListener('scroll', () => { if (image) return; image = true; requestAnimationFrame(() => { image = false; placer(); }); }, { capture: true, passive: true });
     window.addEventListener('resize', plusTard);
     document.addEventListener('toggle', plusTard, true);
