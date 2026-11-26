@@ -16,7 +16,7 @@
       ecrire: true, modules: ['eleves', 'inscriptions', 'presences', 'evaluations', 'cep', 'personnel',
         'visites', 'risques', 'alertes', 'analytics', 'rapports', 'documents', 'recensement',
         'reseau', 'telechargements', 'espace-cs', 'unites-pedagogiques', 'repertoire', 'calendrier-scolaire',
-        'carte-ecole', 'carte-eleve', 'fiche-cep', 'stats-cs', 'divisions', 'signatures', 'documents-officiels', 'docs-pedagogiques', 'pedagogie', 'pedagogie-sec', 'bulletins-sec', 'maitre-semaine', 'annonces-personnel', 'releves-mensuels', 'vie-etablissement', 'ferme-ecole', 'examens-sec', 'pilotage-sec', 'uascep', 'pvs-sport', 'pvs-pilotage', 'pvs-communication', 'pvs-territoire', 'pvs-sante', 'pvs-inspection', 'pvs-patrimoine', 'pvs-examens']
+        'carte-ecole', 'carte-eleve', 'fiche-cep', 'stats-cs', 'divisions', 'signatures', 'documents-officiels', 'docs-pedagogiques', 'pedagogie', 'pedagogie-sec', 'bulletins-sec', 'maitre-semaine', 'annonces-personnel', 'zone-desheritee', 'releves-mensuels', 'vie-etablissement', 'ferme-ecole', 'examens-sec', 'pilotage-sec', 'uascep', 'pvs-sport', 'pvs-pilotage', 'pvs-communication', 'pvs-territoire', 'pvs-sante', 'pvs-inspection', 'pvs-patrimoine', 'pvs-examens']
     },
     DIRECTEUR: {
       ecrire: true, modules: '*', sauf: ['securite', 'support', 'reseau', 'espace-cs', 'unites-pedagogiques', 'personnel-cs', 'statuts-personnel', 'courriers', 'ecoles-cm2', 'ecarts-cs', 'rapport-rentree', 'divisions']
@@ -321,6 +321,7 @@
         ['bulletins-sec', '\uE010', 'Notes et bulletins du secondaire', 'bulletins-sec'],
         ['maitre-semaine', '\uE004', 'Maître de semaine : planning, journal, rapport', 'maitre-semaine'],
         ['annonces-personnel', '\uE050', 'Annonces au personnel', 'annonces-personnel'],
+        ['zone-desheritee', '\uE047', 'Zone déshéritée (prime de zone)', 'zone-desheritee'],
         ['releves-mensuels', '\uE004', 'Relevé mensuel des présences', 'releves-mensuels'],
         ['vie-etablissement', '\uE054', 'Vie de l’établissement (secondaire)', 'vie-etablissement'],
         ['examens-sec', '\uE00F', 'Examens BEPC / BAC', 'examens-sec'],

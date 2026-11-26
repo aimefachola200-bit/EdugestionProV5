@@ -90,6 +90,7 @@
     { code: 'ferme-ecole', cat: 'PEDAGOGIE', nom: 'Ferme-école (lycée agricole) : parcelles, cheptel, intrants, production', icone: '\uE00A', entites: ['reg_sec'], ecran: 'ferme-ecole' },
     { code: 'examens-sec', cat: 'PEDAGOGIE', nom: 'Examens BEPC / BAC : centres, candidats, statistiques', icone: '\uE00F', entites: ['reg_sec'], ecran: 'examens-sec' },
     { code: 'annonces-personnel', cat: 'PEDAGOGIE', nom: 'Annonces au personnel (accusé de lecture)', icone: '\uE050', entites: ['annonces_personnel'], ecran: 'annonces-personnel' },
+    { code: 'zone-desheritee', cat: 'PEDAGOGIE', nom: 'Zone déshéritée : agents des postes orange et rouge, prime de zone', icone: '\uE047', entites: ['zone_desheritee'], ecran: 'zone-desheritee' },
     { code: 'releves-mensuels', cat: 'PEDAGOGIE', nom: 'Relevé mensuel des présences', icone: '\uE004', entites: ['presences'], ecran: 'releves-mensuels' },
     { code: 'pilotage-sec', cat: 'PEDAGOGIE', nom: 'Pilotage et enseignement technique (secondaire) : synoptique, identité, filières, ateliers', icone: '\uE00A', entites: ['reg_sec'], ecran: 'pilotage-sec' },
     { code: 'pedagogie-sec', cat: 'PEDAGOGIE', nom: 'Pédagogie du secondaire : fiches, épreuves APC, banque, langues', icone: '\uE031', entites: [], ecran: 'pedagogie-sec' },
@@ -1389,6 +1390,11 @@
         f('auteur_nom', 'Auteur', 'text'), f('date_publication', 'Publication', 'text', { list: 1 }), f('lus', 'Lue par', 'json')
       ]
     },
+    zone_desheritee: {
+      label: 'Zone déshéritée', singulier: 'Zone déshéritée', icone: '\uE047',
+      titre: r => 'Zone déshéritée — ' + (r.ecole_id || 'circonscription'),
+      champs: [f('ecole_id', 'École', 'ref', { ref: 'ecoles' }), f('donnees', 'Agents et montants', 'json')]
+    },
     declarations_paiement: {
       label: 'Déclarations de paiement', singulier: 'Déclaration de paiement', icone: '\uE04E',
       titre: r => (r.reference || 'Déclaration') + ' — ' + (r.montant || 0) + ' FCFA',
@@ -1892,7 +1898,7 @@
 
   global.EG = global.EG || {};
   /* Version de l'application : même valeur que version.txt et le cache du service worker (tools/version.mjs) */
-  global.EG.VERSION = '8.2.2';
+  global.EG.VERSION = '8.2.3';
   global.EG.SCHEMA = SCHEMA;
   global.EG.MODULES = MODULES;
   global.EG.CATEGORIES_MODULES = CATEGORIES_MODULES;
